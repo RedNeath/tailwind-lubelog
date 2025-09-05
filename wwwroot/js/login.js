@@ -22,6 +22,11 @@
     })
 }
 function performRegistration() {
+    if (!$("#registrationForm")[0].checkValidity()) {
+        $("#registrationForm")[0].reportValidity();
+        return;
+    }
+    
     var token = $("#inputToken").val();
     var userName = $("#inputUserName").val();
     var userPassword = $("#inputUserPassword").val();
