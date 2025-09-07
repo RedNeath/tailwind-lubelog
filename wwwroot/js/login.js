@@ -57,6 +57,11 @@ function requestPasswordReset() {
     })
 }
 function performPasswordReset() {
+    if (!$("#passwordResetForm")[0].checkValidity()) {
+        $("#passwordResetForm")[0].reportValidity();
+        return;
+    }
+    
     var token = $("#inputToken").val();
     var userPassword = $("#inputUserPassword").val();
     var userEmail = $("#inputEmail").val();
