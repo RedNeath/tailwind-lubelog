@@ -1,0 +1,17 @@
+@if (User.IsInRole(nameof(UserData.IsRootUser)))
+{
+    <div class="row api-method">
+        <div class="col-1">
+            <span class="badge bg-success">GET</span>
+        </div>
+        <div class="col-5 copyable testable">
+            <code>/api/makebackup</code>
+        </div>
+        <div class="col-3">
+            Creates a snapshot/backup of the DB at the time and returns a URL to download it.
+        </div>
+        <div class="col-3">
+            No Params(must be root user)
+        </div>
+    </div>
+}

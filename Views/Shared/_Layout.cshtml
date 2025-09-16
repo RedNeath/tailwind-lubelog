@@ -26,16 +26,16 @@
         shortDatePattern = shortDatePattern.Replace("m", "mm");
     }
 }
-<html lang="en" class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white scheme-light dark:scheme-dark">
+<html lang="@userLanguage.Substring(0, 2)" class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white scheme-light dark:scheme-dark">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="apple-mobile-web-app-title" content="LubeLogger" />
+    <meta name="apple-mobile-web-app-title" content="WindLogger" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#181818">
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f3f3f3">
-    <title>@ViewData["Title"] - LubeLogger</title>
+    <title>@ViewData["Title"] - WindLogger</title>
     <link rel="icon" type="image/svg+xml" href="~/defaults/wind-logger-fan.min.svg">
     <link rel="stylesheet" href="~/css/app.css"/>
     <link rel="stylesheet" href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker.min.css" />
@@ -174,7 +174,7 @@
         </header>
     }
 
-    <div class="@( (!config.GetServerAuthEnabled() || User.IsInRole("CookieAuth") || User.IsInRole("APIAuth")) ? "container pt-10 mx-auto" : "bg-white dark:bg-transparent min-h-screen" )">
+    <div class="@( (!config.GetServerAuthEnabled() || User.IsInRole("CookieAuth") || User.IsInRole("APIAuth")) ? Url.Action().Contains("API") ? "py-10 w-full" : "container py-10 mx-auto" : "bg-white dark:bg-transparent min-h-screen" )">
         <main role="main" class="h-full">
             @RenderBody()
             <dialog class="modal fade" id="accountInformationModal">

@@ -1,0 +1,18 @@
+@if (User.IsInRole(nameof(UserData.IsRootUser)))
+{
+    <div class="row api-method">
+        <div class="col-1">
+            <span class="badge bg-success">GET</span>
+        </div>
+        <div class="col-5 copyable testable">
+            <code>/api/cleanup</code>
+        </div>
+        <div class="col-3">
+            Clears out temp files. Deep clean will also delete unlinked thumbnails and documents. Returns number of deleted files.
+        </div>
+        <div class="col-3">
+            (must be root user)<br />
+            deepClean(bool) - Perform deep clean(optional)
+        </div>
+    </div>
+}
