@@ -20,8 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\API\Calendar\" />
-    <Folder Include="Views\API\Documents\" />
     <Folder Include="wwwroot\lib\tailwindplus\" />
   </ItemGroup>
 

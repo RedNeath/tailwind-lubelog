@@ -5,18 +5,51 @@
 @inject IConfigHelper config
 @section Nav { API documentation }
 @* If authentication is enabled, use the credentials of the user for Basic Auth(RFC2617) *@
-<div class="flex gap-8">
-    <div class="hidden md:block w-64">
+<div>
+    @* Left column, for MD and above *@
+    <div class="hidden md:block fixed top-48 bottom-8 overflow-y-auto inset-y-0 z-50 flex flex-col w-72 border-r border-gray-200 dark:border-gray-800">
         @await Html.PartialAsync("_DocMenu")
     </div>
 
-    <div class="px-4 w-full">
+    @* Menu taking over the content of the page for screens below MD *@
+    @* Keep the md:hidden class on the div, so that the menu is not displayed when turning the screen to landscape *@
+    <div id="mobileMenu" class="hidden md:hidden px-4">
+        @await Html.PartialAsync("_DocMenu")
+    </div>
+    @* Keep the md:block class on the div, so that the page content is displayed when turning the screen to landscape *@
+    <div id="pageContent" class="px-4 md:block md:pl-80 md:pr-8 w-full">
         <div class="flex items-center justify-between">
             <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">WindLogger API Overview</h2>
         </div>
-        <hr class="md:hidden border-gray-200 dark:border-gray-800 mt-4" />
-        <div class="py-4">
-            <p>Description text about the API and how its documentation is organised. If you are watching this page on a mobile device, you should see a button to browse other pages below this text.</p>
+        <hr class="md:hidden border-gray-200 dark:border-gray-800 mt-4"/>
+        <div class="pt-6 md:py-8">
+            <p class="mb-6">
+                At the moment, the only information available is about the API references (that is, the API endpoints).
+                Every route has a page for itself, giving details about what is needed to call it, and what it will give
+                in return. There will also be a section where you will be able to try each route, and extract a cURL
+                request as a sample.
+            </p>
+
+            <p class="mb-2">The routes are gathered within four major categories:</p>
+            <ul role="list" class="list-inside list-disc pl-2 mb-6">
+                <li><b>General</b>: mostly for utilities and general purpose endpoints;</li>
+                <li><b>Calendar</b>: having only one route at the moment (serving the calendar as an ICS file);</li>
+                <li><b>Documents</b>: having only one route too (for uploading documents to the server);</li>
+                <li>and <b>Vehicles</b>: which groups every endpoint for vehicles.</li>
+            </ul>
+
+            <p>
+                The Vehicles category is the only one to be subdivided into eight different categories for every type of
+                entity linked to it. This category also contains two routes to retreive the list of vehicles, as well as
+                more detailed information about one or more vehicles.
+            </p>
+
+
+            <button type="button"
+                    onclick="displayMobileMenu()"
+                    class="mt-6 inline-flex md:hidden w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25">
+                Browse the API
+            </button>
         </div>
     </div>
 </div>
@@ -30,5 +63,10 @@
         } else {
             copyToClipboard(e.currentTarget);
         }
-    })
+    });
+    
+    function displayMobileMenu() {
+        $('#mobileMenu').removeClass('hidden');
+        $('#pageContent').addClass('hidden');
+    }
 </script>
