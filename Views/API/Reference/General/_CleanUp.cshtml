@@ -1,0 +1,42 @@
+@if (!User.IsInRole(nameof(UserData.IsRootUser)))
+{
+    <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">You are not allowed to see that! 😇</h2>
+    </div>
+}
+else
+{
+    <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Clean up temporary files</h2>
+        <button type="button"
+                onclick="displayAuthModal()"
+                class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+            <heroicon kind="Mini" name="LockClosed" class="size-3 mr-1.5"/>Auth required
+        </button>
+    </div>
+    <hr class="md:hidden border-gray-200 dark:border-gray-800 mt-4"/>
+    <div class="pt-6 md:py-8">
+        <p class="mb-2">
+            Clears out temp files. Deep clean will also delete unlinked thumbnails and documents. Returns number of deleted files.
+        </p>
+    </div>    
+}
+
+@* @if (User.IsInRole(nameof(UserData.IsRootUser))) *@
+@* { *@
+@*     <div class="row api-method"> *@
+@*         <div class="col-1"> *@
+@*             <span class="badge bg-success">GET</span> *@
+@*         </div> *@
+@*         <div class="col-5 copyable testable"> *@
+@*             <code>/api/cleanup</code> *@
+@*         </div> *@
+@*         <div class="col-3"> *@
+@*             Clears out temp files. Deep clean will also delete unlinked thumbnails and documents. Returns number of deleted files. *@
+@*         </div> *@
+@*         <div class="col-3"> *@
+@*             (must be root user)<br /> *@
+@*             deepClean(bool) - Perform deep clean(optional) *@
+@*         </div> *@
+@*     </div> *@
+@* } *@
