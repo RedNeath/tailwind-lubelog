@@ -53,6 +53,41 @@ namespace CarCareTracker.Controllers.API
             });
         }
         
+        [Route("/API/Reference/General/Version")]
+        public IActionResult GeneralVersion()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Version",
+                PartialViewName = "/Views/API/Reference/General/_Version.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Get,
+                    Route = "/api/version",
+                    RouteParameters = [
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "CheckForUpdate",
+                            Type = "bool",
+                            Description = "Checks for update",
+                            IsRequired = false,
+                            Example = "false"
+                        }
+                    ],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        {
+                            "currentVersion": "1.5.0",
+                            "latestVersion": "1.5.0"
+                        }
+                        """
+                    }
+                }
+            });
+        }
+        
         [Route("/API/Reference/General/MakeBackup")]
         public IActionResult GeneralMakeBackup()
         {
