@@ -35,6 +35,7 @@ Read this [Getting Started Guide](https://docs.lubelogger.com/Installation/Getti
 
 ## Dependencies
 - [TailwindPlus](https://tailwindcss.com/plus/ui-blocks/documentation)
+- [Highlight.js](https://highlightjs.org/)
 - [LiteDB](https://github.com/mbdavid/litedb)
 - [Npgsql](https://github.com/npgsql/npgsql)
 - [Bootstrap-DatePicker](https://github.com/uxsolutions/bootstrap-datepicker)

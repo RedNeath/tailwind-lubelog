@@ -1,0 +1,307 @@
+@using CarCareTracker.Models.API.Reference
+@model ReferenceEndpointViewModel
+@{
+    string baseUrl = Context.Request.Scheme + "://" + Context.Request.Host;
+    string sampleRequest = Model.GenerateSampleJavaScriptRequest(baseUrl);
+    List<ReferenceEndpointFormDataPropertyViewModel>? formDataBodyContent = null;
+    List<ReferenceEndpointFormDataPropertyViewModel>? formDataResponseContent = null;
+    string? jsonResponseContent = null;
+    string methodBadgeColour;
+
+    switch (Model.Method.ToString())
+    {
+        case "GET":
+            methodBadgeColour = "bg-sky-400";
+            break;
+
+        case "POST":
+            methodBadgeColour = "bg-emerald-400";
+            break;
+
+        case "PUT":
+            methodBadgeColour = "bg-amber-400";
+            break;
+
+        case "DELETE":
+            methodBadgeColour = "bg-red-500";
+            break;
+
+        default:
+            methodBadgeColour = "";
+            break;
+    }
+
+    switch (Model.Body?.MimeType)
+    {
+        case "application/www-form-urlencoded":
+            formDataBodyContent = ((ReferenceEndpointFormDataBodyViewModel)Model.Body).Content;
+            break;
+    }
+
+    switch (Model.Response?.MimeType)
+    {
+        case "application/www-form-urlencoded":
+            formDataResponseContent = ((ReferenceEndpointFormDataResponseViewModel)Model.Response).Content;
+            break;
+            
+        case "application/json":
+            jsonResponseContent = ((ReferenceEndpointJsonResponseViewModel)Model.Response).Content;
+            break;
+    }
+}
+
+<div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
+    <div class="h-fit lg:sticky lg:top-0 lg:bottom-0 lg:overflow-y-auto w-full">
+        <div class="bg-white dark:bg-gray-800 shadow-md p-2 md:p-4 border border-1 border-gray-300 dark:border-gray-700 rounded-md">
+            <h4 class="text-lg mb-4">
+                <span class="inline-flex items-center rounded-md @methodBadgeColour px-2 py-1 text-sm font-medium text-white mr-2">@Model.Method</span>
+                @Model.Route
+                <button onclick="copyTextToClipboard('@Model.Route')">@* Function defined in /Views/API/Reference/Base.chtml *@
+                    <heroicon class="shrink-0 size-4 my-auto transition text-gray-500 group-hover:text-white" kind="Mini" name="Clipboard"/>
+                </button>
+            </h4>
+            
+            @if (Model.RouteParameters.Count > 0)
+            {
+                <h5 class="font-semibold text-gray-500 dark:text-gray-400">Route parameters</h5>
+                <ul>
+                    @foreach (ReferenceEndpointRouteParameterViewModel parameter in Model.RouteParameters)
+                    {
+                        <li class="mt-1">
+                            <p class="text-sm">
+                                <span class="text-base">@parameter.Name</span>: @parameter.Type
+                                @if (parameter.IsRequired)
+                                {
+                                    <span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-400/10 px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">
+                                        Required
+                                    </span>
+                                }
+                            </p>
+                            <div class="ml-1 pl-1 border-l border-gray-300 dark:border-gray-700">
+                                <p class="text-sm">
+                                    @parameter.Description
+                                </p>
+                                <p class="text-sm">
+                                    Example: <code class="language-vala text-sm rounded-md px-1 py-0.5 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">
+                                        @parameter.Example
+                                    </code>
+                                </p>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+            @{
+                if (Model.Body != null)
+                {
+                    <h5 class="font-semibold text-gray-500 dark:text-gray-400">Body <small>@Model.Body.MimeType</small></h5>
+                    if (formDataBodyContent != null)
+                    {
+                        <ul>
+                            @foreach (var formLine in formDataBodyContent)
+                            {
+                                <li class="mt-1">
+                                    <p class="text-sm">
+                                        <span class="text-base">@formLine.Name</span>: @formLine.Type
+                                        @if (formLine.IsRequired)
+                                        {
+                                            <span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-400/10 px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">
+                                                Required
+                                            </span>
+                                        }
+                                    </p>
+                                    <div class="ml-1 pl-1 border-l border-gray-300 dark:border-gray-700">
+                                        <p class="text-sm">
+                                            @formLine.Description
+                                        </p>
+                                        <p class="text-sm">
+                                            Example: <code class="language-vala text-sm rounded-md px-1 py-0.5 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">
+                                                @formLine.Example
+                                            </code>
+                                        </p>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    }
+                }
+            }
+        </div>
+    </div>
+    <div class="h-fit lg:sticky lg:top-0 lg:bottom-0 lg:overflow-y-auto w-full lg:max-w-xl">
+        <div class="bg-white dark:bg-gray-800 shadow-md p-2 md:p-4 border border-1 border-gray-300 dark:border-gray-700 rounded-md">
+            <h4 class="text-lg mb-4">Endpoint @(baseUrl + Model.Route)</h4>
+            
+            @{
+                if (Model.RouteParameters.Count > 0)
+                {
+                    <h6 class="mb-2 mt-4 text-gray-500 uppercase text-sm font-semibold">Route parameters</h6>
+                    <ul class="grid grid-cols-2 gap-2">
+                        @foreach (ReferenceEndpointRouteParameterViewModel parameter in Model.RouteParameters)
+                        {
+                            switch (parameter.Type)
+                            {
+                                case "bool":
+                                    <div class="flex gap-12 mb-4 col-span-2">
+                                        <div class="flex gap-3 items-center">
+                                            <div class="flex h-6 shrink-0 items-center">
+                                                <div class="group grid size-4 grid-cols-1">
+                                                    <input type="checkbox" id="@parameter.Name" class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                                                    <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center text-white" fill="none"/>
+                                                </div>
+                                            </div>
+                                            <label class="block text-sm text-gray-900 dark:text-gray-300" for="@parameter.Name">@parameter.Name</label>
+                                        </div>
+                                    </div>
+                                    break;
+                                    
+                                default:
+                                    <label for="@parameter.Name" class="block text-sm font-medium text-gray-900 dark:text-gray-100">Standard text field</label>
+                                    <input type="text" id="@parameter.Name" class="mt-2 block w-full transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 px-3 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">
+                                    break;
+                            }
+                        }
+                    </ul>
+                }
+
+                if (Model.Body != null)
+                {
+                    <h6 class="mb-2 mt-4 text-gray-500 uppercase text-sm font-semibold">Body</h6>
+                    if (formDataBodyContent != null)
+                    {
+                        <ul class="grid grid-cols-2 gap-2">
+                            @foreach (var formLine in formDataBodyContent)
+                            {
+                                switch (formLine.Type)
+                                {
+                                    case "bool":
+                                        <div class="flex gap-12 mb-4 col-span-2">
+                                            <div class="flex gap-3 items-center">
+                                                <div class="flex h-6 shrink-0 items-center">
+                                                    <div class="group grid size-4 grid-cols-1">
+                                                        <input type="checkbox" id="@formLine.Name" class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                                                        <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center text-white" fill="none"/>
+                                                    </div>
+                                                </div>
+                                                <label class="block text-sm text-gray-900 dark:text-gray-300" for="@formLine.Name">@formLine.Name</label>
+                                            </div>
+                                        </div>
+                                        break;
+                                        
+                                    default:
+                                        <label for="@formLine.Name" class="block text-sm font-medium text-gray-900 dark:text-gray-100">Standard text field</label>
+                                        <input type="text" id="@formLine.Name" class="mt-2 block w-full transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 px-3 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">
+                                        break;
+                                }
+                            }
+                        </ul>
+                    }
+                }
+            }
+
+            <div class="w-full flex">
+                <button type="button"
+                        onclick="tryEndpoint('@Model.Body?.MimeType')"
+                        class="inline-flex w-full lg:w-auto ml-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"
+                >
+                    <heroicon kind="Outline" name="PaperAirplane" class="size-5 mr-1.5"/>Try it!
+                </button>
+            </div>
+            
+            <h6 class="mb-2 mt-4 text-gray-500 uppercase text-sm font-semibold">Sample request - <small>JavaScript</small></h6>
+            <pre onclick="copyTextToClipboard('@sampleRequest')"><code class="language-javascript text-sm rounded-md px-1 py-0.5 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">@sampleRequest</code></pre>
+            
+            <h6 class="mb-2 mt-4 text-gray-500 uppercase text-sm font-semibold">Response</h6>
+            @{
+                if (Model.Response != null && formDataResponseContent != null)
+                {
+                    <div class="relative sm:max-h-[55vh] lg:max-h-[70vh] overflow-x-auto overflow-y-auto shadow-md border border-1 border-gray-300 dark:border-gray-700 rounded-lg">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 w-3/12">Key</th>
+                                <th scope="col" class="px-6 py-3 w-5/12">Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var line in formDataResponseContent)
+                            {
+                                <tr class="bg-white border-t dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="px-6 py-2 w-4/12">@line.Name</td>
+                                    <td class="px-6 py-2 w-8/12">@line.Example</td>
+                                </tr>
+                            }
+                            @if (formDataResponseContent.Count == 0)
+                            {
+                                <tr class="light:bg-white border-t dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td colspan="2" class="text-center px-6 py-2 w-full">Empty)</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else if (Model.Response != null && jsonResponseContent != null)
+                {
+                    <pre><code class="language-javascript text-sm rounded-md px-1 py-0.5 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">@jsonResponseContent</code></pre>
+                }
+                else
+                {
+                    <pre><code class="text-sm rounded-md px-1 py-0.5 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">Empty response</code></pre>
+                }
+            }
+        </div>
+    </div>
+</div>
+<script>
+    async function tryEndpoint(bodyType) {
+        let url = "@(baseUrl + Model.Route)";
+        let body = null;
+        
+        switch (bodyType) {
+            case "application/x-www-form-urlencoded":
+                body = getFromDataBody();
+                break;
+        }
+        
+        let routeParameters = getRouteParameters();
+        let response = await fetch(url + routeParameters, { body, method: "@Model.Method" });
+        if (response.ok) {
+            successToast("Request successfully sent");
+        } else {
+            errorToast("Request failed with status code: " + response.statusText);
+        }
+    }
+    
+    function getRouteParameters() {
+        let routeParameters = "";
+        let routeParametersIds = "@(
+            Model.RouteParameters
+                .Aggregate("", (reducedList, parameter) => $"{parameter.Name},")
+        )".split(",");
+        routeParametersIds.pop();
+        
+        routeParametersIds.forEach((parameterId, index) => {
+            let input = document.getElementById(parameterId);
+            routeParameters += index === 0 ? "?" : "&";
+            routeParameters += parameterId + "=" + (input.type === "checkbox" ? input.checked : input.value);
+        });
+        return routeParameters;
+    }
+    
+    function getFromDataBody() {
+        let formIds = "@(
+            (formDataBodyContent ?? new List<ReferenceEndpointFormDataPropertyViewModel>())
+                .Aggregate("", (reducedList, line) => $"{line.Name},")
+        )".split(",");
+        formIds.pop();
+
+        let body = new FormData();
+        formIds.forEach(formId => {
+            let input = document.getElementById(formId);
+            body.append(formId, input.type === "checkbox" ? input.checked : input.value);
+        });
+        
+        return body;
+    }
+</script>

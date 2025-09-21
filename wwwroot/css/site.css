@@ -622,3 +622,9 @@ html[data-bs-theme="light"] .frosted {
 .sticky-top-nav {
     top: calc(48px + 2.5rem);
 }
+
+/* Highlight.js theme handling */
+/* Light theme */
+:root {
+    --hljs-background: oklch(1 0 89.876 / 0.0)
+}

@@ -53,17 +53,6 @@
     </div>
 </div>
 <script>
-    $('.copyable').on('click', function (e) {
-        if (e.ctrlKey || e.metaKey){
-            let targetElement = $(e.currentTarget);
-            if (targetElement.hasClass("testable")){
-                window.location = targetElement.text().trim();
-            }
-        } else {
-            copyToClipboard(e.currentTarget);
-        }
-    });
-    
     function displayMobileMenu() {
         $('#mobileMenu').removeClass('hidden');
         $('#pageContent').addClass('hidden');
