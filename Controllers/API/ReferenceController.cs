@@ -276,9 +276,10 @@ namespace CarCareTracker.Controllers.API
                             {
                                 Name = "documents",
                                 Description = "Files to upload",
-                                Example = "servicing_bill.pdf",
+                                Example = "[\"servicing_bill.pdf\"]",
                                 IsRequired = true,
-                                Type = "File[]"
+                                Type = "File[]",
+                                DisplayExample = false
                             }
                         ]
                     },

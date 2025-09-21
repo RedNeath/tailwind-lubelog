@@ -119,11 +119,14 @@
                                         <p class="text-sm">
                                             @formLine.Description
                                         </p>
-                                        <p class="text-sm">
-                                            Example: <code class="language-vala text-sm rounded-md px-1 py-0.5 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">
-                                                @formLine.Example
-                                            </code>
-                                        </p>
+                                        @if (formLine.DisplayExample)
+                                        {
+                                            <p class="text-sm">
+                                                Example: <code class="language-vala text-sm rounded-md px-1 py-0.5 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">
+                                                    @formLine.Example
+                                                </code>
+                                            </p>
+                                        }
                                     </div>
                                 </li>
                             }
@@ -193,6 +196,16 @@
                                         </div>
                                         break;
                                         
+                                    case "File":
+                                        <label for="@formLine.Name" class="block content-center text-sm font-medium text-gray-900 dark:text-gray-100">@formLine.Name</label>
+                                        <input type="file" id="@formLine.Name" class="col-span-2 block w-full transition-all duration-100 ease-out rounded-md border file:mr-2 file:py-2 file:px-3 file:font-normal file:text-gray-900 file:dark:text-white file:border-l-0 file:border-y-0 file:border-r file:border-gray-50/50 file:dark:border-gray-500 file:bg-white file:dark:bg-gray-800 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">
+                                        break;
+                                        
+                                    case "File[]":
+                                        <label for="@formLine.Name" class="block content-center text-sm font-medium text-gray-900 dark:text-gray-100">@formLine.Name</label>
+                                        <input type="file" multiple="multiple" id="@formLine.Name" class="col-span-2 block w-full transition-all duration-100 ease-out rounded-md border file:mr-2 file:py-2 file:px-3 file:font-normal file:text-gray-900 file:dark:text-white file:border-l-0 file:border-y-0 file:border-r file:border-gray-50/50 file:dark:border-gray-500 file:bg-white file:dark:bg-gray-800 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">
+                                        break;
+                                        
                                     default:
                                         <label for="@formLine.Name" class="block content-center text-sm font-medium text-gray-900 dark:text-gray-100">@formLine.Name</label>
                                         <input type="text" id="@formLine.Name" class="col-span-2 block w-full transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 px-3 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">
@@ -214,7 +227,7 @@
             </div>
             
             <h6 class="mb-2 mt-4 text-gray-500 uppercase text-sm font-semibold">Sample request - <small>JavaScript</small></h6>
-            <pre onclick="copyTextToClipboard('@sampleRequest')"><code class="language-javascript text-sm rounded-md px-1 py-0.5 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">@sampleRequest</code></pre>
+            <pre onclick="copyTextToClipboard(sampleRequest)"><code class="language-javascript text-sm rounded-md px-1 py-0.5 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">@sampleRequest</code></pre>
             
             <h6 class="mb-2 mt-4 text-gray-500 uppercase text-sm font-semibold">Response - <small>@((Model.Response?.MimeType ?? "text/plaintext").Split("/")[1])</small></h6>
             @{
@@ -262,7 +275,15 @@
         </div>
     </div>
 </div>
+@* I'm too lazy to do it differently at the moment *@
+<p id="sampleRequest" class="hidden">@sampleRequest</p>
 <script>
+    const sampleRequest = document.getElementById('sampleRequest').innerHTML;
+    const valuePropertyMapper = {
+        "checkbox": "checked",
+        "file": "files"
+    };
+    
     async function tryEndpoint(bodyType) {
         let url = "@(baseUrl + Model.Route)";
         let body = null;
@@ -292,8 +313,10 @@
         
         routeParametersIds.forEach((parameterId, index) => {
             let input = document.getElementById(parameterId);
+            let valueProperty = valuePropertyMapper[input.type];
+            
             routeParameters += index === 0 ? "?" : "&";
-            routeParameters += parameterId + "=" + (input.type === "checkbox" ? input.checked : input.value);
+            routeParameters += parameterId + "=" + (valueProperty === undefined ? input.value : input[valueProperty]);
         });
         return routeParameters;
     }
@@ -308,7 +331,16 @@
         let body = new FormData();
         formIds.forEach(formId => {
             let input = document.getElementById(formId);
-            body.append(formId, input.type === "checkbox" ? input.checked : input.value);
+            let valueProperty = valuePropertyMapper[input.type];
+            let value = valueProperty === undefined ? input.value : input[valueProperty];
+            
+            if (Array.isArray(value)) {
+                value.forEach(valueItem => {
+                    body.append(formId, valueItem);
+                })
+            } else {
+                body.append(formId, value);
+            }
         });
         
         return body;

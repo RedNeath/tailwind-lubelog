@@ -32,11 +32,11 @@ public class ReferenceEndpointViewModel
 
         if (Body != null)
         {
-            request += "\", body);";
+            request += $"\", {{ body, method: \"{Method}\" }});";
         }
         else
         {
-            request += "\");";
+            request += $"\", {{ method: \"{Method}\" }});";
         }
             
         return request;

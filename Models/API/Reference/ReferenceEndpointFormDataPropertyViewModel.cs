@@ -8,4 +8,5 @@ public class ReferenceEndpointFormDataPropertyViewModel
     public string Description { get; set; }
     public bool IsRequired { get; set; }
     public string Example { get; set; }
+    public bool DisplayExample  { get; set; }
 }

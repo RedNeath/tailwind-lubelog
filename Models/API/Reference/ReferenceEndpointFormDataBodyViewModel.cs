@@ -8,6 +8,14 @@ public class ReferenceEndpointFormDataBodyViewModel : ReferenceEndpointBodyInter
     
     public string GenerateSampleJavaScriptBody()
     {
-        return ""; //TODO
+        string sampleJavaScriptBody = "let body = new FormData();";
+        foreach (var item in Content)
+        {
+            string value = item.Type == "string" ? $"\"{item.Example}\"" : item.Example;
+            sampleJavaScriptBody += $"\nbody.append(\"{item.Name}\", {value});";
+        }
+
+        sampleJavaScriptBody += "\n";
+        return sampleJavaScriptBody;
     }
 }
