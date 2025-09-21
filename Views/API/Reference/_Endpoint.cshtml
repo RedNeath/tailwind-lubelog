@@ -6,6 +6,7 @@
     List<ReferenceEndpointFormDataPropertyViewModel>? formDataBodyContent = null;
     List<ReferenceEndpointFormDataPropertyViewModel>? formDataResponseContent = null;
     string? jsonResponseContent = null;
+    string? calendarResponseContent = null;
     string methodBadgeColour;
 
     switch (Model.Method.ToString())
@@ -46,6 +47,10 @@
             
         case "application/json":
             jsonResponseContent = ((ReferenceEndpointJsonResponseViewModel)Model.Response).Content;
+            break;
+            
+        case "text/calendar":
+            calendarResponseContent = ((ReferenceEndpointCalendarResponseViewModel)Model.Response).Content;
             break;
     }
 }
@@ -211,7 +216,7 @@
             <h6 class="mb-2 mt-4 text-gray-500 uppercase text-sm font-semibold">Sample request - <small>JavaScript</small></h6>
             <pre onclick="copyTextToClipboard('@sampleRequest')"><code class="language-javascript text-sm rounded-md px-1 py-0.5 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">@sampleRequest</code></pre>
             
-            <h6 class="mb-2 mt-4 text-gray-500 uppercase text-sm font-semibold">Response</h6>
+            <h6 class="mb-2 mt-4 text-gray-500 uppercase text-sm font-semibold">Response - <small>@((Model.Response?.MimeType ?? "text/plaintext").Split("/")[1])</small></h6>
             @{
                 if (Model.Response != null && formDataResponseContent != null)
                 {
@@ -243,7 +248,11 @@
                 }
                 else if (Model.Response != null && jsonResponseContent != null)
                 {
-                    <pre><code class="language-javascript text-sm rounded-md px-1 py-0.5 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">@jsonResponseContent</code></pre>
+                    <pre><code class="language-json text-sm rounded-md px-1 py-0.5 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">@jsonResponseContent</code></pre>
+                }
+                else if (Model.Response != null && calendarResponseContent != null)
+                {
+                    <pre><code class="language-plaintext text-sm rounded-md px-1 py-0.5 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">@calendarResponseContent</code></pre>
                 }
                 else
                 {
