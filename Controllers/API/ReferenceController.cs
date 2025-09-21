@@ -53,6 +53,34 @@ namespace CarCareTracker.Controllers.API
             });
         }
         
+        [Route("/API/Reference/General/WhoAmI")]
+        public IActionResult GeneralWhoAmI()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Who am I?",
+                PartialViewName = "/Views/API/Reference/General/_WhoAmI.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Get,
+                    Route = "/api/whoami",
+                    RouteParameters = [],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        {
+                            "username": "john_doe",
+                            "emailAddress": "j.doe@example.org",
+                            "isAdmin": "False",
+                            "isRoot": "False"
+                        }
+                        """
+                    }
+                }
+            });
+        }
+        
         [Route("/API/Reference/General/Version")]
         public IActionResult GeneralVersion()
         {
