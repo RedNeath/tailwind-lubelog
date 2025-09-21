@@ -53,6 +53,29 @@ namespace CarCareTracker.Controllers.API
             });
         }
         
+        [Route("/API/Reference/General/MakeBackup")]
+        public IActionResult GeneralMakeBackup()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Make backup",
+                PartialViewName = "/Views/API/Reference/General/_MakeBackup.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Get,
+                    Route = "/api/makebackup",
+                    RouteParameters = [],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        "/temp/db_backup_2025-09-21-11-15-58.zip"
+                        """
+                    }
+                }
+            });
+        }
+        
         [Route("/API/Reference/Calendar/ICSCalendar")]
         public IActionResult CalendarICSCalendar()
         {
