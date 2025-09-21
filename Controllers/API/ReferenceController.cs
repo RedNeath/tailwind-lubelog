@@ -256,5 +256,135 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Documents/Upload")]
+        public IActionResult DocumentsUpload()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Upload documents",
+                PartialViewName = "/Views/API/Reference/Documents/_Upload.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Post,
+                    Route = "/api/documents/upload",
+                    RouteParameters = [],
+                    Body = new ReferenceEndpointFormDataBodyViewModel()
+                    {
+                        Content = [
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "documents",
+                                Description = "Files to upload",
+                                Example = "servicing_bill.pdf",
+                                IsRequired = true,
+                                Type = "File[]"
+                            }
+                        ]
+                    },
+                    Response = new ReferenceEndpointCalendarResponseViewModel()
+                    {
+                        Content = """
+                        BEGIN:VCALENDAR
+                        VERSION:2.0
+                        PRODID:lubelogger.com
+                        CALSCALE:GREGORIAN
+                        METHOD:PUBLISH
+                        BEGIN:VEVENT
+                        DTSTAMP:20250921T112800
+                        UID:36f7c703-d346-335f-6290-cfe5248293e8
+                        DTSTART:20191208T000000
+                        DTEND:20191208T235900
+                        SUMMARY:2010 Renault Wind #BA-586-VR - Renault servicing
+                        DESCRIPTION:2010 Renault Wind #BA-586-VR - Renault servicing
+                        PRIORITY:1
+                        END:VEVENT
+                        BEGIN:VEVENT
+                        DTSTAMP:20250921T112800
+                        UID:13cb738f-780b-8371-1553-7cee43639a77
+                        DTSTART:20190414T000000
+                        DTEND:20190414T235900
+                        SUMMARY:2010 Renault Wind #BA-586-VR - Air filter
+                        DESCRIPTION:2010 Renault Wind #BA-586-VR - Air filter
+                        PRIORITY:1
+                        END:VEVENT
+                        BEGIN:VEVENT
+                        DTSTAMP:20250921T112800
+                        UID:91c8553a-0290-7786-0fdc-18f1128cd191
+                        DTSTART:20250820T000000
+                        DTEND:20250820T235900
+                        SUMMARY:2010 Renault Wind #BA-586-VR - Brake fluid
+                        DESCRIPTION:2010 Renault Wind #BA-586-VR - Brake fluid
+                        PRIORITY:1
+                        END:VEVENT
+                        BEGIN:VEVENT
+                        DTSTAMP:20250921T112800
+                        UID:a8144320-ed2d-f5e2-2d95-21653a4a7f8a
+                        DTSTART:20231208T000000
+                        DTEND:20231208T235900
+                        SUMMARY:2010 Renault Wind #BA-586-VR - Accessory belt
+                        DESCRIPTION:2010 Renault Wind #BA-586-VR - Accessory belt
+                        PRIORITY:1
+                        END:VEVENT
+                        BEGIN:VEVENT
+                        DTSTAMP:20250921T112800
+                        UID:1e7b82fa-5d5f-e3a4-c6a1-f96c300caae6
+                        DTSTART:20250820T000000
+                        DTEND:20250820T235900
+                        SUMMARY:2010 Renault Wind #BA-586-VR - Engine coolant
+                        DESCRIPTION:2010 Renault Wind #BA-586-VR - Engine coolant
+                        PRIORITY:1
+                        END:VEVENT
+                        BEGIN:VEVENT
+                        DTSTAMP:20250921T112800
+                        UID:e6a07b59-a366-a116-85d6-ce525dfd2613
+                        DTSTART:20251016T000000
+                        DTEND:20251016T235900
+                        SUMMARY:2010 Renault Wind #BA-586-VR - Cabin filter
+                        DESCRIPTION:2010 Renault Wind #BA-586-VR - Cabin filter
+                        PRIORITY:2
+                        END:VEVENT
+                        BEGIN:VEVENT
+                        DTSTAMP:20250921T112800
+                        UID:20970377-ccc2-9336-4cce-a15c9cc2434c
+                        DTSTART:20251016T000000
+                        DTEND:20251016T235900
+                        SUMMARY:2010 Renault Wind #BA-586-VR - Oil filter
+                        DESCRIPTION:2010 Renault Wind #BA-586-VR - Oil filter
+                        PRIORITY:2
+                        END:VEVENT
+                        BEGIN:VEVENT
+                        DTSTAMP:20250921T112800
+                        UID:fef219c9-1a61-6514-4e82-e9a49a2d8ad2
+                        DTSTART:20251016T000000
+                        DTEND:20251016T235900
+                        SUMMARY:2010 Renault Wind #BA-586-VR - Oil change
+                        DESCRIPTION:2010 Renault Wind #BA-586-VR - Oil change
+                        PRIORITY:2
+                        END:VEVENT
+                        BEGIN:VEVENT
+                        DTSTAMP:20250921T112800
+                        UID:a31936b1-bd96-1ce0-8e47-c1392c34a714
+                        DTSTART:20270829T000000
+                        DTEND:20270829T235900
+                        SUMMARY:2010 Renault Wind #BA-586-VR - Sparking plugs
+                        DESCRIPTION:2010 Renault Wind #BA-586-VR - Sparking plugs
+                        PRIORITY:3
+                        END:VEVENT
+                        BEGIN:VEVENT
+                        DTSTAMP:20250921T112800
+                        UID:52fe488e-8891-b121-edd1-fd5a33fbc929
+                        DTSTART:20300429T000000
+                        DTEND:20300429T235900
+                        SUMMARY:2010 Renault Wind #BA-586-VR - Cam belt
+                        DESCRIPTION:2010 Renault Wind #BA-586-VR - Cam belt
+                        PRIORITY:3
+                        END:VEVENT
+                        END:VCALENDAR
+                        """
+                    }
+                }
+            });
+        }
     }
 }

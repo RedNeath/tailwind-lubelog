@@ -34,14 +34,14 @@
 
     switch (Model.Body?.MimeType)
     {
-        case "application/www-form-urlencoded":
+        case "application/x-www-form-urlencoded":
             formDataBodyContent = ((ReferenceEndpointFormDataBodyViewModel)Model.Body).Content;
             break;
     }
 
     switch (Model.Response?.MimeType)
     {
-        case "application/www-form-urlencoded":
+        case "application/x-www-form-urlencoded":
             formDataResponseContent = ((ReferenceEndpointFormDataResponseViewModel)Model.Response).Content;
             break;
             
@@ -141,7 +141,7 @@
                 if (Model.RouteParameters.Count > 0)
                 {
                     <h6 class="mb-2 mt-4 text-gray-500 uppercase text-sm font-semibold">Route parameters</h6>
-                    <ul class="grid grid-cols-2 gap-2">
+                    <div class="grid grid-cols-2 gap-2 mb-2">
                         @foreach (ReferenceEndpointRouteParameterViewModel parameter in Model.RouteParameters)
                         {
                             switch (parameter.Type)
@@ -161,12 +161,12 @@
                                     break;
                                     
                                 default:
-                                    <label for="@parameter.Name" class="block text-sm font-medium text-gray-900 dark:text-gray-100">Standard text field</label>
-                                    <input type="text" id="@parameter.Name" class="mt-2 block w-full transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 px-3 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">
+                                    <label for="@parameter.Name" class="block content-center text-sm font-medium text-gray-900 dark:text-gray-100">Standard text field</label>
+                                    <input type="text" id="@parameter.Name" class="block w-full transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 px-3 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">
                                     break;
                             }
                         }
-                    </ul>
+                    </div>
                 }
 
                 if (Model.Body != null)
@@ -174,13 +174,13 @@
                     <h6 class="mb-2 mt-4 text-gray-500 uppercase text-sm font-semibold">Body</h6>
                     if (formDataBodyContent != null)
                     {
-                        <ul class="grid grid-cols-2 gap-2">
+                        <div class="grid grid-cols-3 gap-2 mb-2">
                             @foreach (var formLine in formDataBodyContent)
                             {
                                 switch (formLine.Type)
                                 {
                                     case "bool":
-                                        <div class="flex gap-12 mb-4 col-span-2">
+                                        <div class="flex gap-12 mb-4 col-span-3">
                                             <div class="flex gap-3 items-center">
                                                 <div class="flex h-6 shrink-0 items-center">
                                                     <div class="group grid size-4 grid-cols-1">
@@ -194,12 +194,12 @@
                                         break;
                                         
                                     default:
-                                        <label for="@formLine.Name" class="block text-sm font-medium text-gray-900 dark:text-gray-100">Standard text field</label>
-                                        <input type="text" id="@formLine.Name" class="mt-2 block w-full transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 px-3 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">
+                                        <label for="@formLine.Name" class="block content-center text-sm font-medium text-gray-900 dark:text-gray-100">@formLine.Name</label>
+                                        <input type="text" id="@formLine.Name" class="col-span-2 block w-full transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 px-3 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">
                                         break;
                                 }
                             }
-                        </ul>
+                        </div>
                     }
                 }
             }
