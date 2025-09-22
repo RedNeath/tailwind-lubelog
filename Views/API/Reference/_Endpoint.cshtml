@@ -280,8 +280,8 @@
 <script>
     const sampleRequest = document.getElementById('sampleRequest').innerHTML;
     const valuePropertyMapper = {
-        "checkbox": "checked",
-        "file": "files"
+        "checkbox": (input) => input.checked,
+        "file": (input) => Array.from(input.files),
     };
     
     async function tryEndpoint(bodyType) {
@@ -313,10 +313,12 @@
         
         routeParametersIds.forEach((parameterId, index) => {
             let input = document.getElementById(parameterId);
-            let valueProperty = valuePropertyMapper[input.type];
+            let value = (valuePropertyMapper[input.type] !== undefined)
+                ? valuePropertyMapper[input.type](input)
+                : input.value;
             
             routeParameters += index === 0 ? "?" : "&";
-            routeParameters += parameterId + "=" + (valueProperty === undefined ? input.value : input[valueProperty]);
+            routeParameters += parameterId + "=" + value;
         });
         return routeParameters;
     }
@@ -331,8 +333,9 @@
         let body = new FormData();
         formIds.forEach(formId => {
             let input = document.getElementById(formId);
-            let valueProperty = valuePropertyMapper[input.type];
-            let value = valueProperty === undefined ? input.value : input[valueProperty];
+            let value = (valuePropertyMapper[input.type] !== undefined)
+                ? valuePropertyMapper[input.type](input)
+                : input.value;
             
             if (Array.isArray(value)) {
                 value.forEach(valueItem => {
