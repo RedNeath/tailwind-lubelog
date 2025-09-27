@@ -309,5 +309,15 @@ namespace CarCareTracker.Controllers.API
                 PartialViewName = "/Views/API/Reference/Vehicles/_Index.cshtml"
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Gas")]
+        public IActionResult VehiclesGas()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Gas",
+                PartialViewName = "/Views/API/Reference/Vehicles/Gas/_Index.cshtml"
+            });
+        }
     }
 }
