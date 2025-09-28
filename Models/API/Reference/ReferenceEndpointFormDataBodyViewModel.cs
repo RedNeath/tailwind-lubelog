@@ -11,8 +11,7 @@ public class ReferenceEndpointFormDataBodyViewModel : ReferenceEndpointBodyInter
         string sampleJavaScriptBody = "let body = new FormData();";
         foreach (var item in Content)
         {
-            string value = item.Type == "string" ? $"\"{item.Example}\"" : item.Example;
-            sampleJavaScriptBody += $"\nbody.append(\"{item.Name}\", {value});";
+            sampleJavaScriptBody += $"\nbody.append(\"{item.Name}\", {item.Example});";
         }
 
         sampleJavaScriptBody += "\n";

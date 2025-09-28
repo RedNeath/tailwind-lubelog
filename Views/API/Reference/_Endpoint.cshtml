@@ -72,7 +72,7 @@
                 <ul>
                     @foreach (ReferenceEndpointRouteParameterViewModel parameter in Model.RouteParameters)
                     {
-                        <li class="mt-1">
+                        <li class="mt-2">
                             <p class="text-sm">
                                 <span class="text-base">@parameter.Name</span>: @parameter.Type
                                 @if (parameter.IsRequired)
@@ -99,13 +99,21 @@
             @{
                 if (Model.Body != null)
                 {
-                    <h5 class="font-semibold text-gray-500 dark:text-gray-400">Body <small>@Model.Body.MimeType</small></h5>
+                    if (Model.RouteParameters.Count > 0) 
+                    {
+                        <h5 class="font-semibold text-gray-500 dark:text-gray-400 mt-4">Body <small>@Model.Body.MimeType</small></h5>
+                    }
+                    else
+                    {
+                        <h5 class="font-semibold text-gray-500 dark:text-gray-400">Body <small>@Model.Body.MimeType</small></h5>
+                    }
+                    
                     if (formDataBodyContent != null)
                     {
                         <ul>
                             @foreach (var formLine in formDataBodyContent)
                             {
-                                <li class="mt-1">
+                                <li class="mt-2">
                                     <p class="text-sm">
                                         <span class="text-base">@formLine.Name</span>: @formLine.Type
                                         @if (formLine.IsRequired)
@@ -115,14 +123,24 @@
                                             </span>
                                         }
                                     </p>
-                                    <div class="ml-1 pl-1 border-l border-gray-300 dark:border-gray-700">
-                                        <p class="text-sm">
-                                            @formLine.Description
-                                        </p>
+                                    <div class="ml-1 pl-1 border-l border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400">
+                                        @if (formLine.Description == "See format for extra fields")
+                                        {
+                                            <p class="text-sm cursor-pointer underline hover:text-gray-900 dark:hover:text-white" onclick="showExtraFieldsInfo()">
+                                                @formLine.Description
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p class="text-sm">
+                                                @formLine.Description
+                                            </p>
+                                        }
                                         @if (formLine.DisplayExample)
                                         {
                                             <p class="text-sm">
-                                                Example: <code class="language-vala text-sm rounded-md px-1 py-0.5 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">
+                                                Example:
+                                                <code class="language-vala text-sm rounded-md px-1 py-0.5 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">
                                                     @formLine.Example
                                                 </code>
                                             </p>
@@ -144,13 +162,13 @@
                 if (Model.RouteParameters.Count > 0)
                 {
                     <h6 class="mb-2 mt-4 text-gray-500 uppercase text-sm font-semibold">Route parameters</h6>
-                    <div class="grid grid-cols-2 gap-2 mb-2">
+                    <div class="grid grid-cols-3 gap-2 mb-2">
                         @foreach (ReferenceEndpointRouteParameterViewModel parameter in Model.RouteParameters)
                         {
                             switch (parameter.Type)
                             {
                                 case "bool":
-                                    <div class="flex gap-12 mb-4 col-span-2">
+                                    <div class="flex gap-12 col-span-3 my-auto">
                                         <div class="flex gap-3 items-center">
                                             <div class="flex h-6 shrink-0 items-center">
                                                 <div class="group grid size-4 grid-cols-1">
@@ -164,8 +182,8 @@
                                     break;
                                     
                                 default:
-                                    <label for="@parameter.Name" class="block content-center text-sm font-medium text-gray-900 dark:text-gray-100">Standard text field</label>
-                                    <input type="text" id="@parameter.Name" class="block w-full transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 px-3 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">
+                                    <label for="@parameter.Name" class="block content-center text-sm font-medium text-gray-900 dark:text-gray-100">@parameter.Name</label>
+                                    <input type="text" id="@parameter.Name" class="col-span-2 block w-full transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 px-3 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">
                                     break;
                             }
                         }
@@ -183,7 +201,7 @@
                                 switch (formLine.Type)
                                 {
                                     case "bool":
-                                        <div class="flex gap-12 mb-4 col-span-3">
+                                        <div class="flex gap-12 col-span-3 my-auto">
                                             <div class="flex gap-3 items-center">
                                                 <div class="flex h-6 shrink-0 items-center">
                                                     <div class="group grid size-4 grid-cols-1">
@@ -307,7 +325,7 @@
         let routeParameters = "";
         let routeParametersIds = "@(
             Model.RouteParameters
-                .Aggregate("", (reducedList, parameter) => $"{parameter.Name},")
+                .Aggregate("", (reducedList, parameter) => $"{parameter.Name},{reducedList}")
         )".split(",");
         routeParametersIds.pop();
         
@@ -326,7 +344,7 @@
     function getFromDataBody() {
         let formIds = "@(
             (formDataBodyContent ?? new List<ReferenceEndpointFormDataPropertyViewModel>())
-                .Aggregate("", (reducedList, line) => $"{line.Name},")
+                .Aggregate("", (reducedList, line) => $"{line.Name},{reducedList}")
         )".split(",");
         formIds.pop();
 
@@ -347,5 +365,13 @@
         });
         
         return body;
+    }
+
+    function showExtraFieldsInfo(){
+        Swal.fire({
+            title: "Format for Extra Fields",
+            html: "extrafields[i][name] - Name of Extra Field<br/>extrafields[i][value] - Value of Extra Field<br/>i is an integer that starts at 0 and increments with each extrafield",
+            icon: "info"
+        });
     }
 </script>
