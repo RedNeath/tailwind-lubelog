@@ -456,5 +456,68 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Gas/RecordsList")]
+        public IActionResult VehiclesGasRecordsList()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Records list",
+                PartialViewName = "/Views/API/Reference/Vehicles/Gas/_RecordsList.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Get,
+                    Route = "/api/vehicle/gasrecords",
+                    RouteParameters = [
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "vehicleId",
+                            Type = "int",
+                            Description = "Id of vehicle",
+                            IsRequired = true,
+                            Example = "1"
+                        },
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "useMPG",
+                            Type = "bool",
+                            Description = "Use imperial units and calculation",
+                            IsRequired = true,
+                            Example = "false"
+                        },
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "useUKMPG",
+                            Type = "bool",
+                            Description = "Use UK imperial calculation",
+                            IsRequired = true,
+                            Example = "false"
+                        }
+                    ],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        [
+                            {
+                                "id": "1",
+                                "date": "2025-09-27",
+                                "odometer": "128992",
+                                "fuelConsumed": "36.48",
+                                "cost": "58.67",
+                                "fuelEconomy": "3.6774193548387096774193548387",
+                                "isFillToFull": "True",
+                                "missedFuelUp": "False",
+                                "notes": "Refilled the tank at the E.Leclerc Paridis fuel station",
+                                "tags": "sp95-e10 e.leclerc paridis",
+                                "extraFields": [],
+                                "files": []
+                            }
+                        ]
+                        """
+                    }
+                }
+            });
+        }
     }
 }
