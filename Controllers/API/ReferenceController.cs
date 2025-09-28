@@ -830,5 +830,15 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Odometer")]
+        public IActionResult VehiclesOdometer()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Odometer",
+                PartialViewName = "/Views/API/Reference/Vehicles/Odometer/_Index.cshtml"
+            });
+        }
     }
 }
