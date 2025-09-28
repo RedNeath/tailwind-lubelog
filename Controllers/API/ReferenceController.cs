@@ -691,5 +691,50 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/List")]
+        public IActionResult VehiclesList()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "List vehicles",
+                PartialViewName = "/Views/API/Reference/Vehicles/_List.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Get,
+                    Route = "/api/vehicles",
+                    RouteParameters = [],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        [
+                            {
+                                "id": 1,
+                                "imageLocation": "/images/12f226dc-d93d-44d1-acfd-85d1eee2bba0.jpg",
+                                "mapLocation": "",
+                                "year": 2010,
+                                "make": "Renault",
+                                "model": "Wind",
+                                "licencePlate": "WW-001-AA",
+                                "purchaseDate": "2025-08-06",
+                                "soldDate": null,
+                                "purchasePrice": 7500,
+                                "soldPrice": 0,
+                                "isElectric": false,
+                                "isDiesel": false,
+                                "useHours": false,
+                                "odometerOptional": false,
+                                "extraFields": [],
+                                "tags": [],
+                                "hasOdometerAdjustment": false,
+                                "odometerMultiplier": "1"
+                            }
+                        ]
+                        """
+                    }
+                }
+            });
+        }
     }
 }
