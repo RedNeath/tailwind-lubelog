@@ -519,5 +519,40 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Gas/DeleteRecord")]
+        public IActionResult VehiclesGasDeleteRecord()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Delete record",
+                PartialViewName = "/Views/API/Reference/Vehicles/Gas/_RecordsList.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Delete,
+                    Route = "/api/vehicle/gasrecords/delete",
+                    RouteParameters = [
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "Id",
+                            Type = "int",
+                            Description = "Id of gas record",
+                            IsRequired = true,
+                            Example = "1"
+                        }
+                    ],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        {
+                            "success": true,
+                            "message": "Gas Record Deleted"
+                        }
+                        """
+                    }
+                }
+            });
+        }
     }
 }
