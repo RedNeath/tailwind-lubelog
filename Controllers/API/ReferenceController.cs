@@ -716,8 +716,8 @@ namespace CarCareTracker.Controllers.API
                                 "year": 2010,
                                 "make": "Renault",
                                 "model": "Wind",
-                                "licencePlate": "WW-001-AA",
-                                "purchaseDate": "2025-08-06",
+                                "licensePlate": "WI-072-ND",
+                                "purchaseDate": "2025-06-08",
                                 "soldDate": null,
                                 "purchasePrice": 7500,
                                 "soldPrice": 0,
@@ -728,7 +728,101 @@ namespace CarCareTracker.Controllers.API
                                 "extraFields": [],
                                 "tags": [],
                                 "hasOdometerAdjustment": false,
-                                "odometerMultiplier": "1"
+                                "odometerMultiplier": "1",
+                                "odometerDifference": "0",
+                                "dashboardMetrics": [0, 2, 1],
+                                "vehicleIdentifier": "LicensePlate"
+                            }
+                        ]
+                        """
+                    }
+                }
+            });
+        }
+        
+        [Route("/API/Reference/Vehicles/Info")]
+        public IActionResult VehiclesInfo()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Vehicle(s) info",
+                PartialViewName = "/Views/API/Reference/Vehicles/_Info.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Get,
+                    Route = "/api/vehicle/info",
+                    RouteParameters = [
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "VehicleId",
+                            Description = "Id of vehicle",
+                            IsRequired = false,
+                            Type = "int",
+                            Example = "1"
+                        }
+                    ],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        [
+                            {
+                                "vehicleData": {
+                                    "id": 1,
+                                    "imageLocation": "/images/12f226dc-d93d-44d1-acfd-85d1eee2bba0.jpg",
+                                    "mapLocation": "",
+                                    "year": 2010,
+                                    "make": "Renault",
+                                    "model": "Wind",
+                                    "licensePlate": "WI-072-ND",
+                                    "purchaseDate": "2025-06-08",
+                                    "soldDate": null,
+                                    "purchasePrice": 7500,
+                                    "soldPrice": 0,
+                                    "isElectric": false,
+                                    "isDiesel": false,
+                                    "useHours": false,
+                                    "odometerOptional": false,
+                                    "extraFields": [],
+                                    "tags": [],
+                                    "hasOdometerAdjustment": false,
+                                    "odometerMultiplier": "1",
+                                    "odometerDifference": "0",
+                                    "dashboardMetrics": [0, 2, 1],
+                                    "vehicleIdentifier": "LicensePlate"
+                                },
+                                "veryUrgentReminderCount": 0,
+                                "urgentReminderCount": 0,
+                                "notUrgentReminderCount": 15,
+                                "pastDueReminderCount": 1,
+                                "nextReminder": {
+                                    "id": "14",
+                                    "description": "Lavage",
+                                    "urgency": "NotUrgent",
+                                    "metric": "Date",
+                                    "userMetric": "Date",
+                                    "notes": null,
+                                    "dueDate": "2025-12-16",
+                                    "dueOdometer": "0",
+                                    "dueDays": "78",
+                                    "dueDistance": "0",
+                                    "tags": "faisable"
+                                },
+                                "serviceRecordCount": 9,
+                                "serviceRecordCost": 3155.36,
+                                "repairRecordCount": 4,
+                                "repairRecordCost": 1132.62,
+                                "upgradeRecordCount": 0,
+                                "upgradeRecordCost": 0,
+                                "taxRecordCount": 0,
+                                "taxRecordCost": 0,
+                                "gasRecordCount": 4,
+                                "gasRecordCost": 15065.96,
+                                "lastReportedOdometer": 128524,
+                                "planRecordBackLogCount": 0,
+                                "planRecordInProgressCount": 0,
+                                "planRecordTestingCount": 0,
+                                "planRecordDoneCount": 0
                             }
                         ]
                         """
