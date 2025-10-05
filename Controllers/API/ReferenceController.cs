@@ -1100,5 +1100,115 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Odometer/UpdateRecord")]
+        public IActionResult VehiclesOdometerUpdateRecord()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Update odometer record",
+                PartialViewName = "/Views/API/Reference/Vehicles/Odometer/_UpdateRecord.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Put,
+                    Route = "/api/vehicle/odometerrecords/update",
+                    RouteParameters = [],
+                    Body = new ReferenceEndpointFormDataBodyViewModel()
+                    {
+                        Content = [
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "Id",
+                                Description = "Id of odometer record",
+                                Example = "1",
+                                IsRequired = true,
+                                Type = "int",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "date",
+                                Description = "Date to be entered",
+                                Example = "\"2025-09-28\"",
+                                IsRequired = true,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "initialOdometer",
+                                Description = "Initial odometer reading",
+                                Example = "128534",
+                                IsRequired = true,
+                                Type = "int",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "odometer",
+                                Description = "Odometer reading",
+                                Example = "128992",
+                                IsRequired = true,
+                                Type = "int",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "notes",
+                                Description = "Notes",
+                                Example = "\"Vehicle won't move before some time\"",
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "tags",
+                                Description = "Tags separated by spaces",
+                                Example = "\"immobilisation\"",
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "extrafields",
+                                Description = "See format for extra fields",
+                                Example = "",
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = false
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "files",
+                                Description = "Json response from the Upload document route",
+                                Example = """
+                                "[
+                                    {
+                                        name: \"odometer.jpg\",
+                                        location: \"/documents/bc28e7d5-a533-4108-b184-3cdc77f23c12.jpg\",
+                                        isPending: false
+                                    }
+                                ]"
+                                """,
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                        ]
+                    },
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        {
+                            "success": true,
+                            "message": "Odometer Record Updated"
+                        }
+                        """
+                    }
+                }
+            });
+        }
     }
 }
