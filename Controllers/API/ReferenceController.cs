@@ -950,5 +950,40 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Odometer/DeleteRecord")]
+        public IActionResult VehiclesOdometerDeleteRecord()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Delete odometer record",
+                PartialViewName = "/Views/API/Reference/Vehicles/Odometer/_DeleteRecord.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Delete,
+                    Route = "/api/vehicle/odometerrecords/delete",
+                    RouteParameters = [
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "Id",
+                            Type = "int",
+                            Description = "Id of odometer record",
+                            IsRequired = true,
+                            Example = "1"
+                        }
+                    ],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                                  {
+                                      "success": true,
+                                      "message": "Odometer Record Deleted"
+                                  }
+                                  """
+                    }
+                }
+            });
+        }
     }
 }
