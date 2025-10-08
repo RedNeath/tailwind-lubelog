@@ -1210,5 +1210,15 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Plans")]
+        public IActionResult VehiclesPlans()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Plans",
+                PartialViewName = "/Views/API/Reference/Vehicles/Plans/_Index.cshtml"
+            });
+        }
     }
 }
