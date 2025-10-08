@@ -1,40 +1,17 @@
-<div class="row api-method">
-    <div class="col-1">
-        <span class="badge text-bg-warning">PUT</span>
-    </div>
-    <div class="col-5 copyable">
-        <code>/api/vehicle/planrecords/update</code>
-    </div>
-    <div class="col-3">
-        Updates Plan Record
-    </div>
-    <div class="col-3">
-        Body(form-data): {<br />
-        Id - Id of Plan Record<br />
-        description - Description<br />
-        cost - Cost<br />
-        type - ServiceRecord/RepairRecord/UpgradeRecord<br />
-        priority - Low/Normal/Critical<br />
-        progress - Backlog/InProgress/Testing<br />
-        notes - notes(optional)<br />
-        extrafields - <a class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reminder-calendar-item" onclick="showExtraFieldsInfo()">extrafields(optional)</a><br />
-        files - <a class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reminder-calendar-item" onclick="showAttachmentsInfo()">attachments(optional)</a><br />
-        }
-    </div>
+@using CarCareTracker.Models.API.Reference
+@model BaseReferenceViewModel
+<div class="flex flex-col items-start gap-2 md:gap-1">
+    <button type="button"
+            onclick="showAuthDialog()"
+            class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-400/10 px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">
+        <heroicon kind="Mini" name="LockClosed" class="size-3 mr-1.5"/>Auth required
+    </button>
+    <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Update plan record</h2>
 </div>
-<script>
-    function showExtraFieldsInfo(){
-        Swal.fire({
-            title: "Format for Extra Fields",
-            html: "extrafields[i][name] - Name of Extra Field<br/>extrafields[i][value] - Value of Extra Field<br/>i is an integer that starts at 0 and increments with each extrafield",
-            icon: "info"
-        });
-    }
-    function showAttachmentsInfo(){
-        Swal.fire({
-            title: "Attaching Files",
-            html: "The Document Upload Endpoint will upload the files and provide a formatted output which you can pass into this method",
-            icon: "info"
-        });
-    }
-</script>
+<hr class="md:hidden border-gray-200 dark:border-gray-800 mt-4"/>
+<div class="py-6 md:pt-8">
+    <p class="mb-2">
+        Updates an existing plan record.
+    </p>
+</div>
+@await Html.PartialAsync("/Views/API/Reference/_Endpoint.cshtml", Model.Endpoint)
