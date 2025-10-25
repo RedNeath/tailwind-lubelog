@@ -1718,6 +1718,41 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Reminders/SendViaEmail")]
+        public IActionResult VehiclesRemindersSendViaEmail()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Send reminders",
+                PartialViewName = "/Views/API/Reference/Vehicles/Reminders/_SendViaEmail.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Get,
+                    Route = "/api/vehicle/reminders/send",
+                    RouteParameters = [
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "urgencies",
+                            Type = "string[]",
+                            Description = "Array of the following strings: `NotUrgent`, `Urgent`, `VeryUrgent, `PastDue",
+                            IsRequired = false,
+                            Example = "VeryUrgent,PastDue"
+                        },
+                    ],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                                  {
+                                      "success": false,
+                                      "message": "No Emails Sent, No Vehicles Available or No Recipients Configured",
+                                  }
+                                  """
+                    }
+                }
+            });
+        }
                         """
                     }
                 }
