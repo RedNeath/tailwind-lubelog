@@ -1637,6 +1637,41 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Reminders/DeleteRecord")]
+        public IActionResult VehiclesRemindersDeleteRecord()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Delete reminder record",
+                PartialViewName = "/Views/API/Reference/Vehicles/Reminders/_DeleteRecord.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Delete,
+                    Route = "/api/vehicle/reminders/delete",
+                    RouteParameters = [
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "Id",
+                            Type = "int",
+                            Description = "Id of reminder record",
+                            IsRequired = true,
+                            Example = "1"
+                        }
+                    ],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                                  {
+                                      "success": true,
+                                      "message": "Reminder Record Deleted"
+                                  }
+                                  """
+                    }
+                }
+            });
+        }
                         """
                     }
                 }
