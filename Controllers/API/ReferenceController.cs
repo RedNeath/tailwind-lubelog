@@ -1534,6 +1534,16 @@ namespace CarCareTracker.Controllers.API
                             "success": true,
                             "message": "Plan Record Updated"
                         }
+        
+        [Route("/API/Reference/Vehicles/Reminders")]
+        public IActionResult VehiclesReminders()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Reminders",
+                PartialViewName = "/Views/API/Reference/Vehicles/Reminders/_Index.cshtml"
+            });
+        }
                         """
                     }
                 }
