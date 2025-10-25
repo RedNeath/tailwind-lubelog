@@ -1534,6 +1534,11 @@ namespace CarCareTracker.Controllers.API
                             "success": true,
                             "message": "Plan Record Updated"
                         }
+                        """
+                    }
+                }
+            });
+        }
         
         [Route("/API/Reference/Vehicles/Reminders")]
         public IActionResult VehiclesReminders()
@@ -1753,6 +1758,93 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Reminders/UpdateRecord")]
+        public IActionResult VehiclesRemindersUpdateRecord()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Update reminder record",
+                PartialViewName = "/Views/API/Reference/Vehicles/Reminders/_UpdateRecord.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Put,
+                    Route = "/api/vehicle/reminders/update",
+                    RouteParameters = [],
+                    Body = new ReferenceEndpointFormDataBodyViewModel()
+                    {
+                        Content = [
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "Id",
+                                Description = "Id of reminder record",
+                                Example = "1",
+                                IsRequired = true,
+                                Type = "int",
+                                DisplayExample = true
+                            },new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "description",
+                                Description = "Description",
+                                Example = "\"Oil service\"",
+                                IsRequired = true,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "dueDate",
+                                Description = "Due date",
+                                Example = "\"2025-10-14\"",
+                                IsRequired = true,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "dueOdometer",
+                                Description = "Due odometer reading",
+                                Example = "20000",
+                                IsRequired = true,
+                                Type = "int",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "metric",
+                                Description = "One of: `Date`, `Odometer` or `Both`.",
+                                Example = "\"Both\"",
+                                IsRequired = true,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "notes",
+                                Description = "Notes",
+                                Example = "\"Preferred oil: ELF 5W-40.\"",
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "tags",
+                                Description = "Tags separated by spaces",
+                                Example = "\"oil 5w-40\"",
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                        ]
+                    },
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        {
+                            "success": true,
+                            "message": "Reminder Record Updated"
+                        }
                         """
                     }
                 }
