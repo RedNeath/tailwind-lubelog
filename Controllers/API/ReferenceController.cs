@@ -1672,6 +1672,52 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Reminders/RecordsList")]
+        public IActionResult VehiclesRemindersRecordsList()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Reminder records list",
+                PartialViewName = "/Views/API/Reference/Vehicles/Reminders/_RecordsList.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Get,
+                    Route = "/api/vehicle/reminders",
+                    RouteParameters = [
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "vehicleId",
+                            Type = "int",
+                            Description = "Id of vehicle",
+                            IsRequired = true,
+                            Example = "1"
+                        },
+                    ],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                                  [
+                                      {
+                                          "id": "1",
+                                          "description": "Oil service",
+                                          "urgency": "VeryUrgent",
+                                          "metric": "Date",
+                                          "userMetric": "Both",
+                                          "notes": "Preferred oil: ELF 5W-40.",
+                                          "dueDate": "2025-10-14",
+                                          "dueOdometer": "158000",
+                                          "dueDays": "0",
+                                          "dueDistance": "20000",
+                                          "tags": "oil 5w-40",
+                                      }
+                                  ]
+                                  """
+                    }
+                }
+            });
+        }
                         """
                     }
                 }
