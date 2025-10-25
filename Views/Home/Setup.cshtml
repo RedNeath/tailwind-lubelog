@@ -114,6 +114,10 @@
                     <!option value="false" @(Model.InvariantAPIEnabled ? "" : "selected")>@translator.Translate(userLanguage, "Disabled")</!option>
                 </select>
             </div>
+            <div class="form-group">
+                <label for="inputCookieLifeSpan" class="form-label"><span>@($"{translator.Translate(userLanguage, "Auth Cookie Lifespan")} - ")</span><span id="inputCookieLifeSpanRangeLabel">@Model.CookieLifeSpan</span><span>@($" {translator.Translate(userLanguage, "Days")}")</span></label>
+                <input type="range" class="form-range" oninput="updateCookieLifeSpanRange()" min="1" max="90" id="inputCookieLifeSpan" value="@Model.CookieLifeSpan">
+            </div>
         </form>
     </div>
     <div class="setup-wizard-content" data-page="2" style="display:none;">
@@ -160,6 +164,43 @@
     </div>
     <div class="setup-wizard-content" data-page="3" style="display:none;">
         <div class="d-flex justify-content-between align-items-center">
+            <span class="display-5">@translator.Translate(userLanguage, "Server Endpoints")</span>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" onchange="nextOnSkip(this)" role="switch" id="skipHTTPS">
+                <label class="form-check-label" for="skipHTTPS">@translator.Translate(userLanguage, "Skip")</label>
+            </div>
+        </div>
+        <hr />
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="inputHTTPURL">@translator.Translate(userLanguage, "HTTP Endpoint")</label>
+                <input type="text" id="inputHTTPURL" class="form-control" placeholder="@translator.Translate(userLanguage, "Not Configured")" value="@Model.KestrelAppConfig.Endpoints.Http.Url">
+                <small class="text-body-secondary">@translator.Translate(userLanguage, "Restart Required")</small>
+            </div>
+            <div class="form-group">
+                <label for="inputHTTPSURL">@translator.Translate(userLanguage, "HTTPS Endpoint")</label>
+                <input type="text" id="inputHTTPSURL" class="form-control" placeholder="@translator.Translate(userLanguage, "Not Configured")" value="@Model.KestrelAppConfig.Endpoints.HttpsInlineCertFile.Url">
+                <small class="text-body-secondary">@translator.Translate(userLanguage, "Restart Required")</small>
+            </div>
+            <div class="form-group">
+                <label for="inputHTTPSCertLocation">@translator.Translate(userLanguage, "HTTPS Certificate Location")</label>
+                <input type="text" id="inputHTTPSCertLocation" class="form-control" placeholder="@translator.Translate(userLanguage, "Not Configured")" value="@Model.KestrelAppConfig.Endpoints.HttpsInlineCertFile.Certificate.Path">
+                <small class="text-body-secondary">@translator.Translate(userLanguage, "Restart Required")</small>
+            </div>
+            <div class="form-group">
+                <label for="inputHTTPSCertPassword">@translator.Translate(userLanguage, "HTTPS Certificate Password")</label>
+                <div class="input-group">
+                    <input type="password" id="inputHTTPSCertPassword" class="form-control" placeholder="@translator.Translate(userLanguage, "Not Configured")" value="@Model.KestrelAppConfig.Endpoints.HttpsInlineCertFile.Certificate.Password">
+                    <div class="input-group-text">
+                        <button type="button" class="btn btn-sm text-secondary password-visible-button" onclick="togglePasswordVisibility(this)"><i class="bi bi-eye"></i></button>
+                    </div>
+                </div>
+                <small class="text-body-secondary">@translator.Translate(userLanguage, "Restart Required")</small>
+            </div>
+        </form>
+    </div>
+    <div class="setup-wizard-content" data-page="4" style="display:none;">
+        <div class="d-flex justify-content-between align-items-center">
             <span class="display-5">@translator.Translate(userLanguage, "Single Sign On")</span>
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" onchange="nextOnSkip(this)" role="switch" id="skipOIDC">
@@ -198,6 +239,10 @@
                 <input type="text" id="inputOIDCUserInfo" class="form-control" placeholder="@translator.Translate(userLanguage, "Not Configured")" value="@Model.OIDCConfig.UserInfoURL">
             </div>
             <div class="form-group">
+                <label for="inputOIDCJwks">@translator.Translate(userLanguage, "OIDC JWKS URL")</label>
+                <input type="text" id="inputOIDCJwks" class="form-control" placeholder="@translator.Translate(userLanguage, "Not Configured")" value="@Model.OIDCConfig.JwksURL">
+            </div>
+            <div class="form-group">
                 <label for="inputOIDCRedirect">@translator.Translate(userLanguage, "OIDC Redirect URL")</label>
                 <input type="text" id="inputOIDCRedirect" class="form-control" placeholder="@translator.Translate(userLanguage, "Not Configured")" value="@Model.OIDCConfig.RedirectURL">
             </div>
@@ -230,9 +275,14 @@
                     <!option value="false" @(Model.OIDCConfig.DisableRegularLogin ? "" : "selected")>@translator.Translate(userLanguage, "Disabled")</!option>
                 </select>
             </div>
+            <div class="form-group">
+                <div class="d-flex align-items-center justify-content-center flex-column">
+                    <div class="mt-2"><a class="btn btn-warning" onclick="importOpenIDConfig()">@translator.Translate(userLanguage, "Import OpenID Config")</a></div>
+                </div>
+            </div>
         </form>
     </div>
-    <div class="setup-wizard-content" data-page="4" style="display:none;">
+    <div class="setup-wizard-content" data-page="5" style="display:none;">
         <span class="display-5">@translator.Translate(userLanguage, "Miscellaneous")</span>
         <hr />
         <form class="form-inline">
@@ -280,7 +330,7 @@
             </div>
         </form>
     </div>
-    <div class="setup-wizard-content" data-page="5" style="display:none;">
+    <div class="setup-wizard-content" data-page="6" style="display:none;">
         <div class="d-flex text-center align-items-center justify-content-center flex-column" style="height:100%;">
             <div><span class="display-5">@translator.Translate(userLanguage, "Server Settings Saved")<span class="text-success"><i class="bi bi-check-lg"></i></span></span></div>
             <div class="mt-2"><a class="btn btn-secondary me-2" onclick="loadSetupPage(0)">@translator.Translate(userLanguage, "Restart Wizard")</a><a class="btn btn-primary" onclick="returnToGarage()">@translator.Translate(userLanguage, "Return to Garage")</a></div>

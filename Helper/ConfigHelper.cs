@@ -12,6 +12,7 @@ namespace CarCareTracker.Helper
         ReminderUrgencyConfig GetReminderUrgencyConfig();
         MailConfig GetMailConfig();
         UserConfig GetUserConfig(ClaimsPrincipal user);
+        KestrelAppConfig GetKestrelAppConfig();
         bool SaveUserConfig(ClaimsPrincipal user, UserConfig configData);
         bool SaveServerConfig(ServerConfig serverConfig);
         bool AuthenticateRootUser(string username, string password);
@@ -35,6 +36,7 @@ namespace CarCareTracker.Helper
         bool GetInvariantApi();
         bool GetServerOpenRegistration();
         string GetDefaultReminderEmail();
+        int GetAuthCookieLifeSpan();
     }
     public class ConfigHelper : IConfigHelper
     {
@@ -51,6 +53,12 @@ namespace CarCareTracker.Helper
             _userConfig = userConfig;
             _cache = memoryCache;
             _logger = logger;
+        }
+
+        public KestrelAppConfig GetKestrelAppConfig()
+        {
+            KestrelAppConfig kestrelConfig = _config.GetSection("Kestrel").Get<KestrelAppConfig>() ?? new KestrelAppConfig();
+            return kestrelConfig;
         }
         public string GetWebHookUrl()
         {
@@ -88,6 +96,26 @@ namespace CarCareTracker.Helper
         public bool GetServerOpenRegistration()
         {
             return CheckBool(CheckString("LUBELOGGER_OPEN_REGISTRATION"));
+        }
+        public int GetAuthCookieLifeSpan()
+        {
+            var lifespan = CheckString("LUBELOGGER_COOKIE_LIFESPAN", StaticHelper.DefaultCookieLifeSpan);
+            if (!string.IsNullOrWhiteSpace(lifespan) && int.TryParse(lifespan, out int lifespandays))
+            {
+                if (lifespandays > 90) //max 90 days because that is the max lifetime of the DPAPI keys
+                {
+                    lifespandays = 90;
+                }
+                if (lifespandays < 1) //min 1 day because cookie lifespan is incremented in days for our implementation
+                {
+                    lifespandays = 1;
+                }
+                return lifespandays;
+            } 
+            else
+            {
+                return int.Parse(StaticHelper.DefaultCookieLifeSpan); //default is 30 days for when remember me is selected.
+            }
         }
         public bool GetServerAuthEnabled()
         {
@@ -244,6 +272,47 @@ namespace CarCareTracker.Helper
             {
                 serverConfig.EnableRootUserOIDC = null;
             }
+            if (serverConfig.CookieLifeSpan == StaticHelper.DefaultCookieLifeSpan || string.IsNullOrWhiteSpace(serverConfig.CookieLifeSpan))
+            {
+                serverConfig.CookieLifeSpan = null;
+            }
+            if (serverConfig.KestrelAppConfig != null)
+            {
+                if (serverConfig.KestrelAppConfig.Endpoints.Http != null)
+                {
+                    //validate http endpoint
+                    if (string.IsNullOrWhiteSpace(serverConfig.KestrelAppConfig.Endpoints.Http.Url))
+                    {
+                        serverConfig.KestrelAppConfig.Endpoints.Http = null;
+                    }
+                }
+                if (serverConfig.KestrelAppConfig.Endpoints.HttpsInlineCertFile != null)
+                {
+                    //https endpoint provided
+                    if (string.IsNullOrWhiteSpace(serverConfig.KestrelAppConfig.Endpoints.HttpsInlineCertFile.Url))
+                    {
+                        serverConfig.KestrelAppConfig.Endpoints.HttpsInlineCertFile = null;
+                    }
+                    else if (serverConfig.KestrelAppConfig.Endpoints.HttpsInlineCertFile.Certificate != null)
+                    {
+                        if (string.IsNullOrWhiteSpace(serverConfig.KestrelAppConfig.Endpoints.HttpsInlineCertFile.Certificate.Password))
+                        {
+                            //cert not null but password is null
+                            serverConfig.KestrelAppConfig.Endpoints.HttpsInlineCertFile.Certificate.Password = null;
+                        }
+                        if (string.IsNullOrWhiteSpace(serverConfig.KestrelAppConfig.Endpoints.HttpsInlineCertFile.Certificate.Path))
+                        {
+                            //cert not null but path is null
+                            serverConfig.KestrelAppConfig.Endpoints.HttpsInlineCertFile.Certificate = null;
+                        }
+                    }
+                }
+                if (serverConfig.KestrelAppConfig.Endpoints.Http == null && serverConfig.KestrelAppConfig.Endpoints.HttpsInlineCertFile == null)
+                {
+                    //if no endpoints are provided
+                    serverConfig.KestrelAppConfig = null;
+                }
+            }
             try
             {
                 File.WriteAllText(StaticHelper.ServerConfigPath, JsonSerializer.Serialize(serverConfig));
@@ -367,7 +436,8 @@ namespace CarCareTracker.Helper
                 TabOrder = _config.GetSection(nameof(UserConfig.TabOrder)).Get<List<ImportMode>>() ?? new UserConfig().TabOrder,
                 UserColumnPreferences = _config.GetSection(nameof(UserConfig.UserColumnPreferences)).Get<List<UserColumnPreference>>() ?? new List<UserColumnPreference>(),
                 DefaultTab = (ImportMode)int.Parse(CheckString(nameof(UserConfig.DefaultTab), "8")),
-                ShowVehicleThumbnail = CheckBool(CheckString(nameof(UserConfig.ShowVehicleThumbnail)))
+                ShowVehicleThumbnail = CheckBool(CheckString(nameof(UserConfig.ShowVehicleThumbnail))),
+                ShowSearch = CheckBool(CheckString(nameof(UserConfig.ShowSearch)))
             };
             int userId = 0;
             if (user != null)

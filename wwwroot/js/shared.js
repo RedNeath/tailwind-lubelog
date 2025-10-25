@@ -1,4 +1,9 @@
-﻿function returnToGarage() {
+﻿$.expr[":"].containsNC = $.expr.createPseudo(function (arg) {
+    return function (elem) {
+        return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+    };
+});
+function returnToGarage() {
     window.location.href = '/Home';
 }
 function successToast(message) {
@@ -1154,6 +1159,7 @@ $(window).on('keydown', function (e) {
             e.preventDefault();
             e.stopPropagation();
             selectAllRows();
+            selectAllVehicles();
         }
     }
 });
@@ -1167,14 +1173,22 @@ function selectAllRows() {
         addToSelectedRows($(elem).attr('data-rowId'));
     });
 }
+function selectAllVehicles() {
+    clearSelectedVehicles();
+    $('.garage-item:visible').addClass('garage-active');
+    $('.garage-item:visible').map((index, elem) => {
+        addToSelectedVehicles($(elem).attr('data-rowId'));
+    });
+}
 function rangeMouseDown(e) {
     if (isRightClick(e)) {
         return;
     }
-    var contextMenuAction = $(e.target).parents(".table-context-menu > li > .dropdown-item").length > 0 || $(e.target).is(".table-context-menu > li > .dropdown-item");
+    var contextMenuAction = $(e.target).parents(".table-context-menu > li > .dropdown-item").length > 0 || $(e.target).is(".table-context-menu > li > .dropdown-item") || $(e.target).parents(".garage-context-menu > li > .dropdown-item").length > 0 || $(e.target).is(".garage-context-menu > li > .dropdown-item");
     var selectMode = $("#chkSelectMode").length > 0 ? $("#chkSelectMode").is(":checked") : false;
     if (!(e.ctrlKey || e.metaKey || selectMode) && !contextMenuAction) {
         clearSelectedRows();
+        clearSelectedVehicles();
     }
     isDragging = true;
 
@@ -1200,6 +1214,9 @@ function rangeMouseUp(e) {
     }
     if ($(".table-context-menu").length > 0) {
         $(".table-context-menu").fadeOut("fast");
+    }
+    if ($(".garage-context-menu").length > 0) {
+        $(".garage-context-menu").fadeOut("fast");
     }
     isDragging = false;
     document.documentElement.onselectstart = function () { return true; };
@@ -1227,6 +1244,10 @@ function clearSelectedRows() {
     selectedRow = [];
     $('.table tr').removeClass('table-active');
 }
+function clearSelectedVehicles() {
+    selectedVehicles = [];
+    $('.garage-item').removeClass('garage-active');
+}
 function getDeviceIsTouchOnly() {
     if (navigator.maxTouchPoints > 0 && matchMedia('(pointer: coarse)').matches && !matchMedia('(any-pointer: fine)').matches) {
         return true;
@@ -1241,17 +1262,17 @@ function showTableContextMenu(e) {
     if (getDeviceIsTouchOnly()) {
         return;
     }
+    if (!$(e).hasClass('table-active')) {
+        clearSelectedRows();
+        addToSelectedRows($(e).attr('data-rowId'));
+        $(e).addClass('table-active');
+    }
     $(".table-context-menu").fadeIn("fast");
     determineContextMenuItems();
     $(".table-context-menu").css({
         left: getMenuPosition(event.clientX, 'width', 'scrollLeft'),
         top: getMenuPosition(event.clientY, 'height', 'scrollTop')
     });
-    if (!$(e).hasClass('table-active')) {
-        clearSelectedRows();
-        addToSelectedRows($(e).attr('data-rowId'));
-        $(e).addClass('table-active');
-    }
 }
 function determineContextMenuItems() {
     var tableRows = $('.table tbody tr:visible');
@@ -1300,6 +1321,17 @@ function getMenuPosition(mouse, direction, scrollDir) {
         position -= menu;
     return position;
 }
+function getGarageMenuPosition(mouse, direction, scrollDir) {
+    var win = $(window)[direction](),
+        scroll = $(window)[scrollDir](),
+        menu = $(".garage-context-menu")[direction](),
+        position = mouse + scroll;
+
+    // opening menu would pass the side of the page
+    if (mouse + menu > win && menu < mouse)
+        position -= menu;
+    return position;
+}
 function handleTableRowClick(e, callBack, rowId) {
     var selectMode = $("#chkSelectMode").length > 0 ? $("#chkSelectMode").is(":checked") : false;
     if (!(event.ctrlKey || event.metaKey || selectMode)) {
@@ -1320,11 +1352,11 @@ function showTableContextMenuForMobile(e, xPosition, yPosition) {
         shakeTableRow(e);
     } else {
         $(".table-context-menu").fadeIn("fast");
+        determineContextMenuItems();
         $(".table-context-menu").css({
             left: getMenuPosition(xPosition, 'width', 'scrollLeft'),
             top: getMenuPosition(yPosition, 'height', 'scrollTop')
         });
-        determineContextMenuItems();
     }
 }
 function shakeTableRow(e) {
@@ -1419,7 +1451,7 @@ function searchTableRows(tabName) {
     Swal.fire({
         title: 'Search Records',
         html: `
-                            <input type="text" id="inputSearch" class="swal2-input" placeholder="Keyword(case sensitive)" onkeydown="handleSwalEnter(event)">
+                            <input type="text" id="inputSearch" class="swal2-input" placeholder="Keyword" onkeydown="handleSwalEnter(event)">
                             `,
         confirmButtonText: 'Search',
         focusConfirm: false,
@@ -1430,7 +1462,7 @@ function searchTableRows(tabName) {
     }).then(function (result) {
         if (result.isConfirmed) {
             var rowData = $(`#${tabName} table tbody tr`);
-            var filteredRows = $(`#${tabName} table tbody tr td:contains('${result.value.searchString}')`).parent();
+            var filteredRows = $(`#${tabName} table tbody tr td:containsNC('${result.value.searchString}')`).parent();
             var splitSearchString = result.value.searchString.split('=');
             if (result.value.searchString.includes('=') && splitSearchString.length == 2) {
                 //column specific search.
@@ -1439,7 +1471,7 @@ function searchTableRows(tabName) {
                 var columnName = splitSearchString[0];
                 var colSearchString = splitSearchString[1];
                 var colIndex = columns.findIndex(x => x == columnName) + 1;
-                filteredRows = $(`#${tabName} table tbody tr td:nth-child(${colIndex}):contains('${colSearchString}')`).parent();
+                filteredRows = $(`#${tabName} table tbody tr td:nth-child(${colIndex}):containsNC('${colSearchString}')`).parent();
             }
             if (result.value.searchString.trim() == '') {
                 rowData.removeClass('override-hide');
@@ -1723,5 +1755,32 @@ function checkNavBarOverflow() {
         setTimeout(() => { removeNavbarItems() }, 500);
     } else {
         removeNavbarItems()
+    }
+}
+function openAttachmentPreview(fileName, fileLocation) {
+    $.get('/Files/PreviewFile', { fileName: fileName, fileLocation: fileLocation }, function (data) {
+        $('#attachmentPreviewModalContent').html(data);
+        $('#attachmentPreviewModal').modal('show');
+    });
+}
+function closeAttachmentPreview() {
+    $('#attachmentPreviewModal').modal('hide');
+}
+function setBrowserHistory(param, val) {
+    let currentParams = new URLSearchParams(window.location.search);
+    currentParams.set(param, val);
+    let updatedURL = `${window.location.origin}${window.location.pathname}?${currentParams.toString()}`;
+    window.history.pushState({}, '', updatedURL);
+}
+function getTabNameForURL(tabName) {
+    return tabName.toLowerCase().split('-')[0];
+}
+function getTabNameFromURL(defaultValue) {
+    let currentParams = new URLSearchParams(window.location.search);
+    let currentTab = currentParams.get('tab');
+    if (currentTab == null || currentTab == undefined || currentTab == '') {
+        return `${defaultValue.toLowerCase()}-tab`;
+    } else {
+        return `${currentTab}-tab`;
     }
 }
