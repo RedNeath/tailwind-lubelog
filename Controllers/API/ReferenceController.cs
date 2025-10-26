@@ -1979,5 +1979,40 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Repairs/DeleteRecord")]
+        public IActionResult VehiclesRepairsDeleteRecord()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Delete repair record",
+                PartialViewName = "/Views/API/Reference/Vehicles/Repairs/_DeleteRecord.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Delete,
+                    Route = "/api/vehicle/repairrecords/delete",
+                    RouteParameters = [
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "Id",
+                            Type = "int",
+                            Description = "Id of repair record",
+                            IsRequired = true,
+                            Example = "1"
+                        }
+                    ],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                                  {
+                                      "success": true,
+                                      "message": "Repair Record Deleted"
+                                  }
+                                  """
+                    }
+                }
+            });
+        }
     }
 }
