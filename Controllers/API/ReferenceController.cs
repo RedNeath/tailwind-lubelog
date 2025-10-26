@@ -1412,7 +1412,7 @@ namespace CarCareTracker.Controllers.API
                                           "progress": "Backlog",
                                           "cost": "822.99",
                                           "extraFields": [],
-                                          "files":[]
+                                          "files": []
                                       }
                                   ]
                                   """
@@ -1848,6 +1848,16 @@ namespace CarCareTracker.Controllers.API
                         """
                     }
                 }
+            });
+        }
+        
+        [Route("/API/Reference/Vehicles/Repairs")]
+        public IActionResult VehiclesRepairs()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Repairs",
+                PartialViewName = "/Views/API/Reference/Vehicles/Repairs/_Index.cshtml"
             });
         }
     }
