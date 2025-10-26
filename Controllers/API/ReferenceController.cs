@@ -2014,5 +2014,49 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Repairs/RecordsList")]
+        public IActionResult VehiclesRepairsRecordsList()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Repair records list",
+                PartialViewName = "/Views/API/Reference/Vehicles/Repairs/_RecordsList.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Get,
+                    Route = "/api/vehicle/repairrecords",
+                    RouteParameters = [
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "vehicleId",
+                            Type = "int",
+                            Description = "Id of vehicle",
+                            IsRequired = true,
+                            Example = "1"
+                        },
+                    ],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                                  [
+                                      {
+                                          "id": "1",
+                                          "date": "2025-10-26",
+                                          "odometer": "132000",
+                                          "description": "Gearbox oil joint, Gearbox servicing, Gimbal",
+                                          "notes": "Preferred oil: ELF 75W-80.",
+                                          "cost": "526",
+                                          "tags": "oil 75w-80 leakage",
+                                          "extraFields": [],
+                                          "files": [],
+                                      }
+                                  ]
+                                  """
+                    }
+                }
+            });
+        }
     }
 }
