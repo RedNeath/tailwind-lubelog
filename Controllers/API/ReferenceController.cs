@@ -1860,5 +1860,124 @@ namespace CarCareTracker.Controllers.API
                 PartialViewName = "/Views/API/Reference/Vehicles/Repairs/_Index.cshtml"
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Repairs/AddRecord")]
+        public IActionResult VehiclesRepairsAddRecord()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Add repair record",
+                PartialViewName = "/Views/API/Reference/Vehicles/Repairs/_AddRecord.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Post,
+                    Route = "/api/vehicle/repairrecords/add",
+                    RouteParameters = [
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "vehicleId",
+                            Type = "int",
+                            Description = "Id of vehicle",
+                            IsRequired = true,
+                            Example = "1"
+                        }
+                    ],
+                    Body = new ReferenceEndpointFormDataBodyViewModel()
+                    {
+                        Content = [
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "date",
+                                Description = "Date to be entered",
+                                Example = "\"2025-10-26\"",
+                                IsRequired = true,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "odometer",
+                                Description = "Odometer reading",
+                                Example = "200000",
+                                IsRequired = true,
+                                Type = "int",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "description",
+                                Description = "Description",
+                                Example = "\"Gearbox oil joint, Gearbox servicing, Gimbal\"",
+                                IsRequired = true,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "cost",
+                                Description = "Cost of the repair ⚠️: Locale sensitive",
+                                Example = "526",
+                                IsRequired = true,
+                                Type = "float",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "notes",
+                                Description = "Notes",
+                                Example = "\"Preferred oil: ELF 75W-80 (2.5L).\"",
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "tags",
+                                Description = "Tags separated by spaces",
+                                Example = "\"oil 75w-80 leakage\"",
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "extrafields",
+                                Description = "See format for extra fields",
+                                Example = "",
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = false
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "files",
+                                Description = "Json response from the Upload document route",
+                                Example = """
+                                          "[
+                                              {
+                                                  name: \"plan.jpg\",
+                                                  location: \"/documents/bc28e7d5-a533-4108-b184-3cdc77f23c12.jpg\",
+                                                  isPending: false
+                                              }
+                                          ]"
+                                          """,
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                        ]
+                    },
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        {
+                            "success": true,
+                            "message": "Repair Record Added"
+                        }
+                        """
+                    }
+                }
+            });
+        }
     }
 }
