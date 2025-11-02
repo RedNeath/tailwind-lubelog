@@ -2728,5 +2728,115 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Taxes/UpdateRecord")]
+        public IActionResult VehiclesTaxesUpdateRecord()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Update tax record",
+                PartialViewName = "/Views/API/Reference/Vehicles/Taxes/_UpdateRecord.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Put,
+                    Route = "/api/vehicle/taxrecords/update",
+                    RouteParameters = [],
+                    Body = new ReferenceEndpointFormDataBodyViewModel()
+                    {
+                        Content = [
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "Id",
+                                Description = "Id of tax record",
+                                Example = "1",
+                                IsRequired = true,
+                                Type = "int",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "date",
+                                Description = "Date to be entered",
+                                Example = "\"2025-09-27\"",
+                                IsRequired = true,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "description",
+                                Description = "Description",
+                                Example = "\"Annual vehicle registration\"",
+                                IsRequired = true,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "cost",
+                                Description = "Cost ⚠️: Locale sensitive",
+                                Example = "150.00",
+                                IsRequired = true,
+                                Type = "float",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "notes",
+                                Description = "Notes",
+                                Example = "\"Paid at the prefecture\"",
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "tags",
+                                Description = "Tags separated by spaces",
+                                Example = "\"registration tax\"",
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "extrafields",
+                                Description = "See format for extra fields",
+                                Example = "",
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = false
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "files",
+                                Description = "Json response from the Upload document route",
+                                Example = """
+                                "[
+                                    {
+                                        name: \"tax_receipt.pdf\",
+                                        location: \"/documents/bc28e7d5-a533-4108-b184-3cdc77f23c12.pdf\",
+                                        isPending: false
+                                    }
+                                ]"
+                                """,
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                        ]
+                    },
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        {
+                            "success": true,
+                            "message": "Tax Record Updated"
+                        }
+                        """
+                    }
+                }
+            });
+        }
     }
 }
