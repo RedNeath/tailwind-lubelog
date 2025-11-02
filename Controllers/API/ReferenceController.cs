@@ -2624,5 +2624,31 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Taxes/CheckRecords")]
+        public IActionResult VehiclesTaxesCheckRecords()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Check tax records",
+                PartialViewName = "/Views/API/Reference/Vehicles/Taxes/_CheckRecords.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Get,
+                    Route = "/api/vehicle/taxrecords/check",
+                    RouteParameters = [],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        {
+                            "success": true,
+                            "message": "No Recurring Taxes Updated"
+                        }
+                        """
+                    }
+                }
+            });
+        }
     }
 }
