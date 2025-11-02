@@ -2650,5 +2650,40 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Taxes/DeleteRecord")]
+        public IActionResult VehiclesTaxesDeleteRecord()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Delete tax record",
+                PartialViewName = "/Views/API/Reference/Vehicles/Taxes/_DeleteRecord.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Delete,
+                    Route = "/api/vehicle/taxrecords/delete",
+                    RouteParameters = [
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "Id",
+                            Type = "int",
+                            Description = "Id of tax record",
+                            IsRequired = true,
+                            Example = "1"
+                        }
+                    ],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        {
+                            "success": true,
+                            "message": "Tax Record Deleted"
+                        }
+                        """
+                    }
+                }
+            });
+        }
     }
 }
