@@ -3002,5 +3002,49 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Upgrades/RecordsList")]
+        public IActionResult VehiclesUpgradesRecordsList()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Upgrade records list",
+                PartialViewName = "/Views/API/Reference/Vehicles/Upgrades/_RecordsList.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Get,
+                    Route = "/api/vehicle/upgraderecords",
+                    RouteParameters = [
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "vehicleId",
+                            Type = "int",
+                            Description = "Id of vehicle",
+                            IsRequired = true,
+                            Example = "1"
+                        },
+                    ],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        [
+                            {
+                                "id": "1",
+                                "date": "2025-11-02",
+                                "odometer": "132447",
+                                "description": "Performance exhaust system",
+                                "notes": "Custom stainless steel exhaust",
+                                "cost": "822.99",
+                                "tags": "exhaust performance upgrade",
+                                "extraFields": [],
+                                "files": []
+                            }
+                        ]
+                        """
+                    }
+                }
+            });
+        }
     }
 }
