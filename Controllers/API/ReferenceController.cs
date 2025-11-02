@@ -3046,5 +3046,124 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Upgrades/UpdateRecord")]
+        public IActionResult VehiclesUpgradesUpdateRecord()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Update upgrade record",
+                PartialViewName = "/Views/API/Reference/Vehicles/Upgrades/_UpdateRecord.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Put,
+                    Route = "/api/vehicle/upgraderecords/update",
+                    RouteParameters = [],
+                    Body = new ReferenceEndpointFormDataBodyViewModel()
+                    {
+                        Content = [
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "Id",
+                                Description = "Id of upgrade record",
+                                Example = "1",
+                                IsRequired = true,
+                                Type = "int",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "date",
+                                Description = "Date to be entered",
+                                Example = "\"2025-09-27\"",
+                                IsRequired = true,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "odometer",
+                                Description = "Odometer reading",
+                                Example = "132447",
+                                IsRequired = true,
+                                Type = "int",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "description",
+                                Description = "Description",
+                                Example = "\"Performance exhaust system\"",
+                                IsRequired = true,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "cost",
+                                Description = "Cost ⚠️: Locale sensitive",
+                                Example = "822.99",
+                                IsRequired = true,
+                                Type = "float",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "notes",
+                                Description = "Notes",
+                                Example = "\"Custom stainless steel exhaust\"",
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "tags",
+                                Description = "Tags separated by spaces",
+                                Example = "\"exhaust performance upgrade\"",
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "extrafields",
+                                Description = "See format for extra fields",
+                                Example = "",
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = false
+                            },
+                            new ReferenceEndpointFormDataPropertyViewModel()
+                            {
+                                Name = "files",
+                                Description = "Json response from the Upload document route",
+                                Example = """
+                                "[
+                                    {
+                                        name: \"upgrade_bill.pdf\",
+                                        location: \"/documents/bc28e7d5-a533-4108-b184-3cdc77f23c12.pdf\",
+                                        isPending: false
+                                    }
+                                ]"
+                                """,
+                                IsRequired = false,
+                                Type = "string",
+                                DisplayExample = true
+                            },
+                        ]
+                    },
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        {
+                            "success": true,
+                            "message": "Upgrade Record Updated"
+                        }
+                        """
+                    }
+                }
+            });
+        }
     }
 }
