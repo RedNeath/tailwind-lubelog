@@ -2685,5 +2685,48 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Taxes/RecordsList")]
+        public IActionResult VehiclesTaxesRecordsList()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Tax records list",
+                PartialViewName = "/Views/API/Reference/Vehicles/Taxes/_RecordsList.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Get,
+                    Route = "/api/vehicle/taxrecords",
+                    RouteParameters = [
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "vehicleId",
+                            Type = "int",
+                            Description = "Id of vehicle",
+                            IsRequired = true,
+                            Example = "1"
+                        },
+                    ],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        [
+                            {
+                                "id": "1",
+                                "date": "2025-11-02",
+                                "description": "Annual vehicle registration",
+                                "notes": "Paid at the prefecture",
+                                "cost": "150.00",
+                                "tags": "registration tax",
+                                "extraFields": [],
+                                "files": []
+                            }
+                        ]
+                        """
+                    }
+                }
+            });
+        }
     }
 }
