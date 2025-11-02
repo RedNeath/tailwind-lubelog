@@ -2504,5 +2504,15 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Taxes")]
+        public IActionResult VehiclesTaxes()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Taxes",
+                PartialViewName = "/Views/API/Reference/Vehicles/Taxes/_Index.cshtml"
+            });
+        }
     }
 }
