@@ -2341,5 +2341,49 @@ namespace CarCareTracker.Controllers.API
                 }
             });
         }
+        
+        [Route("/API/Reference/Vehicles/Services/RecordsList")]
+        public IActionResult VehiclesServicesRecordsList()
+        {
+            return View("/Views/API/Reference/Base.cshtml", new BaseReferenceViewModel()
+            {
+                Name = "Service records list",
+                PartialViewName = "/Views/API/Reference/Vehicles/Services/_RecordsList.cshtml",
+                Endpoint = new ReferenceEndpointViewModel()
+                {
+                    Method = HttpMethod.Get,
+                    Route = "/api/vehicle/servicerecords",
+                    RouteParameters = [
+                        new ReferenceEndpointRouteParameterViewModel()
+                        {
+                            Name = "vehicleId",
+                            Type = "int",
+                            Description = "Id of vehicle",
+                            IsRequired = true,
+                            Example = "1"
+                        },
+                    ],
+                    Body = null,
+                    Response = new ReferenceEndpointJsonResponseViewModel()
+                    {
+                        Content = """
+                        [
+                            {
+                                "id": "1",
+                                "date": "2025-11-02",
+                                "odometer": "132447",
+                                "description": "Oil change and filter replacement",
+                                "notes": "Regular maintenance service",
+                                "cost": "85.50",
+                                "tags": "oil filter maintenance",
+                                "extraFields": [],
+                                "files": []
+                            }
+                        ]
+                        """
+                    }
+                }
+            });
+        }
     }
 }
