@@ -1,0 +1,17 @@
+@using CarCareTracker.Models.API.Reference
+@model BaseReferenceViewModel
+<div class="flex flex-col items-start gap-2 md:gap-1">
+    <button type="button"
+            onclick="showAuthDialog()"
+            class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-400/10 px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/20">
+        <heroicon kind="Mini" name="LockClosed" class="size-3 mr-1.5"/>Auth required
+    </button>
+    <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Add a new repair record</h2>
+</div>
+<hr class="md:hidden border-gray-200 dark:border-gray-800 mt-4"/>
+<div class="py-6 md:pt-8">
+    <p class="mb-2">
+        Adds a new repair record to the specified vehicle.
+    </p>
+</div>
+@await Html.PartialAsync("/Views/API/Reference/_Endpoint.cshtml", Model.Endpoint)

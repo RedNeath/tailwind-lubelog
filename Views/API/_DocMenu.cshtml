@@ -1,0 +1,225 @@
+@* Note that the same partial view is used for devices of all sizes. *@
+<div class="relative flex grow-1 flex-col md:px-4">
+    <h6 class="mb-2 text-gray-500 uppercase text-sm font-semibold">Navigation</h6>
+    <ul>
+        <li>
+            <a href="/API" class="flex items-center w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                <heroicon kind="Outline" name="Home" class="size-4 mr-2"/>Overview
+            </a>
+        </li>
+    </ul>
+    
+    <h6 class="mb-2 mt-4 text-gray-500 uppercase text-sm font-semibold">Reference</h6>
+    <ul>
+        <li>
+            <a href="/API/Reference/General" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                General
+            </a>
+            <ul class="ml-4">
+                <li>
+                    <a href="/API/Reference/General/CleanUp" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        Clean up temp files
+                    </a>
+                    <a href="/API/Reference/General/WhoAmI" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        Get current user
+                    </a>
+                    <a href="/API/Reference/General/Version" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        Get version
+                    </a>
+                    <a href="/API/Reference/General/MakeBackup" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        Make backup
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="/API/Reference/Calendar/ICSCalendar" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                Get ICS calendar
+            </a>
+        </li>
+        <li>
+            <a href="/API/Reference/Documents/Upload" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                Upload documents
+            </a>
+        </li>
+        <li>
+            <a href="/API/Reference/Vehicles" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                Vehicles
+            </a>
+            <ul class="ml-4">
+                <li>
+                    <a href="/API/Reference/Vehicles/Gas" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        Gas
+                    </a>
+                    <ul class="ml-4">
+                        <li>
+                            <a href="/API/Reference/Vehicles/Gas/AddRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Add record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Gas/DeleteRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Delete record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Gas/RecordsList" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Get records list
+                            </a>
+                            <a href="/API/Reference/Vehicles/Gas/UpdateRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Update record
+                            </a>
+                        </li>
+                    </ul>
+                    <a href="/API/Reference/Vehicles/List" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        Get vehicle list
+                    </a>
+                    <a href="/API/Reference/Vehicles/Info" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        Get vehicle(s) info
+                    </a>
+                    <a href="/API/Reference/Vehicles/Odometer" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        Odometer
+                    </a>
+                    <ul class="ml-4">
+                        <li>
+                            <a href="/API/Reference/Vehicles/Odometer/AddRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Add record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Odometer/DeleteRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Delete record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Odometer/AdjustedOdometer" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Get adjusted odometer
+                            </a>
+                            <a href="/API/Reference/Vehicles/Odometer/LatestRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Get latest record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Odometer/RecordsList" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Get records list
+                            </a>
+                            <a href="/API/Reference/Vehicles/Odometer/UpdateRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Update record
+                            </a>
+                        </li>
+                    </ul>
+                    <a href="/API/Reference/Vehicles/Plans" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        Plans
+                    </a>
+                    <ul class="ml-4">
+                        <li>
+                            <a href="/API/Reference/Vehicles/Plans/AddRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Add record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Plans/DeleteRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Delete record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Plans/RecordsList" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Get records list
+                            </a>
+                            <a href="/API/Reference/Vehicles/Plans/UpdateRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Update record
+                            </a>
+                        </li>
+                    </ul>
+                    <a href="/API/Reference/Vehicles/Reminders" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        Reminders
+                    </a>
+                    <ul class="ml-4">
+                        <li>
+                            <a href="/API/Reference/Vehicles/Reminders/AddRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Add record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Reminders/DeleteRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Delete record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Reminders/RecordsList" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Get records list
+                            </a>
+                            <a href="/API/Reference/Vehicles/Reminders/SendViaEmail" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Send reminders via email
+                            </a>
+                            <a href="/API/Reference/Vehicles/Reminders/UpdateRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Update record
+                            </a>
+                        </li>
+                    </ul>
+                    <a href="/API/Reference/Vehicles/Repairs" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        Repairs
+                    </a>
+                    <ul class="ml-4">
+                        <li>
+                            <a href="/API/Reference/Vehicles/Repairs/AddRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Add record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Repairs/DeleteRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Delete record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Repairs/RecordsList" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Get records list
+                            </a>
+                            <a href="/API/Reference/Vehicles/Repairs/UpdateRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Update record
+                            </a>
+                        </li>
+                    </ul>
+                    <a href="/API/Reference/Vehicles/Services" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        Services
+                    </a>
+                    <ul class="ml-4">
+                        <li>
+                            <a href="/API/Reference/Vehicles/Services/AddRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Add record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Services/DeleteRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Delete record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Services/RecordsList" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Get records list
+                            </a>
+                            <a href="/API/Reference/Vehicles/Services/UpdateRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Update record
+                            </a>
+                        </li>
+                    </ul>
+                    <a href="/API/Reference/Vehicles/Taxes" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        Taxes
+                    </a>
+                    <ul class="ml-4">
+                        <li>
+                            <a href="/API/Reference/Vehicles/Taxes/AddRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Add record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Taxes/CheckRecords" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Check records
+                            </a>
+                            <a href="/API/Reference/Vehicles/Taxes/DeleteRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Delete record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Taxes/RecordsList" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Get records list
+                            </a>
+                            <a href="/API/Reference/Vehicles/Taxes/UpdateRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Update record
+                            </a>
+                        </li>
+                    </ul>
+                    <a href="/API/Reference/Vehicles/Upgrades" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        Upgrades
+                    </a>
+                    <ul class="ml-4">
+                        <li>
+                            <a href="/API/Reference/Vehicles/Upgrades/AddRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Add record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Upgrades/DeleteRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Delete record
+                            </a>
+                            <a href="/API/Reference/Vehicles/Upgrades/RecordsList" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Get records list
+                            </a>
+                            <a href="/API/Reference/Vehicles/Upgrades/UpdateRecord" class="flex w-full hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                Update record
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
