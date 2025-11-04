@@ -185,10 +185,8 @@
     <div class="@((!config.GetServerAuthEnabled() || User.IsInRole("CookieAuth") || User.IsInRole("APIAuth")) ? Url.Action().StartsWith("/API") ? "py-10 w-full" : "container py-10 mx-auto" : "bg-white dark:bg-transparent min-h-screen")">
         <main role="main" class="h-full">
             @RenderBody()
-            <dialog class="modal fade" id="accountInformationModal">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content" id="accountInformationModalContent">
-                    </div>
+            <dialog id="accountInformationDialog" class="w-11/12 lg:w-5/12 lg:mt-32 bg-white dark:bg-gray-900 rounded-xl border border-1 border-gray-300 dark:border-gray-700" onkeydown="handleEnter(this)">
+                <div id="accountInformationDialogContent">
                 </div>
             </dialog>
         </main>

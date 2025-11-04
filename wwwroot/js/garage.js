@@ -351,8 +351,8 @@ function copyContributors(sourceVehicleId, destVehicleId) {
 
 function showAccountInformationModal() {
     $.get('/Home/GetUserAccountInformationModal', function (data) {
-        $('#accountInformationModalContent').html(data);
-        $('#accountInformationModal')[0].showModal();
+        $('#accountInformationDialogContent').html(data);
+        $('#accountInformationDialog')[0].showModal();
     })
 }
 
@@ -397,7 +397,7 @@ function validateAndSaveRootUserAccount() {
 }
 
 function hideAccountInformationModal() {
-    $('#accountInformationModal')[0].close();
+    $('#accountInformationDialog')[0].close();
 }
 function validateAndSaveUserAccount() {
     var hasError = false;
