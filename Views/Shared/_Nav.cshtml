@@ -24,7 +24,7 @@
                         }
                         @if (userConfig.ShowCalendar)
                         {
-                            <a href="/Home#calendar-tab-pane" @(Context.Request.Path.Value == "/Home#calendar-tab-pane" ? "aria-current=\"page\"": "") class="@(Context.Request.Path.Value == "/Home#calendar-tab-pane" ? "bg-gray-900 dark:bg-gray-950/50 text-white": "text-gray-300 hover:bg-white/5 hover:text-white") rounded-md px-3 py-2 text-sm font-medium">@translator.Translate(userLanguage, "Calendar")</a>
+                            <a href="/Calendar" @(Context.Request.Path.Value == "/Calendar" ? "aria-current=\"page\"": "") class="@(Context.Request.Path.Value == "/Calendar" ? "bg-gray-900 dark:bg-gray-950/50 text-white": "text-gray-300 hover:bg-white/5 hover:text-white") rounded-md px-3 py-2 text-sm font-medium">@translator.Translate(userLanguage, "Calendar")</a>
                         }
                         @if (User.IsInRole("CookieAuth") || User.IsInRole("APIAuth") && User.IsInRole(nameof(UserData.IsAdmin)))
                         {
@@ -80,7 +80,7 @@
             }
             @if (userConfig.ShowCalendar)
             {
-                <a href="/Home#calendar-tab-pane" @(Context.Request.Path.Value == "/Home#calendar-tab-pane" ? "aria-current=\"page\"": "") class="@(Context.Request.Path.Value == "/Home#calendar-tab-pane" ? "bg-gray-900 dark:bg-gray-950/50 text-white": "text-gray-300 hover:bg-white/5 hover:text-white") block rounded-md px-3 py-2 text-base font-medium">@translator.Translate(userLanguage, "Calendar")</a>
+                <a href="/Calendar" @(Context.Request.Path.Value == "/Calendar" ? "aria-current=\"page\"": "") class="@(Context.Request.Path.Value == "/Calendar" ? "bg-gray-900 dark:bg-gray-950/50 text-white": "text-gray-300 hover:bg-white/5 hover:text-white") block rounded-md px-3 py-2 text-base font-medium">@translator.Translate(userLanguage, "Calendar")</a>
             }
             @if (User.IsInRole("CookieAuth") || User.IsInRole("APIAuth") && User.IsInRole(nameof(UserData.IsAdmin)))
             {

@@ -1,0 +1,45 @@
+@using CarCareTracker.Helper
+@inject IConfigHelper config
+@inject ITranslationHelper translator
+@{
+    var userLanguage = config.GetServerLanguage();
+    var displayDate = new DateTime(Model.YearAndMonth.Year, Model.YearAndMonth.Month, 1).ToString("Y");
+    displayDate = char.ToUpper(displayDate[0]) + displayDate.Substring(1);
+    var firstDay = Model.CalendarDays.First();
+    var lastDay = Model.CalendarDays.Last();
+    var today = Model.CalendarDays.FirstOrDefault(day => day.Date.DayOfYear == DateTime.Now.DayOfYear && day.Date.Year == DateTime.Now.Year);
+}
+@model CalendarViewModel
+
+<div class="flex items-center text-gray-900 dark:text-white">
+    <button onclick="getMonth(@Model.PreviousYearAndMonth.Year, @Model.PreviousYearAndMonth.Month)" class="-m-3 flex flex-none items-center justify-center p-3 text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-white" type="button">
+        <heroicon kind="Mini" name="ChevronLeft" class="size-5"/>
+    </button>
+    <div class="flex-auto text-sm font-semibold">@(displayDate)</div>
+    <button onclick="getMonth(@Model.NextYearAndMonth.Year, @Model.NextYearAndMonth.Month)" class="-m-3 flex flex-none items-center justify-center p-3 text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-white" type="button">
+        <heroicon kind="Mini" name="ChevronRight" class="size-5"/>
+    </button>
+</div>
+<div class="mt-6 grid grid-cols-7 text-xs text-gray-500 dark:text-gray-400">
+    <div>@(translator.Translate(userLanguage, DayOfWeek.Monday.ToString("G"))[0])</div>
+    <div>@(translator.Translate(userLanguage, DayOfWeek.Tuesday.ToString("G"))[0])</div>
+    <div>@(translator.Translate(userLanguage, DayOfWeek.Wednesday.ToString("G"))[0])</div>
+    <div>@(translator.Translate(userLanguage, DayOfWeek.Thursday.ToString("G"))[0])</div>
+    <div>@(translator.Translate(userLanguage, DayOfWeek.Friday.ToString("G"))[0])</div>
+    <div>@(translator.Translate(userLanguage, DayOfWeek.Saturday.ToString("G"))[0])</div>
+    <div>@(translator.Translate(userLanguage, DayOfWeek.Sunday.ToString("G"))[0])</div>
+</div>
+<div class="isolate mt-2 grid grid-cols-7 gap-px rounded-md bg-gray-200 dark:bg-white/15 text-sm shadow-md ring-1 ring-gray-200 dark:ring-white/15">
+    @foreach (DayViewModel day in Model.CalendarDays)
+    {
+        <button onclick="selectDate(new Date('@day.Date.ToString("yyyy-MM-dd")'), @Model.YearAndMonth.Year, @Model.YearAndMonth.Month)" class="@(day.Date.Month != Model.YearAndMonth.Month ? "bg-gray-50 dark:bg-gray-900/75 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-900/25" : "bg-white dark:bg-gray-900/90 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900/50") @(day.Date == firstDay.Date ? "rounded-tl-md" : "") @(day.Date == firstDay.Date.AddDays(6) ? "rounded-tr-md" : "") @(day.Date == lastDay.Date ? "rounded-br-md" : "") @(day.Date == lastDay.Date.AddDays(-6) ? "rounded-bl-md" : "") py-1.5 focus:z-10">
+            @if (day.Reminders.Count > 0)
+            {
+                <div class="relative mx-1.5">
+                    <span class="absolute content-center top-0 right-0 size-3.5 rounded-full text-xs leading-none text-white dark:text-gray-900 bg-red-600 dark:bg-red-400">@day.Reminders.Count</span>
+                </div>
+            }
+            <time class="@(day.Date == today?.Date ? "font-semibold text-blue-600 dark:text-blue-400" : "") @(day.IsSelected ? "font-semibold text-white dark:text-gray-900 bg-gray-900 dark:bg-white" : "") ms-auto me-auto flex size-7 items-center justify-center rounded-full" datetime="@day.Date.ToString("yyyy-MM-dd")">@day.Date.Day</time>
+        </button>
+    }
+</div>

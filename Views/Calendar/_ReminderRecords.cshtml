@@ -1,0 +1,36 @@
+@using CarCareTracker.Helper
+@inject IConfigHelper config
+@inject ITranslationHelper translator
+@{
+    var userLanguage = config.GetServerLanguage();
+}
+@model DayViewModel?
+<div class="bg-white dark:bg-gray-800 shadow-md p-2 md:p-4 border border-1 border-gray-300 dark:border-gray-700 rounded-md">
+    @if (Model == null || Model.Reminders.Count == 0)
+    {
+        <p class="text-sm">@translator.Translate(userLanguage, "Select a day in the calendar to begin.")</p>
+    }
+    else
+    {
+        <h3 class="text-xl font-medium tracking-tight text-gray-900 dark:text-white" id="date-label"></h3>
+        <div class="relative sm:max-h-[55vh] lg:max-h-[70vh] overflow-x-auto overflow-y-auto shadow-md border border-1 border-gray-300 dark:border-gray-700 rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <tbody>
+                @foreach (var reminder in Model.Reminders)
+                {
+                    <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <td class="px-3 py-2 max-w-32 md:max-w-sm lg:max-w-xs xl:max-w-sm 2xl:max-w-lg truncate">@reminder.Description</td>
+                        <td class="px-3 py-2 ml-auto max-w-fit">
+                            <button type="button"
+                                    class="w-full justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"
+                            >
+                                <heroicon class="size-4 mx-auto" kind="Outline" name="MagnifyingGlass"/>
+                            </button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
