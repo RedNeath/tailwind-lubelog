@@ -68,22 +68,22 @@ function getVehicleCalendarEvents() {
         }
     });
 }
-function showCalendarReminderModal(id) {
+function showCalendarReminderDialog(id) {
     event.stopPropagation();
-    $.get(`/Home/ViewCalendarReminder?reminderId=${id}`, function (data) {
+    $.get(`/Calendar/ViewCalendarReminder?reminderId=${id}`, function (data) {
         if (data) {
-            $("#reminderRecordCalendarModalContent").html(data);
-            $("#reminderRecordCalendarModal").modal('show');
-            $('#reminderRecordCalendarModal').off('shown.bs.modal').on('shown.bs.modal', function () {
+            $("#reminder-record-dialog").html(data);
+            $("#reminder-record-dialog")[0].showModal();
+            $('#reminder-record-dialog').off('shown.bs.modal').on('shown.bs.modal', function () {
                 if (getGlobalConfig().useMarkDown) {
-                    toggleMarkDownOverlay("reminderNotes");
+                    toggleMarkDownOverlay("reminder-notes");
                 }
             });
         }
     })
 }
-function hideCalendarReminderModal() {
-    $("#reminderRecordCalendarModal").modal('hide');
+function hideCalendarReminderDialog() {
+    $("#reminder-record-dialog")[0].close();
 }
 function generateReminderItem(id, urgency, description) {
     if (description.trim() == '') {
@@ -104,7 +104,7 @@ function markDoneCalendarReminderRecord(reminderRecordId, e) {
     event.stopPropagation();
     $.post(`/Vehicle/PushbackRecurringReminderRecord?reminderRecordId=${reminderRecordId}`, function (data) {
         if (data) {
-            hideCalendarReminderModal();
+            hideCalendarReminderDialog();
             successToast("Reminder Updated");
             getVehicleCalendarEvents();
         } else {
@@ -116,7 +116,8 @@ function deleteCalendarReminderRecord(reminderRecordId, e) {
     if (e != undefined) {
         event.stopPropagation();
     }
-    $("#workAroundInput").show();
+    
+    hideCalendarReminderDialog();
     Swal.fire({
         title: "Confirm Deletion?",
         text: "Deleted Reminders cannot be restored.",
@@ -127,9 +128,8 @@ function deleteCalendarReminderRecord(reminderRecordId, e) {
         if (result.isConfirmed) {
             $.post(`/Vehicle/DeleteReminderRecordById?reminderRecordId=${reminderRecordId}`, function (data) {
                 if (data) {
-                    hideCalendarReminderModal();
                     successToast("Reminder Deleted");
-                    getVehicleCalendarEvents();
+                    selectDate(selectedDate, selectedDate.getFullYear(), selectedDate.getMonth() + 1);
                 } else {
                     errorToast(genericErrorMessage());
                 }

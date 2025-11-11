@@ -45,21 +45,21 @@
                 RegExp('\n ?' + ind + '(?:(?:\\d+|[a-zA-Z])[.)]|[*\\-+]) +', 'g')).map(list).join('</li><li>')));
 
             return '\n' + (ol
-                ? '<ol start="' + (num
+                ? '<ol class="list-decimal pl-2" start="' + (num
                     ? ol + '">'
                     : parseInt(ol,36) - 9 + '" style="list-style-type:' + (low ? 'low' : 'upp') + 'er-alpha">') + entry + '</ol>'
-                : element('ul', entry));
+                : element('ul class="list-disc pl-2"', entry));
         });
     }
 
     function highlight(src) {
         return src.replace(rx_highlight, function(all, _, p1, emp, sub, sup, small, big, p2, content) {
             return _ + element(
-                  emp ? (p2 ? 'strong' : 'em')
+                  emp ? (p2 ? 'strong class="font-bold"' : 'em class="font-bold"')
                 : sub ? (p2 ? 's' : 'sub')
                 : sup ? 'sup'
-                : small ? 'small'
-                : big ? 'big'
+                : small ? 'small class="text-sm"'
+                : big ? 'big class="text-lg"'
                 : 'code',
                 highlight(content));
         });
@@ -99,7 +99,7 @@
         stash[--si] = p4
             ? p2
                 ? '<img style="max-width:100%;max-height:100%;object-fit:scale-down;" src="' + p4 + '" alt="' + p3 + '"/>'
-                : '<a class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" target="_blank" href="' + p4 + '">' + unesc(highlight(p3)) + '</a>'
+                : '<a class="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300" target="_blank" href="' + p4 + '">' + unesc(highlight(p3)) + '</a>'
             : p6;
         return si + '\uf8ff';
     });
