@@ -12,7 +12,7 @@ namespace CarCareTracker.Helper
     /// </summary>
     public static class StaticHelper
     {
-        public const string VersionNumber = "1.5.3";
+        public const string VersionNumber = "1.5.4";
         public const string DbName = "data/cartracker.db";
         public const string UserConfigPath = "data/config/userConfig.json";
         public const string ServerConfigPath = "data/config/serverConfig.json";
@@ -449,6 +449,8 @@ namespace CarCareTracker.Helper
                     return "bi-journal-bookmark";
                 case ImportMode.ReminderRecord:
                     return "bi-bell";
+                case ImportMode.InspectionRecord:
+                    return "bi-clipboard-check";
                 default:
                     return "bi-file-bar-graph";
             }
@@ -740,6 +742,10 @@ namespace CarCareTracker.Helper
         {
             return (!fileLocation.StartsWith("/documents") && !fileLocation.StartsWith("documents") && !fileLocation.StartsWith("/temp") && !fileLocation.StartsWith("temp"));
         }
+        public static bool GetAttachmentIsInTemp(string fileLocation)
+        {
+            return (fileLocation.StartsWith("/temp") || fileLocation.StartsWith("temp"));
+        }
         public static string GetAttachmentOriginalName(string fileLocation, string originalName)
         {
             var fileExt = Path.GetExtension(fileLocation);
@@ -755,10 +761,46 @@ namespace CarCareTracker.Helper
             var imageExtensions = new[] { ".png", ".jpg", ".jpeg" };
             return imageExtensions.Contains(fileExt);
         }
+        public static bool GetAttachmentIsRecord(string fileLocation, out ImportMode importMode, out int recordId)
+        {
+            var urlMatchesPattern = fileLocation.StartsWith("::") && fileLocation.Split(':').Length == 4;
+            importMode = ImportMode.Dashboard;
+            recordId = 0;
+            if (urlMatchesPattern)
+            {
+                var recordType = fileLocation.Split(':')[2];
+                var recordTypeIsEnum = Enum.TryParse(recordType, out ImportMode recordMode);
+                if (recordTypeIsEnum)
+                {
+                    importMode = recordMode;
+                    recordId = int.Parse(fileLocation.Split(':')[3]);
+                }
+            }
+            return urlMatchesPattern;
+        }
+        public static string GetRecordAttachment(ImportMode importMode, int recordId)
+        {
+            return $"::{importMode.ToString()}:{recordId.ToString()}";
+        }
+        public static List<UploadedFiles> CreateAttachmentFromRecord(ImportMode importMode, int recordId, string description)
+        {
+            return new List<UploadedFiles>
+            {
+                new UploadedFiles
+                {
+                    Name = description,
+                    Location = GetRecordAttachment(importMode, recordId)
+                }
+            };
+        }
         public static string GetIconByFileExtension(string fileLocation)
         {
             var fileExt = Path.GetExtension(fileLocation);
-            if (GetAttachmentIsLink(fileLocation))
+            if (GetAttachmentIsRecord(fileLocation, out ImportMode recordType, out int recordId))
+            {
+                return GetImportModeIcon(recordType);
+            }
+            else if (GetAttachmentIsLink(fileLocation))
             {
                 return "bi-link-45deg";
             }
