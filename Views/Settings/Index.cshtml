@@ -1,0 +1,39 @@
+﻿@using CarCareTracker.Helper
+@{
+    ViewData["Title"] = "Settings";
+}
+@model SettingsViewModel
+@inject ITranslationHelper translator
+@{
+    var userLanguage = Model.UserConfig.UserLanguage;
+}
+@section Nav { @translator.Translate(userLanguage, "Settings") }
+@section Scripts {
+    <script src="~/js/settings.js"></script>
+}
+<div>
+    <div class="px-4">
+        <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">@translator.Translate(userLanguage, "Settings")</h2>
+            @* <div class="flex items-center gap-2"> $1$ Future-proof (will work with more than 1 element) #1# *@
+            @*     <button onclick="showTokenDialog()" class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"> *@
+            @*         <heroicon kind="Outline" name="PencilSquare" class="size-5 mr-2" /> *@
+            @*         @translator.Translate(userLanguage, "Manage Tokens") *@
+            @*     </button> *@
+            @* </div> *@
+        </div>
+        <hr class="md:hidden border-gray-200 dark:border-gray-800 mt-4" />
+        <div class="bg-white dark:bg-gray-800 shadow-md p-2 md:p-4 border border-1 border-gray-300 dark:border-gray-700 rounded-md">
+            <div class="flex gap-4">
+                <button type="button"
+                        onclick="showExtraFieldDialog()"
+                        class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"
+                >
+                    @translator.Translate(userLanguage, "Extra fields")
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <dialog class="w-11/12 lg:w-5/12 lg:mt-32 bg-white dark:bg-gray-900 rounded-xl border border-1 border-gray-300 dark:border-gray-700" id="extra-field-dialog"></dialog>
+</div>
