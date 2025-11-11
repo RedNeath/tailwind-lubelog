@@ -21,8 +21,6 @@ namespace CarCareTracker.Controllers
         private readonly IFileHelper _fileHelper;
         private readonly IConfigHelper _config;
         private readonly IExtraFieldDataAccess _extraFieldDataAccess;
-        private readonly IReminderRecordDataAccess _reminderRecordDataAccess;
-        private readonly IReminderHelper _reminderHelper;
         private readonly ITranslationHelper _translationHelper;
         private readonly IMailHelper _mailHelper;
         public HomeController(ILogger<HomeController> logger,
@@ -33,8 +31,6 @@ namespace CarCareTracker.Controllers
             IConfigHelper configuration,
             IFileHelper fileHelper,
             IExtraFieldDataAccess extraFieldDataAccess,
-            IReminderRecordDataAccess reminderRecordDataAccess,
-            IReminderHelper reminderHelper,
             ITranslationHelper translationHelper,
             IMailHelper mailHelper)
         {
@@ -44,8 +40,6 @@ namespace CarCareTracker.Controllers
             _userLogic = userLogic;
             _fileHelper = fileHelper;
             _extraFieldDataAccess = extraFieldDataAccess;
-            _reminderRecordDataAccess = reminderRecordDataAccess;
-            _reminderHelper = reminderHelper;
             _loginLogic = loginLogic;
             _vehicleLogic = vehicleLogic;
             _translationHelper = translationHelper;
@@ -176,12 +170,6 @@ namespace CarCareTracker.Controllers
             }
             var reminders = _vehicleLogic.GetReminders(vehiclesStored, true);
             return PartialView("_Calendar", reminders);
-        }
-        public IActionResult ViewCalendarReminder(int reminderId)
-        {
-            var reminder = _reminderRecordDataAccess.GetReminderRecordById(reminderId);
-            var reminderUrgency = _reminderHelper.GetReminderRecordViewModels(new List<ReminderRecord> { reminder }, 0, DateTime.Now).FirstOrDefault();
-            return PartialView("_ReminderRecordCalendarModal", reminderUrgency);
         }
         public async Task<IActionResult> Settings()
         {

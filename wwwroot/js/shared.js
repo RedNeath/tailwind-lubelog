@@ -706,8 +706,8 @@ function toggleMarkDownOverlay(textAreaName) {
     if (text.length > 0) {
         var formatted = markdown(text);
         //var overlay div
-        var overlayDiv = `<div class='markdown-overlay' style="z-index: 1060; position:absolute; top:${textArea.css('top')}; left:${textArea.css('left')}; width:${textArea.css('width')}; height:${textArea.css('height')}; padding:${textArea.css('padding')}; overflow-y:auto; background-color:var(--bs-modal-bg);">${formatted}</div>`;
-        textArea.parent().children(`label[for=${textAreaName}]`).append(overlayDiv);
+        var overlayDiv = `<div class='markdown-overlay bg-white dark:text-white dark:bg-gray-800' style="z-index: 1060; position:absolute; top:0; left:0; width:${textArea.css('width')}; height:${textArea.css('height')}; padding:${textArea.css('padding')}; overflow-y:auto;">${formatted}</div>`;
+        textArea.parent().append(overlayDiv);
     }
 }
 function setMarkDownStickerNotes() {

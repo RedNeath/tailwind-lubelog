@@ -7,6 +7,9 @@
 @{
     var userLanguage = config.GetServerLanguage();
 }
+@section Scripts {
+    <script src="~/lib/drawdown/drawdown.js"></script>
+}
 @section Nav { @translator.Translate(userLanguage, "Calendar") }
 @model CalendarViewModel
 <div>
@@ -31,6 +34,8 @@
             </div>
         </div>
     </div>
+    
+    <dialog id="reminder-record-dialog" class="w-11/12 lg:w-5/12 lg:mt-32 bg-white dark:bg-gray-900 rounded-xl border border-1 border-gray-300 dark:border-gray-700"></dialog>
 </div>
 
 <script>

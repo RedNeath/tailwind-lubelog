@@ -16,7 +16,7 @@ namespace CarCareTracker.Controllers
         private readonly IUserLogic _userLogic;
         private readonly IVehicleLogic _vehicleLogic;
         private readonly IReminderHelper _reminderHelper;
-        private readonly ITranslationHelper _translationHelper;
+        private readonly IReminderRecordDataAccess _reminderRecordDataAccess;
         
         public CalendarController(
             ILogger<CalendarController> logger,
@@ -24,14 +24,14 @@ namespace CarCareTracker.Controllers
             IUserLogic userLogic,
             IVehicleLogic vehicleLogic,
             IReminderHelper reminderHelper,
-            ITranslationHelper translationHelper)
+            IReminderRecordDataAccess reminderRecordDataAccess)
         {
             _logger = logger;
             _dataAccess = dataAccess;
             _userLogic = userLogic;
             _vehicleLogic = vehicleLogic;
             _reminderHelper = reminderHelper;
-            _translationHelper = translationHelper;
+            _reminderRecordDataAccess = reminderRecordDataAccess;
         }
         
         private int GetUserID()
@@ -68,6 +68,13 @@ namespace CarCareTracker.Controllers
                 Reminders = reminders.Where(rmd => rmd.Date.ToString("yyyy-MM-dd") == selectedDate).ToList(),
                 IsSelected = true,
             });
+        }
+        
+        public IActionResult ViewCalendarReminder(int reminderId)
+        {
+            var reminder = _reminderRecordDataAccess.GetReminderRecordById(reminderId);
+            var reminderUrgency = _reminderHelper.GetReminderRecordViewModels(new List<ReminderRecord> { reminder }, 0, DateTime.Now).FirstOrDefault();
+            return PartialView("_ReminderRecordDialog", reminderUrgency);
         }
 
         
