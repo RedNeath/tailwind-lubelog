@@ -9,14 +9,17 @@ namespace CarCareTracker.Controllers
     [Authorize]
     public class SettingsController : Controller
     {
+        private readonly ILogger<SettingsController> _logger;
         private readonly IFileHelper _fileHelper;
         private readonly IConfigHelper _config;
         private readonly IExtraFieldDataAccess _extraFieldDataAccess;
         
-        public SettingsController(IFileHelper fileHelper,
+        public SettingsController(ILogger<SettingsController> logger,
+            IFileHelper fileHelper,
             IConfigHelper config,
             IExtraFieldDataAccess extraFieldDataAccess)
         {
+            _logger = logger;
             _fileHelper = fileHelper;
             _config = config;
             _extraFieldDataAccess = extraFieldDataAccess;
@@ -43,6 +46,21 @@ namespace CarCareTracker.Controllers
             {
                 recordExtraFields.Id = importMode;
             }
+            return PartialView("_ExtraFieldsDialog", recordExtraFields);
+        }
+        
+        [Authorize(Roles = nameof(UserData.IsRootUser))]
+        public IActionResult UpdateExtraFields(RecordExtraField record)
+        {
+            try
+            {
+                _extraFieldDataAccess.SaveExtraFields(record);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            var recordExtraFields = _extraFieldDataAccess.GetExtraFieldsById(record.Id);
             return PartialView("_ExtraFieldsDialog", recordExtraFields);
         }
     }
