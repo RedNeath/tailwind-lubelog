@@ -11,7 +11,6 @@ namespace CarCareTracker.Controllers
     [Authorize]
     public class CalendarController : Controller
     {
-        private readonly ILogger<CalendarController> _logger;
         private readonly IVehicleDataAccess _dataAccess;
         private readonly IUserLogic _userLogic;
         private readonly IVehicleLogic _vehicleLogic;
@@ -19,14 +18,12 @@ namespace CarCareTracker.Controllers
         private readonly IReminderRecordDataAccess _reminderRecordDataAccess;
         
         public CalendarController(
-            ILogger<CalendarController> logger,
             IVehicleDataAccess dataAccess,
             IUserLogic userLogic,
             IVehicleLogic vehicleLogic,
             IReminderHelper reminderHelper,
             IReminderRecordDataAccess reminderRecordDataAccess)
         {
-            _logger = logger;
             _dataAccess = dataAccess;
             _userLogic = userLogic;
             _vehicleLogic = vehicleLogic;

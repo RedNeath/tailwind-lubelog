@@ -1,12 +1,13 @@
-﻿function showExtraFieldModal() {
-    $.get(`/Home/GetExtraFieldsModal?importMode=0`, function (data) {
-        $("#extraFieldModalContent").html(data);
-        $("#extraFieldModal").modal('show');
+﻿function showExtraFieldDialog() {
+    $.get(`/Settings/GetExtraFieldsModal?importMode=0`, function (data) {
+        $("#extra-field-dialog").html(data);
+        $("#extra-field-dialog")[0].showModal();
     });
 }
-function hideExtraFieldModal() {
-    $("#extraFieldModal").modal('hide');
+function hideExtraFieldDialog() {
+    $("#extra-field-dialog")[0].close();
 }
+
 function getCheckedTabs() {
     var visibleTabs = $("#visibleTabs :checked").map(function () {
         return this.value;

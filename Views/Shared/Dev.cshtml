@@ -230,8 +230,8 @@
     <div class="bg-white dark:bg-gray-800 shadow-md p-2 md:p-4 border border-1 border-gray-300 dark:border-gray-700 rounded-md">
         <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white mb-2">Form inputs</h2>
 
-        <!-- Text fields -->
         <div class="flex gap-12 mb-4">
+            <!-- Text fields -->
             <div>
                 <label for="standardTextField" class="block text-sm font-medium text-gray-900 dark:text-gray-100">Standard text field</label>
                 <input type="text" id="standardTextField" required class="mt-2 block w-full transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 px-3 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">
@@ -242,10 +242,20 @@
                     <input type="text" id="actionTextField" required class="block min-w-0 rounded-l-md bg-transparent grow py-1.5 px-3 text-base text-gray-900 dark:text-white border-0 border-r border-gray-300 dark:border-gray-600 outline-none sm:text-sm/6">
                     <div class="grid rounded-r-md shrink-0 grid-cols-1 focus-within:relative bg-white dark:bg-gray-800">
                         <button type="button" class="col-start-1 row-start-1 w-full appearance-none rounded-r-md py-2 px-3 text-base text-gray-500 transition-all duration-100 ease-out shadow-xs focus:outline focus:outline-1 focus:ring-4 focus:ring-offset-1 focus:ring-offset-transparent focus:ring-blue-700/25 dark:focus:ring-blue-600/25">
-                            <heroicon id="userPasswordHidden" kind="Outline" name="Eye" class="size-5" />
+                            <heroicon id="userPasswordHidden" kind="Outline" name="Eye" class="size-5"/>
                         </button>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Select fields -->
+            <div>
+                <label for="standardSelectField" class="block text-sm font-medium text-gray-900 dark:text-gray-100">Standard select field</label>
+                <select id="standardSelectField" required class="mt-2 block w-full transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 pl-3 pr-8 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">
+                    <option>Option 1</option>
+                    <option>Option 2</option>
+                    <option>Option 3</option>
+                </select>
             </div>
         </div>
 

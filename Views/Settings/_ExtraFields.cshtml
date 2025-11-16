@@ -1,0 +1,103 @@
+@using CarCareTracker.Helper
+@inject IConfigHelper config
+@inject ITranslationHelper translator
+@{
+    var userLanguage = config.GetServerLanguage();
+}
+@model List<ExtraField>
+
+
+<div class="grid grid-cols-1 gap-3 max-h-[80vh] overflow-y-auto sm:max-h-none sm:overflow-y-hidden">
+    <div class="hidden sm:block relative sm:max-h-[65vh] lg:max-h-[60vh] overflow-x-auto overflow-y-auto shadow-md border border-1 border-gray-300 dark:border-gray-700 rounded-lg">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3 w-5/12">@translator.Translate(userLanguage, "Name")</th>
+                <th scope="col" class="px-6 py-3 w-1/12">@translator.Translate(userLanguage, "Required")</th>
+                <th scope="col" class="px-6 py-3 w-5/12">@translator.Translate(userLanguage, "Type")</th>
+                <th scope="col" class="px-6 py-3 w-1/12">@translator.Translate(userLanguage, "Delete")</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var extraField in Model)
+            {
+                <tr class="bg-white border-t dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td class="px-6 py-2 w-5/12">@extraField.Name</td>
+                    <td class="px-6 py-2 w-1/12">
+                        <div class="flex h-6 shrink-0 items-center">
+                            <div class="group grid size-4 grid-cols-1 mx-auto">
+                                <input type="checkbox" onchange="updateExtraFieldIsRequired(decodeHTMLEntities('@extraField.Name'), this)" @(extraField.IsRequired ? "checked" : "") class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                                <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center text-white" fill="none"/>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-2 w-5/12">
+                        <select onchange="updateExtraFieldType(decodeHTMLEntities('@extraField.Name'), this)" class="block w-full transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 pl-3 pr-8 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 text-sm dark:focus:ring-blue-600/25">
+                            <!option @(extraField.FieldType == ExtraFieldType.Text ? "selected" : "") value="@((int)ExtraFieldType.Text)">@translator.Translate(userLanguage, "Text")</!option>
+                            <!option @(extraField.FieldType == ExtraFieldType.Number ? "selected" : "") value="@((int)ExtraFieldType.Number)">@translator.Translate(userLanguage, "Number")</!option>
+                            <!option @(extraField.FieldType == ExtraFieldType.Decimal ? "selected" : "") value="@((int)ExtraFieldType.Decimal)">@translator.Translate(userLanguage, "Decimal")</!option>
+                            <!option @(extraField.FieldType == ExtraFieldType.Date ? "selected" : "") value="@((int)ExtraFieldType.Date)">@translator.Translate(userLanguage, "Date")</!option>
+                            <!option @(extraField.FieldType == ExtraFieldType.Time ? "selected" : "") value="@((int)ExtraFieldType.Time)">@translator.Translate(userLanguage, "Time")</!option>
+                            <!option @(extraField.FieldType == ExtraFieldType.Location ? "selected" : "") value="@((int)ExtraFieldType.Location)">@translator.Translate(userLanguage, "Location")</!option>
+                        </select>
+                    </td>
+                    <td class="px-6 py-2 w-1/12">
+                        <button type="button"
+                                class="w-full justify-center rounded-md transition-all duration-100 ease-out bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-700/25 dark:focus:ring-red-600/25"
+                                onclick="deleteExtraField(decodeHTMLEntities('@extraField.Name'))">
+                            <heroicon class="size-4 mx-auto" kind="Outline" name="Trash"/>
+                        </button>
+                    </td>
+                </tr>
+            }
+            @if (Model.Count == 0)
+            {
+                <tr class="light:bg-white border-t dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td colspan="4" class="text-center px-6 py-2 w-full">@translator.Translate(userLanguage, "Empty")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    @foreach (var smExtraField in Model)
+    {
+        <div class="sm:hidden bg-white dark:bg-gray-800 shadow-md p-2 border border-1 border-gray-300 dark:border-gray-700 rounded-md">
+            <div class="flex items-center pb-3 pt-1 px-1 mb-2 border-b border-b-1 border-gray-300 dark:border-gray-700">
+                <heroicon class="size-6 text-gray-900 dark:text-white" kind="Outline" name="QueueList"/>
+                <h5 class="text-xl font-medium text-gray-900 dark:text-white ml-2">@smExtraField.Name</h5>
+            </div>
+            <div>
+                <div class="flex w-full gap-3 items-center mb-1">
+                    <div class="flex h-6 shrink-0 items-center">
+                        <div class="group grid size-4 grid-cols-1 px-1">
+                            <input type="checkbox" id="@(smExtraField.Name)-required" onchange="updateExtraFieldIsRequired(decodeHTMLEntities('@smExtraField.Name'), this)" @(smExtraField.IsRequired ? "checked" : "") class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                            <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center text-white" fill="none"/>
+                        </div>
+                    </div>
+                    <label class="block text-sm text-gray-900 dark:text-gray-300" for="@(smExtraField.Name)-required">@translator.Translate(userLanguage, "Required")</label>
+                </div>
+
+                <div class="w-full px-1">
+                    <label for="@(smExtraField.Name)-type" class="block text-sm font-medium text-gray-900 dark:text-gray-100">@translator.Translate(userLanguage, "Type")</label>
+                    <select id="@(smExtraField.Name)-type" onchange="updateExtraFieldType(decodeHTMLEntities('@smExtraField.Name'), this)" class="mt-1 block w-full transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 pl-3 pr-8 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 text-sm dark:focus:ring-blue-600/25">
+                        <!option @(smExtraField.FieldType == ExtraFieldType.Text ? "selected" : "") value="@((int)ExtraFieldType.Text)">@translator.Translate(userLanguage, "Text")</!option>
+                        <!option @(smExtraField.FieldType == ExtraFieldType.Number ? "selected" : "") value="@((int)ExtraFieldType.Number)">@translator.Translate(userLanguage, "Number")</!option>
+                        <!option @(smExtraField.FieldType == ExtraFieldType.Decimal ? "selected" : "") value="@((int)ExtraFieldType.Decimal)">@translator.Translate(userLanguage, "Decimal")</!option>
+                        <!option @(smExtraField.FieldType == ExtraFieldType.Date ? "selected" : "") value="@((int)ExtraFieldType.Date)">@translator.Translate(userLanguage, "Date")</!option>
+                        <!option @(smExtraField.FieldType == ExtraFieldType.Time ? "selected" : "") value="@((int)ExtraFieldType.Time)">@translator.Translate(userLanguage, "Time")</!option>
+                        <!option @(smExtraField.FieldType == ExtraFieldType.Location ? "selected" : "") value="@((int)ExtraFieldType.Location)">@translator.Translate(userLanguage, "Location")</!option>
+                    </select>
+                </div>
+            </div>
+            <div class="p-1 grid grid-cols-1 gap-2 mt-2">
+                <button
+                    type="button"
+                    onclick="deleteExtraField(decodeHTMLEntities('@smExtraField.Name'))"
+                    class="inline-flex w-full justify-center rounded-md transition-all duration-100 ease-out bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-700/25 dark:focus:ring-red-600/25">
+                    @translator.Translate(userLanguage, "Delete")
+                </button>
+            </div>
+        </div>
+    }
+</div>
