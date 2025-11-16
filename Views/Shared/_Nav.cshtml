@@ -17,7 +17,7 @@
                 <div class="hidden md:block">
                     <div class="ml-6 flex items-baseline space-x-4">
                         <!-- Current: "bg-gray-900 dark:bg-gray-950/50 text-white", Default: "text-gray-300 hover:bg-white/5 hover:text-white" -->
-                        <a href="/Home#garage-tab-pane" @(Context.Request.Path.Value == "/Home#garage-tab-pane" ? "aria-current=\"page\"": "") class="@(Context.Request.Path.Value == "/Home#garage-tab-pane" ? "bg-gray-900 dark:bg-gray-950/50 text-white": "text-gray-300 hover:bg-white/5 hover:text-white") rounded-md px-3 py-2 text-sm font-medium">@translator.Translate(userLanguage, "Garage")</a>
+                        <a href="/Home" class="@(Context.Request.Path.Value == "/Home" ? "bg-gray-900 dark:bg-gray-950/50 text-white": "text-gray-300 hover:bg-white/5 hover:text-white") rounded-md px-3 py-2 text-sm font-medium">@translator.Translate(userLanguage, "Garage")</a>
                         @if (config.GetServerEnableShopSupplies())
                         {
                             <a href="/Home#supply-tab-pane" @(Context.Request.Path.Value == "/Home#supply-tab-pane" ? "aria-current=\"page\"": "") class="@(Context.Request.Path.Value == "/Home#supply-tab-pane" ? "bg-gray-900 dark:bg-gray-950/50 text-white": "text-gray-300 hover:bg-white/5 hover:text-white") rounded-md px-3 py-2 text-sm font-medium">@translator.Translate(userLanguage, "Supplies")</a>
@@ -73,18 +73,18 @@
     <el-disclosure id="mobile-menu" hidden class="md:hidden [&:not([hidden])]:block">
         <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
             <!-- Current: "bg-gray-900 dark:bg-gray-950/50 text-white", Default: "text-gray-300 hover:bg-white/5 hover:text-white" -->
-            <a href="/Home#garage-tab-pane" @(Context.Request.Path.Value == "/Home#garage-tab-pane" ? "aria-current=\"page\"": "") class="@(Context.Request.Path.Value == "/Home#garage-tab-pane" ? "bg-gray-900 dark:bg-gray-950/50 text-white": "text-gray-300 hover:bg-white/5 hover:text-white") block rounded-md px-3 py-2 text-base font-medium">@translator.Translate(userLanguage, "Garage")</a>
+            <a href="/Home" class="@(Context.Request.Path.Value == "/Home" ? "bg-gray-900 dark:bg-gray-950/50 text-white": "text-gray-300 hover:bg-white/5 hover:text-white") block rounded-md px-3 py-2 text-base font-medium">@translator.Translate(userLanguage, "Garage")</a>
             @if (config.GetServerEnableShopSupplies())
             {
                 <a href="/Home#supply-tab-pane" @(Context.Request.Path.Value == "/Home#supply-tab-pane" ? "aria-current=\"page\"": "") class="@(Context.Request.Path.Value == "/Home#supply-tab-pane" ? "bg-gray-900 dark:bg-gray-950/50 text-white": "text-gray-300 hover:bg-white/5 hover:text-white") block rounded-md px-3 py-2 text-base font-medium">@translator.Translate(userLanguage, "Supplies")</a>
             }
             @if (userConfig.ShowCalendar)
             {
-                <a href="/Calendar" @(Context.Request.Path.Value == "/Calendar" ? "aria-current=\"page\"": "") class="@(Context.Request.Path.Value == "/Calendar" ? "bg-gray-900 dark:bg-gray-950/50 text-white": "text-gray-300 hover:bg-white/5 hover:text-white") block rounded-md px-3 py-2 text-base font-medium">@translator.Translate(userLanguage, "Calendar")</a>
+                <a href="/Calendar" class="@(Context.Request.Path.Value == "/Calendar" ? "bg-gray-900 dark:bg-gray-950/50 text-white": "text-gray-300 hover:bg-white/5 hover:text-white") block rounded-md px-3 py-2 text-base font-medium">@translator.Translate(userLanguage, "Calendar")</a>
             }
             @if (User.IsInRole("CookieAuth") || User.IsInRole("APIAuth") && User.IsInRole(nameof(UserData.IsAdmin)))
             {
-                <a href="/Admin" @(Context.Request.Path.Value == "/Admin" ? "aria-current=\"page\"": "") class="@(Context.Request.Path.Value == "/Admin" ? "bg-gray-900 dark:bg-gray-950/50 text-white": "text-gray-300 hover:bg-white/5 hover:text-white") block rounded-md px-3 py-2 text-base font-medium">@translator.Translate(userLanguage,"Admin Panel")</a>
+                <a href="/Admin" class="@(Context.Request.Path.Value == "/Admin" ? "bg-gray-900 dark:bg-gray-950/50 text-white": "text-gray-300 hover:bg-white/5 hover:text-white") block rounded-md px-3 py-2 text-base font-medium">@translator.Translate(userLanguage,"Admin Panel")</a>
             }
         </div>
         <div class="border-t border-white/10 pt-4 pb-3">
