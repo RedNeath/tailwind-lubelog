@@ -175,17 +175,6 @@ function performLogOut() {
         }
     })
 }
-function loadPinnedNotes(vehicleId) {
-    var hoveredGrid = $(`#gridVehicle_${vehicleId}`);
-    if (hoveredGrid.attr("data-bs-title") != '') {
-        hoveredGrid.tooltip("show");
-    }
-}
-function hidePinnedNotes(vehicleId) {
-    if ($(`#gridVehicle_${vehicleId}`).attr('data-bs-title') != '') {
-        $(`#gridVehicle_${vehicleId}`).tooltip("hide");
-    }
-}
 
 function filterGarage(sender) {
     var rowData = $(".garage-item");
@@ -194,21 +183,52 @@ function filterGarage(sender) {
         return;
     }
     var tagName = sender.textContent;
-    if ($(sender).hasClass("bg-primary")) {
+    if ($(sender).hasClass("bg-blue-50")) {
         rowData.removeClass('override-hide');
-        $(sender).removeClass('bg-primary');
-        $(sender).addClass('bg-secondary');
+        
+        $(sender).removeClass('bg-blue-50');
+        $(sender).removeClass('dark:bg-blue-900/20');
+        $(sender).removeClass('text-blue-700');
+        $(sender).removeClass('dark:text-blue-400');
+        $(sender).removeClass('border');
+        $(sender).removeClass('border-blue-700/10');
+        $(sender).removeClass('dark:border-blue-400/30');
+        $(sender).addClass('m-[1px]');
+        $(sender).addClass('bg-gray-100');
+        $(sender).addClass('dark:bg-gray-800');
+        $(sender).addClass('text-gray-600');
+        $(sender).addClass('dark:text-gray-300');
     } else {
         //hide table rows.
         rowData.addClass('override-hide');
         $(`[data-tags~='${tagName}']`).removeClass('override-hide');
-        if ($(".tagfilter.bg-primary").length > 0) {
+        if ($(".tagfilter.bg-blue-50").length > 0) {
             //disabling other filters
-            $(".tagfilter.bg-primary").addClass('bg-secondary');
-            $(".tagfilter.bg-primary").removeClass('bg-primary');
+            $(".tagfilter.bg-blue-50").addClass('m-[1px]');
+            $(".tagfilter.bg-blue-50").addClass('bg-gray-100');
+            $(".tagfilter.bg-blue-50").addClass('dark:bg-gray-800');
+            $(".tagfilter.bg-blue-50").addClass('text-gray-600');
+            $(".tagfilter.bg-blue-50").addClass('dark:text-gray-300');
+            $(".tagfilter.bg-blue-50").removeClass('dark:bg-blue-900/20');
+            $(".tagfilter.bg-blue-50").removeClass('text-blue-700');
+            $(".tagfilter.bg-blue-50").removeClass('dark:text-blue-400');
+            $(".tagfilter.bg-blue-50").removeClass('border');
+            $(".tagfilter.bg-blue-50").removeClass('border-blue-700/10');
+            $(".tagfilter.bg-blue-50").removeClass('dark:border-blue-400/30');
+            $(".tagfilter.bg-blue-50").removeClass('bg-blue-50');
         }
-        $(sender).addClass('bg-primary');
-        $(sender).removeClass('bg-secondary');
+        $(sender).addClass('bg-blue-50');
+        $(sender).addClass('dark:bg-blue-900/20');
+        $(sender).addClass('text-blue-700');
+        $(sender).addClass('dark:text-blue-400');
+        $(sender).addClass('border');
+        $(sender).addClass('border-blue-700/10');
+        $(sender).addClass('dark:border-blue-400/30');
+        $(sender).removeClass('m-[1px]');
+        $(sender).removeClass('bg-gray-100');
+        $(sender).removeClass('dark:bg-gray-800');
+        $(sender).removeClass('text-gray-600');
+        $(sender).removeClass('dark:text-gray-300');
     }
 }
 function sortVehicles(desc) {
@@ -319,7 +339,7 @@ function dragOver(event) {
     event.preventDefault();
 }
 function dropBox(event, targetVehicleId) {
-    if (dragged.parentElement != event.target && event.target != dragged && draggedId != targetVehicleId) {
+    if (dragged.parentElement !== event.target && event.target !== dragged && draggedId !== targetVehicleId) {
         copyContributors(draggedId, targetVehicleId);
     }
     event.preventDefault();

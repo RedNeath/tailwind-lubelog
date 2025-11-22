@@ -219,23 +219,28 @@ function uploadMap(event) {
     uploadFileAsync(selectedMapFile, setUploadedMap);
 }
 function uploadThumbnail(event) {
-    var originalImage = event.files[0];
-    var maxHeight = 290;
+    let originalImage = event.files[0];
+    let maxHeight = 192;
+    let maxWidth = 350;
+    
     try {
         //load image and perform Hermite resize
-        var img = new Image();
+        let img = new Image();
         img.onload = function () {
             URL.revokeObjectURL(img.src);
-            var imgWidth = img.width;
-            var imgHeight = img.height;
-            if (imgHeight > maxHeight) {
-                //only scale if height is greater than threshold
-                var imgScale = maxHeight / imgHeight;
-                var newImgWidth = imgWidth * imgScale;
-                var newImgHeight = imgHeight * imgScale;
-                var resizedCanvas = hermiteResize(img, newImgWidth, newImgHeight);
+            let imgWidth = img.width;
+            let imgHeight = img.height;
+            
+            // With this scale ratio, we'll have the maximum number of pixels in the direction that needs the least scaling.
+            let imgScale = Math.min(Math.max(maxHeight / imgHeight, maxWidth / imgWidth), 1);
+            
+            //only scale if height is greater than threshold
+            if (imgScale !== 1) {
+                let newImgWidth = imgWidth * imgScale;
+                let newImgHeight = imgHeight * imgScale;
+                let resizedCanvas = hermiteResize(img, newImgWidth, newImgHeight);
                 resizedCanvas.toBlob((blob) => {
-                    let file = new File([blob], originalImage.name, { type: "image/jpeg" });
+                    let file = new File([blob], originalImage.name, {type: "image/jpeg"});
                     uploadFileAsync(file, setUploadedFile);
                 }, 'image/jpeg');
             } else {
