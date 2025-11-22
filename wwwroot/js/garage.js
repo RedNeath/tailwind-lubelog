@@ -175,17 +175,6 @@ function performLogOut() {
         }
     })
 }
-function loadPinnedNotes(vehicleId) {
-    var hoveredGrid = $(`#gridVehicle_${vehicleId}`);
-    if (hoveredGrid.attr("data-bs-title") != '') {
-        hoveredGrid.tooltip("show");
-    }
-}
-function hidePinnedNotes(vehicleId) {
-    if ($(`#gridVehicle_${vehicleId}`).attr('data-bs-title') != '') {
-        $(`#gridVehicle_${vehicleId}`).tooltip("hide");
-    }
-}
 
 function filterGarage(sender) {
     var rowData = $(".garage-item");
@@ -350,7 +339,7 @@ function dragOver(event) {
     event.preventDefault();
 }
 function dropBox(event, targetVehicleId) {
-    if (dragged.parentElement != event.target && event.target != dragged && draggedId != targetVehicleId) {
+    if (dragged.parentElement !== event.target && event.target !== dragged && draggedId !== targetVehicleId) {
         copyContributors(draggedId, targetVehicleId);
     }
     event.preventDefault();

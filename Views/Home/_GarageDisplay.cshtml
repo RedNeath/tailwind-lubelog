@@ -1,4 +1,5 @@
 ﻿@using CarCareTracker.Helper
+@using Heroicons.AspNetCore.Mvc.TagHelpers
 @inject IConfigHelper config
 @inject ITranslationHelper translator
 @model List<VehicleViewModel>
@@ -7,7 +8,6 @@
     var userLanguage = userConfig.UserLanguage;
     var recordTags = Model.SelectMany(x => x.Tags).Distinct();
 }
-
 <div class="px-4">
     <div class="flex items-center justify-between">
         <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">@translator.Translate(userLanguage, "My vehicles")</h2>
@@ -21,10 +21,10 @@
     
     <hr class="md:hidden border-gray-200 dark:border-gray-800 mt-4" />
     
-    <div id="userTable" class="py-4">
+    <div id="userTable" class="py-2">
         @if (recordTags.Any())
         {
-            <div class='flex-inline gap-1 mb-2'>
+            <div class='flex-inline gap-1 mb-6'>
                 @foreach (string recordTag in recordTags)
                 {
                     <span onclick="filterGarage(this)" class="tagfilter inline-flex items-center rounded-full bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 text-xs font-medium m-[1px] text-gray-600 dark:text-gray-300 cursor-pointer">@recordTag</span>
@@ -37,68 +37,66 @@
                 </datalist>
             </div>
         }
-        <div class="row gy-3 align-items-stretch vehiclesContainer pb-2 @(recordTags.Any() ? "" : "mt-2")">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 vehiclesContainer pb-2 @(recordTags.Any() ? "" : "mt-2")">
             @foreach (VehicleViewModel vehicle in Model)
             {
                 @if (!(userConfig.HideSoldVehicles && !string.IsNullOrWhiteSpace(vehicle.SoldDate)))
                 {
-                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-6 user-select-none garage-item" ondragover="dragOver(event)" ondrop="dropBox(event, @vehicle.Id)" draggable="true" ondragstart="dragStart(event, @vehicle.Id)" data-tags='@string.Join(" ", vehicle.Tags)' id="gridVehicle_@vehicle.Id" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="@await Html.PartialAsync("_VehicleExtraFields", vehicle.ExtraFields)" data-bs-placement="bottom" data-bs-trigger="manual" onmouseenter="loadPinnedNotes(@vehicle.Id)" ontouchstart="loadPinnedNotes(@vehicle.Id)" ontouchcancel="hidePinnedNotes(@vehicle.Id)" ontouchend="hidePinnedNotes(@vehicle.Id)" onmouseleave="hidePinnedNotes(@vehicle.Id)">
-                        <div class="card" onclick="viewVehicle(@vehicle.Id)">
-                            <img src="@vehicle.ImageLocation" style="height:145px; object-fit:scale-down; pointer-events:none; @(string.IsNullOrWhiteSpace(vehicle.SoldDate) ? "" : "filter: grayscale(100%);")" />
+                    <div
+                        id="gridVehicle_@vehicle.Id"
+                        ondragover="dragOver(event)"
+                        ondrop="dropBox(event, @vehicle.Id)"
+                        draggable="true"
+                        ondragstart="dragStart(event, @vehicle.Id)"
+                        data-tags="@string.Join(" ", vehicle.Tags)"
+                        class="garage-item relative bg-white dark:bg-gray-800 shadow-md border border-1 border-gray-300 dark:border-gray-700 rounded-lg cursor-pointer transition-all duration-75 ease-out hover:scale-105"
+                    >
+                        <div onclick="viewVehicle(@vehicle.Id)">
+                            <img src="@vehicle.ImageLocation" class="h-48 w-full rounded-t-lg object-cover pointer-events-none @(string.IsNullOrWhiteSpace(vehicle.SoldDate) ? "" : "grayscale")" />
                             @if (!string.IsNullOrWhiteSpace(vehicle.SoldDate))
                             {
-                                <div class="vehicle-sold-banner"><p class='display-6 mb-0'>@translator.Translate(userLanguage, "SOLD")</p></div>
-                            } else if (vehicle.DashboardMetrics.Any())
-                            {
-                                <div class="vehicle-sold-banner">
-                                @if (vehicle.DashboardMetrics.Contains(DashboardMetric.Default) && vehicle.LastReportedMileage != default)
-                                {
-                                    
-                                        <div class="d-flex justify-content-between">
-                                            <div>
-                                                <span class="ms-2"><i class="bi bi-speedometer me-2"></i>@vehicle.LastReportedMileage.ToString("N0")</span>
-                                            </div>
-                                            @if (vehicle.HasReminders)
-                                            {
-                                                <div>
-                                                    <span class="me-2"><i class="bi bi bi-bell-fill text-warning"></i></span>
-                                                </div>
-                                            }
-                                        </div>
-                                }
-                                @if (vehicle.DashboardMetrics.Contains(DashboardMetric.CostPerMile) && vehicle.CostPerMile != default)
-                                {
-                                        <div class="d-flex justify-content-between">
-                                            <div>
-                                                <span class="ms-2"><i class="bi bi-cash-coin me-2"></i>@($"{vehicle.CostPerMile.ToString("C2")}/{vehicle.DistanceUnit}")</span>
-                                            </div>
-                                        </div>
-                                }
-                                @if (vehicle.DashboardMetrics.Contains(DashboardMetric.TotalCost) && vehicle.TotalCost != default)
-                                {
-                                        <div class="d-flex justify-content-between">
-                                            <div>
-                                                <span class="ms-2"><i class="bi bi-cash-coin me-2"></i>@($"{vehicle.TotalCost.ToString("C2")}")</span>
-                                            </div>
-                                        </div>
-                                }
-                                </div>
+                                <div class="absolute top-0 rounded-t-lg bg-gray-950/60 w-full text-center"><p class="text-white text-sm font-semibold">@translator.Translate(userLanguage, "SOLD")</p></div>
                             }
-                            <div class="card-body">
-                                <h5 class="card-title text-truncate garage-item-year" data-unit="@vehicle.Year">@($"{vehicle.Year}")</h5>
-                                <h5 class="card-title text-truncate">@($"{vehicle.Make}")</h5>
-                                <h5 class="card-title text-truncate">@($"{vehicle.Model}")</h5>
-                                <p class="card-text text-truncate">@StaticHelper.GetVehicleIdentifier(vehicle)</p>
+                            <div class="pt-3 pb-2 px-4 md:p-4 md:pb-3">
+                                <h5 class="font-semibold text-lg">@($"{vehicle.Make}") @($"{vehicle.Model}")</h5>
+                                <div class="inline-flex items-center gap-2 mt-2 whitespace-nowrap max-w-full overflow-scroll">
+                                    <div class="inline-flex items-center gap-1 text-gray-600 dark:text-gray-400">
+                                        <heroicon kind="Micro" name="CalendarDays" class="size-4"/>
+                                        <span class="text-xs">@($"{vehicle.Year}")</span>
+                                    </div>
+                                    @if (vehicle.DashboardMetrics.Contains(DashboardMetric.Default) && vehicle.LastReportedMileage != default)
+                                    {
+                                        <div class="inline-flex items-center gap-1 text-gray-600 dark:text-gray-400">
+                                            <heroicon kind="Micro" name="GlobeAmericas" class="size-4"/>
+                                            <span class="text-xs">@vehicle.LastReportedMileage.ToString("N0")</span>
+                                        </div>
+                                    }
+                                    @if (vehicle.DashboardMetrics.Contains(DashboardMetric.TotalCost) && vehicle.TotalCost != default)
+                                    {
+                                        <div class="inline-flex items-center gap-1 text-gray-600 dark:text-gray-400">
+                                            <heroicon kind="Micro" name="Banknotes" class="size-4"/>
+                                            <span class="text-xs">@($"{vehicle.TotalCost.ToString("C2")}")</span>
+                                        </div>
+                                    }
+                                    @if (vehicle.DashboardMetrics.Contains(DashboardMetric.CostPerMile) && vehicle.CostPerMile != default)
+                                    {
+                                        <div class="inline-flex items-center gap-1 text-gray-600 dark:text-gray-400">
+                                            <heroicon kind="Micro" name="ChartBar" class="size-4"/>
+                                            <span class="text-xs">@($"{vehicle.CostPerMile.ToString("C2")}/{vehicle.DistanceUnit}")</span>
+                                        </div>
+                                    }
+                                </div>
+                                <p class="text-sm font-medium truncate mt-0.5">@StaticHelper.GetVehicleIdentifier(vehicle)</p>
+                                <hr class="border-gray-100 dark:border-gray-700/50 mt-4 mb-3"/>
+                                <div class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                                    <heroicon kind="Mini" name="@(vehicle.HasReminders ? HeroiconName.BellAlert : HeroiconName.Bell)" class="size-4"/>
+                                    <span class="text-sm">@(vehicle.HasReminders ? translator.Translate(userLanguage, "Vehicle has reminders") : translator.Translate(userLanguage, "No reminders"))</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 }
             }
-            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-6 garage-item-add user-select-none">
-                <div class="card" onclick="showAddVehicleModal()" style="height:100%;">
-                    <img src="/defaults/addnew_vehicle.png" style="object-fit:scale-down;height:100%;pointer-events:none;" />
-                </div>
-            </div>
         </div>
     </div>
 </div>
