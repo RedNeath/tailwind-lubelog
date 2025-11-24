@@ -41,7 +41,6 @@
     <link rel="stylesheet" href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap-tagsinput/bootstrap-tagsinput.css" />
     <link rel="stylesheet" href="~/css/site.css"/>
-    <link rel="stylesheet" href="~/css/loader.css"/>
     <link rel="stylesheet" href="~/sweetalert/sweetalert2.min.css"/>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/renault-group">
@@ -177,7 +176,7 @@
         @await Html.PartialAsync("_Nav")
         <header class="relative bg-white dark:bg-gray-800 shadow-sm dark:after:pointer-events-none dark:after:absolute dark:after:inset-x-0 dark:after:inset-y-0 dark:after:border-y dark:after:border-white/10">
             <div class="mx-auto container px-4 py-6 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">@await RenderSectionAsync("Nav", required: false)</h1>
+                <div class="inline-flex items-center justify-between text-3xl font-bold tracking-tight text-gray-900 dark:text-white">@await RenderSectionAsync("Nav", required: false)</div>
             </div>
         </header>
     }

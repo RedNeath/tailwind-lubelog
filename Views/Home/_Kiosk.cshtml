@@ -5,115 +5,167 @@
 @{
     var userConfig = config.GetUserConfig(User);
     var userLanguage = userConfig.UserLanguage;
+    
+    var hasReminders = new Func<VehicleInfo, bool>(vehicle => vehicle.PastDueReminderCount + vehicle.VeryUrgentReminderCount + vehicle.UrgentReminderCount + vehicle.NotUrgentReminderCount > 0);
+    var hasPlans = new Func<VehicleInfo, bool>(vehicle => vehicle.PlanRecordBackLogCount + vehicle.PlanRecordInProgressCount + vehicle.PlanRecordTestingCount + vehicle.PlanRecordBackLogCount > 0);
 }
 @if (Model.Any())
 {
-    <div class="row row-cols-1 row-cols-md-3 g-4 mt-1 kiosk-content" data-masonry='{"percentPosition": true }'>
-        @foreach (VehicleInfo vehicle in Model)
-        {
-            <div class="col" data-vehicleId="@vehicle.VehicleData.Id">
-                <div class="card" onclick="addVehicleToExceptionList(@vehicle.VehicleData.Id)">
-                    <div class="card-body" style="padding-top:0.25rem; padding-bottom:0.25rem;">
-                        <h5 class="card-title">@($"{vehicle.VehicleData.Year} {vehicle.VehicleData.Make} {vehicle.VehicleData.Model} ({StaticHelper.GetVehicleIdentifier(vehicle.VehicleData)})")</h5>
-                        <div class="row">
-                            <div class="col-3 text-center">
-                                <p class="display-7">@vehicle.ServiceRecordCount</p>
-                                <p class="lead text-truncate">@translator.Translate(userLanguage, "Service")</p>
-                                <p class="lead text-truncate">@vehicle.ServiceRecordCost.ToString("C0")</p>
-                            </div>
-                            <div class="col-3 text-center">
-                                <p class="display-7">@vehicle.RepairRecordCount</p>
-                                <p class="lead text-truncate">@translator.Translate(userLanguage, "Repairs")</p>
-                                <p class="lead text-truncate">@vehicle.RepairRecordCost.ToString("C0")</p>
-                            </div>
-                            <div class="col-3 text-center">
-                                <p class="display-7">@vehicle.UpgradeRecordCount</p>
-                                <p class="lead text-truncate">@translator.Translate(userLanguage, "Upgrades")</p>
-                                <p class="lead text-truncate">@vehicle.UpgradeRecordCost.ToString("C0")</p>
-                            </div>
-                            <div class="col-3 text-center">
-                                <p class="display-7">@vehicle.GasRecordCount</p>
-                                <p class="lead text-truncate">@translator.Translate(userLanguage, "Fuel")</p>
-                                <p class="lead text-truncate">@vehicle.GasRecordCost.ToString("C0")</p>
-                            </div>
+    <div class="px-4">
+        <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">@translator.Translate(userLanguage, "Vehicles")</h2>
+            <div class="flex items-center gap-2">@* Future-proof (will allow the inclusion of action buttons) *@</div>
+        </div>
+        
+        <hr class="md:hidden border-gray-200 dark:border-gray-800 mt-4" />
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 pb-2 mt-4 kiosk-content">
+            @foreach (VehicleInfo vehicle in Model)
+            {
+                <div
+                    onclick="addVehicleToExceptionList(@vehicle.VehicleData.Id)"
+                    data-vehicleId="@vehicle.VehicleData.Id"
+                    class="h-fit pt-3 pb-2 px-4 md:p-4 md:pb-3 bg-white dark:bg-gray-800 shadow-md border border-1 border-gray-300 dark:border-gray-700 rounded-lg cursor-pointer transition-all duration-75 ease-out hover:scale-105">
+                    <div class="inline-flex gap-3 items-center justify-between w-full">
+                        <h5 class="font-semibold text-lg truncate">@($"{vehicle.VehicleData.Make} {vehicle.VehicleData.Model}") <small>@StaticHelper.GetVehicleIdentifier(vehicle.VehicleData)</small></h5>
+                        <div class="inline-flex items-center gap-1 text-sm text-gray-700 dark:text-gray-300">
+                            <heroicon kind="Mini" name="Calendar" class="size-4"/>
+                            <span>@vehicle.VehicleData.Year</span>
                         </div>
                     </div>
-                    @if (vehicle.PastDueReminderCount + vehicle.VeryUrgentReminderCount + vehicle.UrgentReminderCount + vehicle.NotUrgentReminderCount > 0)
-                    {
-                        <hr style="margin:0px;" />
-                        <div class="card-body" style="padding-top:0.25rem; padding-bottom:0.25rem;">
-                            <h5 class="card-title">@translator.Translate(userLanguage, "Reminders")</h5>
-                            <div class="row">
-                                <div class="col-3 text-center">
-                                    <p class="display-7">@vehicle.PastDueReminderCount</p>
-                                    <p class="lead text-wrap">@translator.Translate(userLanguage, "Past Due")</p>
-                                </div>
-                                <div class="col-3 text-center">
-                                    <p class="display-7">@vehicle.VeryUrgentReminderCount</p>
-                                    <p class="lead text-wrap">@translator.Translate(userLanguage, "Very Urgent")</p>
-                                </div>
-                                <div class="col-3 text-center">
-                                    <p class="display-7">@vehicle.UrgentReminderCount</p>
-                                    <p class="lead text-wrap">@translator.Translate(userLanguage, "Urgent")</p>
-                                </div>
-                                <div class="col-3 text-center">
-                                    <p class="display-7">@vehicle.NotUrgentReminderCount</p>
-                                    <p class="lead text-wrap">@translator.Translate(userLanguage, "Not Urgent")</p>
-                                </div>
-                            </div>
-                        </div>
-                    }
+                    
                     @if (vehicle.NextReminder != null)
                     {
-                        <hr style="margin:0px;" />
-                        <div class="card-body" style="padding-top:0.25rem; padding-bottom:0.25rem;">
-                            <h5 class="card-title">@translator.Translate(userLanguage, "Upcoming Reminder")</h5>
-                            <div class="row">
-                                <div class="col-12">
-                                    <p class="display-7">@vehicle.NextReminder.Description</p>
-                                    <p class="lead text-wrap">@translator.Translate(userLanguage, StaticHelper.GetTitleCaseReminderUrgency(vehicle.NextReminder.Urgency))</p>
-                                    <div class="row">
-                                        @if (vehicle.NextReminder.Metric == "Date" || vehicle.NextReminder.Metric == "Both")
-                                        {
-                                            <div class="col-6"><i class='bi bi-calendar-event me-2'></i>@vehicle.NextReminder.DueDate</div>
-                                        }
-                                        @if (vehicle.NextReminder.Metric == "Odometer" || vehicle.NextReminder.Metric == "Both")
-                                        {
-                                            <div class="col-6"><i class='bi bi-speedometer me-2'></i>@vehicle.NextReminder.DueOdometer</div>
-                                        }
-                                    </div>
+                        <div class="rounded-lg bg-gray-100 dark:bg-gray-900 p-3 mt-3">
+                            <div class="inline-flex gap-2 justify-between items-start w-full">
+                                <h6 class="font-semibold truncate">@translator.Translate(userLanguage, "Upcoming Reminder")</h6>
+                                <div class="inline-flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+                                    @if (vehicle.NextReminder.Metric is "Date" or "Both")
+                                    {
+                                        <div class="inline-flex items-center gap-1">
+                                            <heroicon kind="Mini" name="CalendarDays" class="size-4"/>
+                                            <span>@vehicle.NextReminder.DueDate</span>
+                                        </div>
+                                    }
+                                    @if (vehicle.NextReminder.Metric is "Odometer" or "Both")
+                                    {
+                                        <div class="inline-flex items-center gap-1">
+                                            <heroicon kind="Mini" name="GlobeAmericas" class="size-4"/>
+                                            <span>@vehicle.NextReminder.DueOdometer</span>
+                                        </div>
+                                    }
                                 </div>
+                            </div>
+                            
+                            <div class="inline-flex justify-between items-end w-full pl-2 mt-2">
+                                <p class="truncate">@vehicle.NextReminder.Description</p>
+                                <span class="inline-flex items-center rounded-full px-1.5 py-0.5 text-xs font-medium border @(vehicle.NextReminder.Urgency == "NotUrgent" ? "bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border-green-700/10 dark:border-green-400/30" : "") @(vehicle.NextReminder.Urgency == "Urgent" ? "bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400 border-orange-700/10 dark:border-orange-400/30" : "") @(vehicle.NextReminder.Urgency == "VeryUrgent" ? "bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-red-700/10 dark:border-red-400/30" : "") @(vehicle.NextReminder.Urgency == "PastDue" ? "bg-gray-50 dark:bg-gray-900/20 text-gray-700 dark:text-gray-400 border-gray-700/10 dark:border-gray-400/30" : "")">
+                                    @translator.Translate(userLanguage, StaticHelper.GetTitleCaseReminderUrgency(vehicle.NextReminder.Urgency))
+                                </span>
                             </div>
                         </div>
                     }
-                    @if (vehicle.PlanRecordBackLogCount + vehicle.PlanRecordInProgressCount + vehicle.PlanRecordTestingCount + vehicle.PlanRecordBackLogCount > 0)
-                    {
-                        <hr style="margin:0px;" />
-                        <div class="card-body" style="padding-top:0.25rem; padding-bottom:0.25rem;">
-                            <h5 class="card-title">@translator.Translate(userLanguage, "Plans")</h5>
-                            <div class="row">
-                                <div class="col-3 text-center">
-                                    <p class="display-7">@vehicle.PlanRecordBackLogCount</p>
-                                    <p class="lead text-wrap">@translator.Translate(userLanguage, "Planned")</p>
-                                </div>
-                                <div class="col-3 text-center">
-                                    <p class="display-7">@vehicle.PlanRecordInProgressCount</p>
-                                    <p class="lead text-wrap">@translator.Translate(userLanguage, "Doing")</p>
-                                </div>
-                                <div class="col-3 text-center">
-                                    <p class="display-7">@vehicle.PlanRecordTestingCount</p>
-                                    <p class="lead text-wrap">@translator.Translate(userLanguage, "Testing")</p>
-                                </div>
-                                <div class="col-3 text-center">
-                                    <p class="display-7">@vehicle.PlanRecordDoneCount</p>
-                                    <p class="lead text-wrap">@translator.Translate(userLanguage, "Done")</p>
-                                </div>
+                    
+                    <div class="mt-3 px-2">
+                        <div class="grid grid-cols-4 gap-2">
+                            <div class="text-center">
+                                <p>@vehicle.ServiceRecordCost.ToString("C0")</p>
+                                <p class="text-xs truncate">@vehicle.ServiceRecordCount @translator.Translate(userLanguage, "Service")</p>
                             </div>
+                            <div class="text-center">
+                                <p>@vehicle.RepairRecordCost.ToString("C0")</p>
+                                <p class="text-xs truncate">@vehicle.RepairRecordCount @translator.Translate(userLanguage, "Repairs")</p>
+                            </div>
+                            <div class="text-center">
+                                <p>@vehicle.UpgradeRecordCost.ToString("C0")</p>
+                                <p class="text-xs truncate">@vehicle.UpgradeRecordCount @translator.Translate(userLanguage, "Upgrades")</p>
+                            </div>
+                            <div class="text-center">
+                                <p>@vehicle.GasRecordCost.ToString("C0")</p>
+                                <p class="text-xs truncate">@vehicle.GasRecordCount @translator.Translate(userLanguage, "Fuel")</p>
+                            </div>
+                        </div>
+                        <div class="font-semibold inline-flex items-center justify-between w-full mt-2">
+                            <span>@translator.Translate(userLanguage, "Total costs")</span>
+                            <span>
+                                @((@vehicle.ServiceRecordCost + @vehicle.RepairRecordCost + @vehicle.UpgradeRecordCost + @vehicle.GasRecordCost).ToString("C0"))
+                            </span>
+                        </div>
+                    </div>
+                    
+                    @if (hasReminders(vehicle) || hasPlans(vehicle))
+                    {
+                        <hr class="border-gray-100 dark:border-gray-700/50 mt-4 mb-3"/>
+                        
+                        <div class="grid @((hasReminders(vehicle) && hasPlans(vehicle)) ? "grid-cols-2" : "grid-cols-1") gap-2 mb-1">
+                            @if (hasReminders(vehicle))
+                            {
+                                <div class="relative overflow-x-auto overflow-y-auto shadow-md border border-1 border-gray-300 dark:border-gray-700 rounded-lg">
+                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead class="sticky top-0 text-xs text-gray-700 uppercase font-medium bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">@translator.Translate(userLanguage, "Reminders")</th>
+                                                <th scope="col" class="px-6 py-3 text-right">@(vehicle.PastDueReminderCount + vehicle.VeryUrgentReminderCount + vehicle.UrgentReminderCount + vehicle.NotUrgentReminderCount)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-t dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                <td class="px-6 py-2 font-medium truncate">@translator.Translate(userLanguage, "Past Due")</td>
+                                                <td class="px-6 py-2 text-right">@vehicle.PastDueReminderCount</td>
+                                            </tr>
+                                            <tr class="bg-white border-t dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                <td class="px-6 py-2 font-medium truncate">@translator.Translate(userLanguage, "Very Urgent")</td>
+                                                <td class="px-6 py-2 text-right">@vehicle.VeryUrgentReminderCount</td>
+                                            </tr>
+                                            <tr class="bg-white border-t dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                <td class="px-6 py-2 font-medium truncate">@translator.Translate(userLanguage, "Urgent")</td>
+                                                <td class="px-6 py-2 text-right">@vehicle.UrgentReminderCount</td>
+                                            </tr>
+                                            <tr class="bg-white border-t dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                <td class="px-6 py-2 font-medium truncate">@translator.Translate(userLanguage, "Not Urgent")</td>
+                                                <td class="px-6 py-2 text-right">@vehicle.NotUrgentReminderCount</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            
+                            @if (hasPlans(vehicle))
+                            {
+                                <div class="relative overflow-x-auto overflow-y-auto shadow-md border border-1 border-gray-300 dark:border-gray-700 rounded-lg">
+                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead class="sticky top-0 text-xs text-gray-700 uppercase font-medium bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">@translator.Translate(userLanguage, "Plans")</th>
+                                                <th scope="col" class="px-6 py-3 text-right">@(vehicle.PlanRecordBackLogCount + vehicle.PlanRecordInProgressCount + vehicle.PlanRecordTestingCount + vehicle.PlanRecordBackLogCount)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-t dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                <td class="px-6 py-2 font-medium truncate">@translator.Translate(userLanguage, "Planned")</td>
+                                                <td class="px-6 py-2 text-right">@vehicle.PlanRecordBackLogCount</td>
+                                            </tr>
+                                            <tr class="bg-white border-t dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                <td class="px-6 py-2 font-medium truncate">@translator.Translate(userLanguage, "Doing")</td>
+                                                <td class="px-6 py-2 text-right">@vehicle.PlanRecordInProgressCount</td>
+                                            </tr>
+                                            <tr class="bg-white border-t dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                <td class="px-6 py-2 font-medium truncate">@translator.Translate(userLanguage, "Testing")</td>
+                                                <td class="px-6 py-2 text-right">@vehicle.PlanRecordTestingCount</td>
+                                            </tr>
+                                            <tr class="bg-white border-t dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                <td class="px-6 py-2 font-medium truncate">@translator.Translate(userLanguage, "Done")</td>
+                                                <td class="px-6 py-2 text-right">@vehicle.PlanRecordDoneCount</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
                         </div>
                     }
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
 }
 else
