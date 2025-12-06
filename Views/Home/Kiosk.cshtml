@@ -146,16 +146,5 @@
             }
         }
     }
-    function togglePlanDetails(sender) {
-        toggleReminderNote(sender);
-        var planSupplies = $(sender).find('.plan-supplies');
-        if (planSupplies.find('.plan-supply').length > 0) {
-            if (planSupplies.hasClass('d-none')) {
-                planSupplies.removeClass('d-none');
-            } else {
-                planSupplies.addClass('d-none');
-            }
-        }
-    }
     initKiosk();
 </script>

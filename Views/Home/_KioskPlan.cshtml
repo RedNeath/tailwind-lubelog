@@ -1,5 +1,5 @@
 ﻿@using CarCareTracker.Helper
-@model List<PlanRecord>
+@model List<PlanRecordViewModel>
 @inject IConfigHelper config
 @inject ITranslationHelper translator
 @{
@@ -8,73 +8,84 @@
 }
 @if (Model.Any())
 {
-    <div class="row row-cols-1 row-cols-md-3 g-4 mt-1 kiosk-content" data-masonry='{"percentPosition": true }'>
-        @foreach (PlanRecord plan in Model)
-        {
-            <div class="col" onclick="togglePlanDetails(this)">
-                <div class="card @StaticHelper.GetPlanRecordColor(plan.Priority)">
-                    <div class="card-body" style="padding-top:0.25rem; padding-bottom:0.25rem;">
-                        <h5 class="card-title">@plan.Description</h5>
-                        <div class="row">
-                            <div class="col-12">
-                                <p class="display-7 d-none reminder-note" style="white-space: pre-wrap">@plan.Notes</p>
-                                <p class="lead text-wrap">@translator.Translate(userLanguage, StaticHelper.GetPlanRecordProgress(plan.Progress))</p>
-                                <div class="row">
-                                    <div class="col-6">
-                                        @if (plan.ImportMode == ImportMode.ServiceRecord)
-                                        {
-                                            <span class="lead">@translator.Translate(userLanguage, "Service")</span>
-                                        }
-                                        else if (plan.ImportMode == ImportMode.UpgradeRecord)
-                                        {
-                                            <span class="lead">@translator.Translate(userLanguage, "Repairs")</span>
-                                        }
-                                        else if (plan.ImportMode == ImportMode.RepairRecord)
-                                        {
-                                            <span class="lead">@translator.Translate(userLanguage, "Upgrades")</span>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
+    <div class="px-4">
+        <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">@translator.Translate(userLanguage, "Plans")</h2>
+            <div class="flex items-center gap-2">@* Future-proof (will allow the inclusion of action buttons) *@</div>
+        </div>
+            
+        <hr class="md:hidden border-gray-200 dark:border-gray-800 mt-4" />
+            
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 pb-2 mt-4 kiosk-content">
+            @foreach (PlanRecordViewModel plan in Model)
+            {
+                <div class="h-fit pt-3 pb-2 px-4 md:p-4 md:pb-3 bg-white dark:bg-gray-800 shadow-md border border-1 border-gray-300 dark:border-gray-700 rounded-lg cursor-pointer transition-all duration-75 ease-out hover:scale-105">
+                    <div class="inline-flex gap-3 items-center justify-between w-full">
+                        <h5 class="font-semibold text-lg truncate">@($"{plan.Vehicle.Make} {plan.Vehicle.Model}") <small>@StaticHelper.GetVehicleIdentifier(plan.Vehicle)</small></h5>
+                        <div class="inline-flex items-center gap-1 text-sm text-gray-700 dark:text-gray-300">
+                            <heroicon kind="Mini" name="Calendar" class="size-4"/>
+                            <span>@plan.Vehicle.Year</span>
                         </div>
                     </div>
+                    
+                    <div class="rounded-lg bg-gray-100 dark:bg-gray-900 p-3 mt-3">
+                        <div class="inline-flex gap-2 justify-between items-start w-full">
+                            <h6 class="font-semibold">
+                                @if (plan.ImportMode == ImportMode.ServiceRecord)
+                                {
+                                    @translator.Translate(userLanguage, "Service")
+                                }
+                                else if (plan.ImportMode == ImportMode.UpgradeRecord)
+                                {
+                                    @translator.Translate(userLanguage, "Repairs")
+                                }
+                                else if (plan.ImportMode == ImportMode.RepairRecord)
+                                {
+                                    @translator.Translate(userLanguage, "Upgrades")
+                                }
+                            </h6>
+                            <span class="text-xs text-gray-600 dark:text-gray-400 truncate">@translator.Translate(userLanguage, StaticHelper.GetPlanRecordProgress(plan.Progress))</span>
+                        </div>
+
+                        <div class="inline-flex gap-2 justify-between items-end w-full pl-2 mt-2">
+                            <p>@plan.SoleDescription</p>
+                            <span class="inline-flex items-center rounded-full px-1.5 py-0.5 text-xs font-medium border @(plan.Priority == PlanPriority.Normal ? "bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border-green-700/10 dark:border-green-400/30" : "") @(plan.Priority == PlanPriority.Critical ? "bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-red-700/10 dark:border-red-400/30" : "") @(plan.Priority == PlanPriority.Low ? "bg-gray-50 dark:bg-gray-900/20 text-gray-700 dark:text-gray-400 border-gray-700/10 dark:border-gray-400/30" : "")">
+                                @translator.Translate(userLanguage, StaticHelper.GetTitleCaseReminderUrgency(plan.Priority.ToString()))
+                            </span>
+                        </div>
+                    </div>
+                    
                     @if (plan.RequisitionHistory.Any())
                     {
-                        <ul class="list-group list-group-flush plan-supplies d-none">
-                            <li class="list-group-item">
-                                <div class="row">
-                                    <div class="col-4">
-                                        @translator.Translate(userLanguage, "Part Number")
-                                    </div>
-                                    <div class="col-4">
-                                        @translator.Translate(userLanguage, "Description")
-                                    </div>
-                                    <div class="col-4">
-                                        @translator.Translate(userLanguage, "Quantity")
-                                    </div>
-                                </div>
-                            </li>
-                            @foreach (SupplyUsageHistory supply in plan.RequisitionHistory)
-                            {
-                                <li class="list-group-item plan-supply">
-                                    <div class="row">
-                                        <div class="col-4">
-                                            @supply.PartNumber
-                                        </div>
-                                        <div class="col-4">
-                                            @supply.Description
-                                        </div>
-                                        <div class="col-4">
-                                            @supply.Quantity
-                                        </div>
-                                    </div>
-                                </li>
-                            }
-                        </ul>
+                        <hr class="border-gray-100 dark:border-gray-700/50 mt-4 mb-3"/>
+                        
+                        <div class="grid grid-cols-1 gap-2 mb-1">
+                            <div class="relative overflow-x-auto overflow-y-auto shadow-md border border-1 border-gray-300 dark:border-gray-700 rounded-lg">
+                                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    <thead class="sticky top-0 text-xs text-gray-700 uppercase font-medium bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3">@translator.Translate(userLanguage, "Part Number")</th>
+                                            <th scope="col" class="px-6 py-3 text-right">@translator.Translate(userLanguage, "Description")</th>
+                                            <th scope="col" class="px-6 py-3 text-right">@translator.Translate(userLanguage, "Quantity")</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (SupplyUsageHistory supply in plan.RequisitionHistory)
+                                        {
+                                            <tr class="bg-white border-t dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                <td class="px-6 py-2">@supply.PartNumber</td>
+                                                <td class="px-6 py-2">@supply.Description</td>
+                                                <td class="px-6 py-2">@supply.Quantity</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     }
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
 } else
 {
