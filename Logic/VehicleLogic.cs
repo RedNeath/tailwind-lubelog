@@ -16,7 +16,7 @@ namespace CarCareTracker.Logic
         int GetOwnershipDays(string purchaseDate, string soldDate, int year, List<ServiceRecord> serviceRecords, List<CollisionRecord> repairRecords, List<GasRecord> gasRecords, List<UpgradeRecord> upgradeRecords, List<OdometerRecord> odometerRecords, List<TaxRecord> taxRecords);
         bool GetVehicleHasUrgentOrPastDueReminders(int vehicleId, int currentMileage);
         List<VehicleInfo> GetVehicleInfo(List<Vehicle> vehicles);
-        List<ReminderRecordViewModel> GetReminders(List<Vehicle> vehicles, bool isCalendar);
+        List<DetailedReminderRecordViewModel> GetReminders(List<Vehicle> vehicles, bool isCalendar);
         List<PlanRecordViewModel> GetPlans(List<Vehicle> vehicles, bool excludeDone);
         bool UpdateRecurringTaxes(int vehicleId);
         void RestoreSupplyRecordsByUsage(List<SupplyUsageHistory> supplyUsage, string usageDescription);
@@ -313,9 +313,9 @@ namespace CarCareTracker.Logic
             }
             return apiResult;
         }
-        public List<ReminderRecordViewModel> GetReminders(List<Vehicle> vehicles, bool isCalendar)
+        public List<DetailedReminderRecordViewModel> GetReminders(List<Vehicle> vehicles, bool isCalendar)
         {
-            List<ReminderRecordViewModel> reminders = new List<ReminderRecordViewModel>();
+            List<DetailedReminderRecordViewModel> reminders = new List<DetailedReminderRecordViewModel>();
             foreach (Vehicle vehicle in vehicles)
             {
                 var vehicleReminders = _reminderRecordDataAccess.GetReminderRecordsByVehicleId(vehicle.Id);
@@ -328,8 +328,8 @@ namespace CarCareTracker.Logic
                 {
                     var vehicleMileage = isCalendar ? 0 : GetMaxMileage(vehicle.Id);
                     var reminderUrgency = _reminderHelper.GetReminderRecordViewModels(vehicleReminders, vehicleMileage, DateTime.Now);
-                    reminderUrgency = reminderUrgency.Select(x => new ReminderRecordViewModel { Id = x.Id, Metric = x.Metric, Date = x.Date, Notes = x.Notes, Mileage = x.Mileage, Urgency = x.Urgency, Description = $"{vehicle.Year} {vehicle.Make} {vehicle.Model} #{StaticHelper.GetVehicleIdentifier(vehicle)} - {x.Description}" }).ToList();
-                    reminders.AddRange(reminderUrgency);
+                    var remindersWithUrgency = reminderUrgency.Select(x => new DetailedReminderRecordViewModel { Id = x.Id, Metric = x.Metric, Date = x.Date, Notes = x.Notes, Mileage = x.Mileage, Urgency = x.Urgency, Vehicle = vehicle, SoleDescription = x.Description, Description = $"{vehicle.Year} {vehicle.Make} {vehicle.Model} #{StaticHelper.GetVehicleIdentifier(vehicle)} - {x.Description}" }).ToList();
+                    reminders.AddRange(remindersWithUrgency);
                 }
             }
             return reminders.OrderByDescending(x=>x.Urgency).ToList();

@@ -826,7 +826,7 @@ namespace CarCareTracker.Helper
                 _csv.NextRecord();
             }
         }
-        public static byte[] RemindersToCalendar(List<ReminderRecordViewModel> reminders)
+        public static byte[] RemindersToCalendar(List<DetailedReminderRecordViewModel> reminders)
         {
             //converts reminders to iCal file
             StringBuilder sb = new StringBuilder();
@@ -838,7 +838,7 @@ namespace CarCareTracker.Helper
             sb.AppendLine("METHOD:PUBLISH");
 
             //create events.
-            foreach(ReminderRecordViewModel reminder in reminders)
+            foreach(DetailedReminderRecordViewModel reminder in reminders)
             {
                 var dtStart = reminder.Date.Date.ToString("yyyyMMddTHHmm00");
                 var dtEnd = reminder.Date.Date.AddDays(1).AddMilliseconds(-1).ToString("yyyyMMddTHHmm00");

@@ -130,21 +130,5 @@
             }
         });
     }
-    function toggleReminderNote(sender){
-        var reminderNote = $(sender).find('.reminder-note');
-        var reminderNoteText = reminderNote.text().trim();
-        if (reminderNoteText != ''){
-            if (reminderNote.hasClass('d-none')) {
-                reminderNote.removeClass('d-none');
-                if (!reminderNote.hasClass('reminder-note-markdown')){
-                    let markedDownReminderNote = markdown(reminderNoteText);
-                    reminderNote.html(markedDownReminderNote);
-                    reminderNote.addClass('reminder-note-markdown');
-                }
-            } else {
-                reminderNote.addClass('d-none');
-            }
-        }
-    }
     initKiosk();
 </script>
