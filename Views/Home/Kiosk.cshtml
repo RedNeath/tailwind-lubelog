@@ -1,22 +1,25 @@
-﻿@{
+﻿@using CarCareTracker.Helper
+@inject IConfigHelper config
+@inject ITranslationHelper translator
+@{
     ViewData["Title"] = "Kiosk";
+    
+    var userConfig = config.GetUserConfig(User);
+    var userLanguage = userConfig.UserLanguage;
 }
-@model KioskViewModel
 @section Scripts {
-    <script src="~/lib/masonry/masonry.min.js"></script>
     <script src="~/lib/drawdown/drawdown.js"></script>
 }
-<div class="no-top-pad">
-    <div class="progress" role="progressbar" aria-label="Refresh Progress" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 1px">
-        <div class="progress-bar" style="width: 0%"></div>
-    </div>
-    <div id="kioskContainer" class="container-fluid">
-    </div>
-</div>
+@section Nav { 
+    <h1>@translator.Translate(userLanguage, "Kiosk")</h1>
+    <span id="refresh-wheel" class="ml-4 text-white dark:text-gray-800 transition-all duration-1000"><heroicon kind="Mini" name="ArrowPath" class="size-3 animate-spin duration-1000"/></span>
+}
+@model KioskViewModel
+<div id="kioskContainer" class="container-fluid"></div>
 <script>
     let refreshTimer;
     let exceptionList = [];
-    let subtractAmount = 0;
+    let currentAmount = 600;
     let kioskMode = '@Model.KioskMode';
     let currentKioskMode = 'Plan';
     let kioskWakeLock;
@@ -27,12 +30,6 @@
     }
 
     function initKiosk() {
-        $("body > div").removeClass("container");
-        $("body > div").css('height', '100vh');
-        subtractAmount = parseInt($("#kioskContainer").width() * 0.0016); //remove 0.0016% of width every 100 ms which will approximate to one minute.
-        if (subtractAmount < 2) {
-            subtractAmount = 2;
-        }
         retrieveKioskContent();
         //acquire wakeLock;
         try {
@@ -57,9 +54,8 @@
         if (kioskMode != 'Cycle'){
             $.post('/Home/KioskContent', { exclusions: exceptionList, kioskMode: kioskMode }, function (data) {
                 $("#kioskContainer").html(data);
-                $(".kiosk-content").masonry();
                 if ($(".no-data-message").length == 0) {
-                    $(".progress-bar").width($("#kioskContainer").width());
+                    currentAmount = 600;
                     setTimeout(function () { startTimer() }, 500);
                 }
             });
@@ -78,7 +74,6 @@
             }
             $.post('/Home/KioskContent', { exclusions: exceptionList, kioskMode: currentKioskMode }, function (data) {
                 $("#kioskContainer").html(data);
-                $(".kiosk-content").masonry();
                 if ($(".no-data-message").length > 0) {
                     //if no data on vehicle page
                     if (currentKioskMode == "Vehicle") {
@@ -87,7 +82,7 @@
                         retrieveKioskContent(); //skip until we hit a page with content.
                     }
                 } else {
-                    $(".progress-bar").width($("#kioskContainer").width());
+                    currentAmount = 600;
                     setTimeout(function () { startTimer() }, 500);
                 }
             });
@@ -96,10 +91,21 @@
     }
     function startTimer() {
         refreshTimer = setInterval(function () {
-            var currentWidth = $(".progress-bar").width();
-            if (currentWidth > 0) {
-                $(".progress-bar").width(currentWidth - subtractAmount);
-            } else {
+            currentAmount--;
+            
+            if (currentAmount === 30) { // Display the refresh wheel for 3 seconds
+                let refreshWheel = $("#refresh-wheel")[0];
+                refreshWheel.classList.remove('text-white');
+                refreshWheel.classList.remove('dark:text-gray-800');
+                refreshWheel.classList.add('text-gray-700');
+                refreshWheel.classList.add('dark:text-gray-300');
+            } else if (currentAmount === 10) {
+                let refreshWheel = $("#refresh-wheel")[0];
+                refreshWheel.classList.remove('text-gray-700');
+                refreshWheel.classList.remove('dark:text-gray-300');
+                refreshWheel.classList.add('text-white');
+                refreshWheel.classList.add('dark:text-gray-800');
+            } else if (currentAmount === 0) {
                 retrieveKioskContent();
             }
         }, 100);
@@ -123,35 +129,6 @@
                 }
             }
         });
-    }
-    function toggleReminderNote(sender){
-        var reminderNote = $(sender).find('.reminder-note');
-        var reminderNoteText = reminderNote.text().trim();
-        if (reminderNoteText != ''){
-            if (reminderNote.hasClass('d-none')) {
-                reminderNote.removeClass('d-none');
-                if (!reminderNote.hasClass('reminder-note-markdown')){
-                    let markedDownReminderNote = markdown(reminderNoteText);
-                    reminderNote.html(markedDownReminderNote);
-                    reminderNote.addClass('reminder-note-markdown');
-                }
-            } else {
-                reminderNote.addClass('d-none');
-            }
-            $(".kiosk-content").masonry();
-        }
-    }
-    function togglePlanDetails(sender) {
-        toggleReminderNote(sender);
-        var planSupplies = $(sender).find('.plan-supplies');
-        if (planSupplies.find('.plan-supply').length > 0) {
-            if (planSupplies.hasClass('d-none')) {
-                planSupplies.removeClass('d-none');
-            } else {
-                planSupplies.addClass('d-none');
-            }
-            $(".kiosk-content").masonry();
-        }
     }
     initKiosk();
 </script>

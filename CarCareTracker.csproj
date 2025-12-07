@@ -23,4 +23,8 @@
     <Folder Include="wwwroot\lib\tailwindplus\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\lib\masonry\masonry.min.js" />
+  </ItemGroup>
+
 </Project>

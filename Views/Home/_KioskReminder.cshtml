@@ -1,5 +1,5 @@
 ﻿@using CarCareTracker.Helper
-@model List<ReminderRecordViewModel>
+@model List<DetailedReminderRecordViewModel>
 @inject IConfigHelper config
 @inject ITranslationHelper translator
 @{
@@ -8,34 +8,69 @@
 }
 @if (Model.Any())
 {
-    <div class="row row-cols-1 row-cols-md-3 g-4 mt-1 kiosk-content" data-masonry='{"percentPosition": true }'>
-        @foreach (ReminderRecordViewModel reminder in Model)
-        {
-            <div class="col" onclick="toggleReminderNote(this)">
-                <div class="card @StaticHelper.GetReminderUrgencyColor(reminder.Urgency)">
-                    <div class="card-body" style="padding-top:0.25rem; padding-bottom:0.25rem;">
-                        <h5 class="card-title">@reminder.Description</h5>
-                        <div class="row">
-                            <div class="col-12">
-                                <p class="display-7 d-none reminder-note" style="white-space: pre-wrap">@reminder.Notes</p>
-                                <p class="lead text-wrap">@translator.Translate(userLanguage, StaticHelper.GetTitleCaseReminderUrgency(reminder.Urgency))</p>
-                                <div class="row">
-                                    @if (reminder.Metric == ReminderMetric.Date || reminder.Metric == ReminderMetric.Both)
-                                    {
-                                        <div class="col-6"><i class='bi bi-calendar-event me-2'></i>@reminder.Date.ToShortDateString()</div>
-                                    }
-                                    @if (reminder.Metric == ReminderMetric.Odometer || reminder.Metric == ReminderMetric.Both)
-                                    {
-                                        <div class="col-6"><i class='bi bi-speedometer me-2'></i>@reminder.Mileage</div>
-                                    }
-                                </div>
+    <div class="px-4">
+        <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">@translator.Translate(userLanguage, "Reminders")</h2>
+            <div class="flex items-center gap-2">@* Future-proof (will allow the inclusion of action buttons) *@</div>
+        </div>
+                
+        <hr class="md:hidden border-gray-200 dark:border-gray-800 mt-4" />
+                
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 pb-2 mt-4 kiosk-content">
+            @foreach (DetailedReminderRecordViewModel reminder in Model)
+            {
+                <div class="h-fit pt-3 pb-2 px-4 md:p-4 md:pb-3 bg-white dark:bg-gray-800 shadow-md border border-1 border-gray-300 dark:border-gray-700 rounded-lg cursor-pointer transition-all duration-75 ease-out hover:scale-105">
+                    <div class="inline-flex gap-3 items-center justify-between w-full">
+                        <h5 class="font-semibold text-lg truncate">@($"{reminder.Vehicle.Make} {reminder.Vehicle.Model}") <small>@StaticHelper.GetVehicleIdentifier(reminder.Vehicle)</small></h5>
+                        <div class="inline-flex items-center gap-1 text-sm text-gray-700 dark:text-gray-300">
+                            <heroicon kind="Mini" name="Calendar" class="size-4"/>
+                            <span>@reminder.Vehicle.Year</span>
+                        </div>
+                    </div>
+                    
+                    <div class="rounded-lg bg-gray-100 dark:bg-gray-900 p-3 mt-3 pb-2">
+                        <div class="inline-flex gap-2 justify-between items-start w-full">
+                            <h6 class="font-semibold">@reminder.SoleDescription</h6>
+                            <div class="inline-flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+                                @if (reminder.Metric == ReminderMetric.Date || reminder.Metric == ReminderMetric.Both)
+                                {
+                                    <div class="inline-flex items-center gap-1">
+                                        <heroicon kind="Mini" name="CalendarDays" class="size-4"/>
+                                        <span>@reminder.Date.ToShortDateString()</span>
+                                    </div>
+                                }
+                                @if (reminder.Metric == ReminderMetric.Odometer || reminder.Metric == ReminderMetric.Both)
+                                {
+                                    <div class="inline-flex items-center gap-1">
+                                        <heroicon kind="Mini" name="GlobeAmericas" class="size-4"/>
+                                        <span>@reminder.Mileage</span>
+                                    </div>
+                                }
                             </div>
+                        </div>
+                            
+                        <div class="inline-flex justify-between gap-2 items-end w-full h-full pl-2 mt-2">
+                            <p class="reminder-notes text-sm whitespace-pre-wrap">@(reminder.Notes != null && reminder.Notes.Trim() != "" ? reminder.Notes : translator.Translate(userLanguage, "No notes"))</p>
+                            <span class="inline-flex items-center rounded-full px-1.5 py-0.5 text-xs font-medium border @(reminder.Urgency == ReminderUrgency.NotUrgent ? "bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border-green-700/10 dark:border-green-400/30" : "") @(reminder.Urgency == ReminderUrgency.Urgent ? "bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400 border-orange-700/10 dark:border-orange-400/30" : "") @(reminder.Urgency == ReminderUrgency.VeryUrgent ? "bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-red-700/10 dark:border-red-400/30" : "") @(reminder.Urgency == ReminderUrgency.PastDue ? "bg-gray-50 dark:bg-gray-900/20 text-gray-700 dark:text-gray-400 border-gray-700/10 dark:border-gray-400/30" : "")">
+                                @translator.Translate(userLanguage, StaticHelper.GetTitleCaseReminderUrgency(reminder.Urgency.ToString()))
+                            </span>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
+    <script>
+        function displayNotesAsHtml(){
+            const reminderNotes = $('.reminder-notes');
+            Object.keys(reminderNotes).forEach((k) => {
+                if (!(reminderNotes[k] instanceof HTMLElement)) return;
+                reminderNotes[k].innerHTML = markdown(reminderNotes[k].innerText.trim());
+            });
+        }
+        
+        displayNotesAsHtml();
+    </script>
 }
 else
 {
