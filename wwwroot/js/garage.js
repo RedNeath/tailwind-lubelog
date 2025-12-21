@@ -378,8 +378,8 @@ function showAccountInformationModal() {
 
 function showRootAccountInformationModal() {
     $.get('/Home/GetRootAccountInformationModal', function (data) {
-        $('#accountInformationModalContent').html(data);
-        $('#accountInformationModal')[0].showModal();
+        $('#accountInformationDialogContent').html(data);
+        $('#accountInformationDialog')[0].showModal();
     })
 }
 function validateAndSaveRootUserAccount() {
