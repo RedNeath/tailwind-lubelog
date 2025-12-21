@@ -6,26 +6,44 @@
     var userConfig = config.GetUserConfig(User);
     var userLanguage = userConfig.UserLanguage;
 }
-<div class="modal-header">
-    <h5 class="modal-title" id="updateRootAccountModalLabel">@translator.Translate(userLanguage, "Update Profile")</h5>
-    <button type="button" class="btn-close" onclick="hideAccountInformationModal()" aria-label="Close"></button>
+<!-- Dialog title -->
+<div class="p-3 sm:py-2 sm:px-4 border-b border-b-1 border-gray-300 dark:border-gray-700 flex justify-between items-center">
+    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">@translator.Translate(userLanguage, "Update Profile")</h3>
+    <!-- Quick actions -->
+    <div class="flex items-center gap-3">
+        <button onclick="hideAccountInformationModal()" class="inline-flex justify-center rounded-md transition-all duration-100 ease-out bg-transparent px-1 py-1 text-sm text-gray-400 dark:text-gray-600 shadow-xs inset-ring inset-ring-gray-300 dark:inset-ring-white/5 hover:text-gray-700 dark:hover:text-gray-400 focus:ring-2 focus:ring-gray-900/5 dark:focus:ring-white/5 w-auto">
+            <heroicon kind="Outline" name="XMark" class="size-5"/>
+        </button>
+    </div>
 </div>
-<div class="modal-body" onkeydown="handleEnter(this)">
-    <form class="form-inline">
-        <div class="form-group">
-            <label for="inputUsername">@translator.Translate(userLanguage, "Username")</label>
-            <input type="text" id="inputUsername" class="form-control" placeholder="@translator.Translate(userLanguage, "Account Username")" value="@Model.UserName">
-            <label for="inputPassword">@translator.Translate(userLanguage, "Password")</label>
-            <div class="input-group">
-                <input type="password" id="inputPassword" class="form-control" placeholder="@translator.Translate(userLanguage, "Password")" value="">
-                <div class="input-group-text">
-                    <button type="button" class="btn btn-sm text-secondary password-visible-button" onclick="togglePasswordVisibility(this)"><i class="bi bi-eye"></i></button>
+<div class="p-3 sm:p-4">
+    <div>
+        <!-- Dialog content -->
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="inputUsername" class="block text-sm font-medium text-gray-900 dark:text-gray-100">@translator.Translate(userLanguage, "Username")</label>
+                <input type="text" id="inputUsername" placeholder="@translator.Translate(userLanguage, "Account Username")" value="@Model.UserName" class="mt-2 block w-full transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 px-3 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">
+                
+                <label for="inputPassword" class="mt-4 block text-sm font-medium text-gray-900 dark:text-gray-100">@translator.Translate(userLanguage, "Password")</label>
+                <div class="mt-2 flex items-center transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 has-[input:focus-within]:ring-4 has-[input:focus-within]:outline-none has-[input:focus-within]:ring-blue-700/25 sm:text-sm/6 dark:has-[input:focus-within]:ring-blue-600/25">
+                    <input type="password" id="inputPassword" placeholder="@translator.Translate(userLanguage, "Password")" value="" class="block min-w-0 rounded-l-md bg-transparent grow py-1.5 px-3 text-base text-gray-900 dark:text-white border-0 border-r border-gray-300 dark:border-gray-600 outline-none sm:text-sm/6">
+                    <div class="grid rounded-r-md shrink-0 grid-cols-1 focus-within:relative bg-white dark:bg-gray-800">
+                        <button type="button" onclick="twTogglePasswordVisibility(this)" class="col-start-1 row-start-1 w-full appearance-none rounded-r-md py-2 px-3 text-base text-gray-500 transition-all duration-100 ease-out shadow-xs focus:outline focus:outline-1 focus:ring-4 focus:ring-offset-1 focus:ring-offset-transparent focus:ring-blue-700/25 dark:focus:ring-blue-600/25">
+                            <heroicon id="userPasswordHidden" kind="Outline" name="Eye" class="size-5" />
+                            <heroicon id="userPasswordVisible" kind="Outline" name="EyeSlash" class="hidden size-5" />
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" onclick="hideAccountInformationModal()">@translator.Translate(userLanguage, "Cancel")</button>
-    <button type="button" onclick="validateAndSaveRootUserAccount()" class="btn btn-primary">@translator.Translate(userLanguage, "Update")</button>
+<div class="p-3 sm:p-4 flex justify-end items-center gap-2 sm:gap-3">
+    <!-- Dialog footer -->
+    <button type="button" onclick="hideAccountInformationModal()" class="inline-flex w-full justify-center rounded-md transition-all duration-100 ease-out bg-transparent dark:bg-white/10 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-xs inset-ring inset-ring-gray-300 dark:inset-ring-white/5 hover:bg-white dark:hover:bg-white/20 focus:ring-4 focus:ring-gray-900/5 dark:focus:ring-white/5 sm:mt-0 sm:w-auto">
+        @translator.Translate(userLanguage, "Cancel")
+    </button>
+    <button type="button" onclick="validateAndSaveRootUserAccount()" class="inline-flex w-full justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:w-auto dark:focus:ring-blue-600/25">
+        @translator.Translate(userLanguage, "Update")
+    </button>
 </div>
