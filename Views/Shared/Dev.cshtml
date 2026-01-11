@@ -129,6 +129,27 @@
             >
                 <heroicon class="size-4 mx-auto" kind="Outline" name="Sparkles"/>
             </button>
+            
+            <br/><!-- Disabled -->
+            
+            <button type="button"
+                    disabled=""
+                    class="cursor-not-allowed inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600/70 px-3 py-2 text-sm font-semibold text-white"
+            >
+                <heroicon kind="Outline" name="Plus" class="size-5 mr-1.5"/>Label
+            </button>
+            <button type="button"
+                    disabled=""
+                    class="cursor-not-allowed inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600/70 px-3 py-2 text-sm font-semibold text-white"
+            >
+                Label
+            </button>
+            <button type="button"
+                    disabled=""
+                    class="cursor-not-allowed w-full justify-center rounded-md transition-all duration-100 ease-out bg-blue-600/70 px-3 py-2 text-sm font-semibold text-white"
+            >
+                <heroicon class="size-4 mx-auto" kind="Outline" name="Sparkles"/>
+            </button>
         </div>
 
         <!-- transparent -->
@@ -148,6 +169,27 @@
             </button>
             <button type="button"
                     class="w-full justify-center rounded-md transition-all duration-100 ease-out bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-700/25 dark:focus:ring-red-600/25"
+            >
+                <heroicon class="size-4 mx-auto" kind="Outline" name="Trash"/>
+            </button>
+            
+            <br/><!-- Disabled -->
+
+            <button type="button"
+                    disabled=""
+                    class="cursor-not-allowed inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-red-600/70 px-3 py-2 text-sm font-semibold text-white"
+            >
+                <heroicon kind="Outline" name="Minus" class="size-5 mr-1.5"/>Label
+            </button>
+            <button type="button"
+                    disabled=""
+                    class="cursor-not-allowed inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-red-600/70 px-3 py-2 text-sm font-semibold text-white"
+            >
+                Label
+            </button>
+            <button type="button"
+                    disabled=""
+                    class="cursor-not-allowed w-full justify-center rounded-md transition-all duration-100 ease-out bg-red-600/70 px-3 py-2 text-sm font-semibold text-white"
             >
                 <heroicon class="size-4 mx-auto" kind="Outline" name="Trash"/>
             </button>
@@ -338,6 +380,21 @@
                     <option>Option 2</option>
                     <option>Option 3</option>
                 </select>
+            </div>
+            <div>
+                <label for="actionSelectField" class="block text-sm font-medium text-gray-900 dark:text-gray-100">Action select field</label>
+                <div class="mt-2 flex items-center transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 has-[select:focus-within]:ring-4 has-[select:focus-within]:outline-none has-[select:focus-within]:ring-blue-700/25 sm:text-sm/6 dark:has-[select:focus-within]:ring-blue-600/25">
+                    <select id="actionSelectField" required class="block w-full rounded-l-md bg-transparent grow py-1.5 pl-3 pr-8 text-base text-gray-900 dark:text-white border-0 border-r border-gray-300 dark:border-gray-600 outline-none sm:text-sm/6">
+                        <option>Option 1</option>
+                        <option>Option 2</option>
+                        <option>Option 3</option>
+                    </select>
+                    <div class="grid rounded-r-md shrink-0 grid-cols-1 focus-within:relative bg-white dark:bg-gray-800">
+                        <button type="button" class="col-start-1 row-start-1 w-full appearance-none rounded-r-md py-2 px-3 text-base text-gray-500 transition-all duration-100 ease-out shadow-xs focus:outline focus:outline-1 focus:ring-4 focus:ring-offset-1 focus:ring-offset-transparent focus:ring-blue-700/25 dark:focus:ring-blue-600/25">
+                            <heroicon id="actionSelectFieldButton" kind="Outline" name="Pencil" class="size-5"/>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 

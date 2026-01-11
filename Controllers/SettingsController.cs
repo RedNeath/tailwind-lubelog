@@ -25,17 +25,39 @@ namespace CarCareTracker.Controllers
             _extraFieldDataAccess = extraFieldDataAccess;
         }
 
-        public IActionResult Index()
+        private SettingsViewModel GetSettingsViewModel()
         {
             var userConfig = _config.GetUserConfig(User);
             var languages = _fileHelper.GetLanguages();
             var viewModel = new SettingsViewModel
             {
                 UserConfig = userConfig,
-                UILanguages = languages
+                UILanguages = languages,
+                CurrentSettingsSection = SettingsSection.DataAndConfiguration,
             };
             
-            return View(viewModel);
+            return viewModel;
+        }
+
+        public IActionResult Index()
+        {
+            return View(GetSettingsViewModel());
+        }
+
+        [HttpPost]
+        public IActionResult SettingsContent(SettingsViewModel settings)
+        {
+            var viewModel = GetSettingsViewModel();
+            viewModel.CurrentSettingsSection = settings.CurrentSettingsSection;
+            
+            return viewModel.CurrentSettingsSection switch
+            {
+                SettingsSection.DataAndConfiguration => PartialView("_DataAndConfiguration", viewModel),
+                SettingsSection.Features => PartialView("_Features", viewModel),
+                SettingsSection.Display => PartialView("_Display", viewModel),
+                SettingsSection.About => PartialView("_About", viewModel),
+                _ => PartialView("_DataAndConfiguration", viewModel)
+            };
         }
         
         [Authorize(Roles = nameof(UserData.IsRootUser))]

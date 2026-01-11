@@ -1,0 +1,71 @@
+@using System.Text.Json
+@using CarCareTracker.Helper
+@model SettingsViewModel
+@inject ITranslationHelper translator
+@{
+    var userLanguage = Model.UserConfig.UserLanguage;
+    var currentSettings = JsonSerializer.Serialize(Model.UserConfig);
+}
+
+<div class="flex sm:hidden items-center justify-between mt-8">
+    <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">@translator.Translate(userLanguage, "About")</h2>
+</div>
+<hr class="sm:hidden border-gray-200 dark:border-gray-800 mt-4"/>
+
+<div class="mt-4 sm:mt-8 bg-white dark:bg-gray-800 shadow-md p-4 md:p-6 space-y-8 border border-gray-300 dark:border-gray-700 rounded-lg">
+    <div class="space-y-2">
+        <h6 class="text-xl font-medium text-gray-800 dark:text-gray-200">Hometown Shoutout <small class="text-sm text-gray-600 dark:text-gray-300">(Message from Hargata Softworks)</small></h6>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+            Do you work remotely and are looking for a new place to call home? Consider looking into the rural Eastern Utah town of Price. Price and Carbon County
+            has experienced pronounced decline in both population and economic activity within the past decade whereas the rest of the state experienced exponential growth.
+            It is conveniently located in between Salt Lake City and Moab Utah. Amenities are relatively complete in terms of big box stores and high speed fiber Internet.
+            Price and its surrounding towns as a whole could really benefit from in-migration. Thank you!
+        </p>
+    </div>
+
+    <div class="space-y-4">
+        <h6 class="text-xl font-medium text-gray-800 dark:text-gray-200">Open Source Dependencies</h6>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+            LubeLogger utilizes open-source dependencies to serve you the best possible user experience, those dependencies are:
+        </p>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <li class="text-sm bg-gray-100 dark:bg-gray-700 p-2 rounded text-gray-700 dark:text-gray-300">Highlight.js</li>
+            <li class="text-sm bg-gray-100 dark:bg-gray-700 p-2 rounded text-gray-700 dark:text-gray-300">Bootstrap-DatePicker</li>
+            <li class="text-sm bg-gray-100 dark:bg-gray-700 p-2 rounded text-gray-700 dark:text-gray-300">LiteDB</li>
+            <li class="text-sm bg-gray-100 dark:bg-gray-700 p-2 rounded text-gray-700 dark:text-gray-300">Npgsql</li>
+            <li class="text-sm bg-gray-100 dark:bg-gray-700 p-2 rounded text-gray-700 dark:text-gray-300">SweetAlert2</li>
+            <li class="text-sm bg-gray-100 dark:bg-gray-700 p-2 rounded text-gray-700 dark:text-gray-300">CsvHelper</li>
+            <li class="text-sm bg-gray-100 dark:bg-gray-700 p-2 rounded text-gray-700 dark:text-gray-300">Chart.js</li>
+            <li class="text-sm bg-gray-100 dark:bg-gray-700 p-2 rounded text-gray-700 dark:text-gray-300">Drawdown</li>
+            <li class="text-sm bg-gray-100 dark:bg-gray-700 p-2 rounded text-gray-700 dark:text-gray-300">MailKit</li>
+        </ul>
+    </div>
+</div>
+
+<div class="mt-4 sm:mt-8 bg-white dark:bg-gray-800 shadow-md p-4 md:p-6 space-y-8 border border-gray-300 dark:border-gray-700 rounded-lg">
+    <div class="flex flex-col items-center space-y-2">
+        <div class="h-12">
+            <application-logo class="h-12" />
+        </div>
+        <small class="text-gray-500 dark:text-gray-400">
+            @($"{translator.Translate(userLanguage, "Version")} {StaticHelper.VersionNumber}")
+        </small>
+    </div>
+    
+    <div class="space-y-4 text-center">
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+            Proudly developed in the rural town of Price, Utah by Hargata Softworks ; aaaand the village of Champtoceaux (Orée d'Anjou), France.
+        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+            If you enjoyed using this app, please consider spreading the good word.<br />
+            And if you want to support the development of the original project, consider subscribing to
+            <a href="https://www.patreon.com/LubeLogger" target="_blank" class="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
+                LubeLogger's Patreon
+            </a>
+            or make a
+            <a href="https://buy.stripe.com/aEU9Egc8DdMc9bO144" target="_blank" class="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
+                donation to Hargata Softworks</a>. @* Please leave the end of the a tag there, otherwise browsers will add a space after the link. *@
+        </p>
+    </div>
+</div>
+

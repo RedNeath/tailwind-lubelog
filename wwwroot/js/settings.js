@@ -36,46 +36,187 @@ function updateColorModeSettings(e) {
             break;
     }
 }
-function updateSettings() {
-    var visibleTabs = getCheckedTabs();
-    var defaultTab = $("#defaultTab").val();
-    if (!visibleTabs.includes(defaultTab)) {
-        defaultTab = "Dashboard"; //default to dashboard.
-    }
-    var tabOrder = getTabOrder();
+// Yet again, I'm too lazy to want to work on the backend, so that will be the way to care about settings persitence
+function updateDataAndConfigurationSettings(modelSettings) {
+    const model = JSON.parse(modelSettings);
+    const userConfigObject = {
+        /* Unused */
+        preferredGasUnit: model.PreferredGasUnit,
+        preferredGasMileageUnit: model.PreferredGasMileageUnit,
 
-    var userConfigObject = {
-        useDarkMode: $("#enableDarkMode").is(':checked'),
-        useSystemColorMode: $("#useSystemColorMode").is(':checked'),
-        enableCsvImports: $("#enableCsvImports").is(':checked'),
+        /* Data & Configuration */
         useMPG: $("#useMPG").is(':checked'),
-        useDescending: $("#useDescending").is(':checked'),
-        hideZero: $("#hideZero").is(":checked"),
-        automaticDecimalFormat: $("#automaticDecimalFormat").is(":checked"),
         useUKMpg: $("#useUKMPG").is(":checked"),
         useThreeDecimalGasCost: $("#useThreeDecimal").is(":checked"),
         useThreeDecimalGasConsumption: $("#useThreeDecimalGasConsumption").is(":checked"),
-        useMarkDownOnSavedNotes: $("#useMarkDownOnSavedNotes").is(":checked"),
+        useUnitForFuelCost: $("#useUnitForFuelCost").is(":checked"),
+        userLanguage: $("#defaultLanguage").val(),
+
+        /* Features */
+        enableCsvImports: model.EnableCsvImports,
+        useDescending: model.UseDescending,
+        automaticDecimalFormat: model.AutomaticDecimalFormat,
+        enableAutoReminderRefresh: model.EnableAutoReminderRefresh,
+        enableAutoOdometerInsert: model.EnableAutoOdometerInsert,
+        enableShopSupplies: model.EnableShopSupplies,
+        showCalendar: model.ShowCalendar,
+
+        /* Display */
+        useDarkMode: model.UseDarkMode,
+        useSystemColorMode: model.UseSystemColorMode,
+        hideZero: model.HideZero,
+        useMarkDownOnSavedNotes: model.UseMarkDownOnSavedNotes,
+        showVehicleThumbnail: model.ShowVehicleThumbnail,
+        enableExtraFieldColumns: model.EnableExtraFieldColumns,
+        hideSoldVehicles: model.HideSoldVehicles,
+        
+        
+        visibleTabs: model.VisibleTabs,
+        defaultTab: model.DefaultTab,
+        tabOrder: model.TabOrder,
+    };
+    
+    updateSettings(userConfigObject);
+}
+function updateFeaturesSettings(modelSettings) {
+    const visibleTabs = getCheckedTabs();
+    let defaultTab = $("#defaultTab").val();
+    if (!visibleTabs.includes(defaultTab)) {
+        defaultTab = "Dashboard"; //default to dashboard.
+    }
+
+    const model = JSON.parse(modelSettings);
+    const userConfigObject = {
+        /* Unused */
+        preferredGasUnit: model.PreferredGasUnit,
+        preferredGasMileageUnit: model.PreferredGasMileageUnit,
+        
+        /* Data & Configuration */
+        useMPG: model.UseMPG,
+        useUKMpg: model.UseUKMPG,
+        useThreeDecimalGasCost: model.UseThreeDecimalGasCost,
+        useThreeDecimalGasConsumption: model.UseThreeDecimalGasConsumption,
+        useUnitForFuelCost: model.UseUnitForFuelCost,
+        userLanguage: model.UserLanguage,
+        
+        /* Features */
+        enableCsvImports: $("#enableCsvImports").is(':checked'),
+        useDescending: $("#useDescending").is(':checked'),
+        automaticDecimalFormat: $("#automaticDecimalFormat").is(":checked"),
         enableAutoReminderRefresh: $("#enableAutoReminderRefresh").is(":checked"),
         enableAutoOdometerInsert: $("#enableAutoOdometerInsert").is(":checked"),
         enableShopSupplies: $("#enableShopSupplies").is(":checked"),
         showCalendar: $("#showCalendar").is(":checked"),
+        
+        /* Display */
+        useDarkMode: model.UseDarkMode,
+        useSystemColorMode: model.UseSystemColorMode,
+        hideZero: model.HideZero,
+        useMarkDownOnSavedNotes: model.UseMarkDownOnSavedNotes,
+        showVehicleThumbnail: model.ShowVehicleThumbnail,
+        enableExtraFieldColumns: model.EnableExtraFieldColumns,
+        hideSoldVehicles: model.HideSoldVehicles,
+        
+        
+        visibleTabs: visibleTabs,
+        defaultTab: defaultTab,
+        tabOrder: model.TabOrder,
+    };
+    
+    updateSettings(userConfigObject);
+}
+function updateDisplaySettings(modelSettings) {
+    const model = JSON.parse(modelSettings);
+    const userConfigObject = {
+        /* Unused */
+        preferredGasUnit: model.PreferredGasUnit,
+        preferredGasMileageUnit: model.PreferredGasMileageUnit,
+
+        /* Data & Configuration */
+        useMPG: model.UseMPG,
+        useUKMpg: model.UseUKMPG,
+        useThreeDecimalGasCost: model.UseThreeDecimalGasCost,
+        useThreeDecimalGasConsumption: model.UseThreeDecimalGasConsumption,
+        useUnitForFuelCost: model.UseUnitForFuelCost,
+        userLanguage: model.UserLanguage,
+
+        /* Features */
+        enableCsvImports: model.EnableCsvImports,
+        useDescending: model.UseDescending,
+        automaticDecimalFormat: model.AutomaticDecimalFormat,
+        enableAutoReminderRefresh: model.EnableAutoReminderRefresh,
+        enableAutoOdometerInsert: model.EnableAutoOdometerInsert,
+        enableShopSupplies: model.EnableShopSupplies,
+        showCalendar: model.ShowCalendar,
+
+        /* Display */
+        useDarkMode: $("#enableDarkMode").is(':checked'),
+        useSystemColorMode: $("#useSystemColorMode").is(':checked'),
+        hideZero: $("#hideZero").is(":checked"),
+        useMarkDownOnSavedNotes: $("#useMarkDownOnSavedNotes").is(":checked"),
         showVehicleThumbnail: $("#showVehicleThumbnail").is(":checked"),
         enableExtraFieldColumns: $("#enableExtraFieldColumns").is(":checked"),
         hideSoldVehicles: $("#hideSoldVehicles").is(":checked"),
-        preferredGasUnit: $("#preferredGasUnit").val(),
-        preferredGasMileageUnit: $("#preferredFuelMileageUnit").val(),
-        userLanguage: $("#defaultLanguage").val(),
-        useUnitForFuelCost: $("#useUnitForFuelCost").is(":checked"),
-        visibleTabs: visibleTabs,
-        defaultTab: defaultTab,
+
+
+        visibleTabs: model.VisibleTabs,
+        defaultTab: model.DefaultTab,
+        tabOrder: model.TabOrder,
+    };
+    
+    updateSettings(userConfigObject);
+}
+
+function updateTabOrderSettings(modelSettings) {
+    const tabOrder = getTabOrder();
+    
+    const model = JSON.parse(modelSettings);
+    const userConfigObject = {
+        /* Unused */
+        preferredGasUnit: model.PreferredGasUnit,
+        preferredGasMileageUnit: model.PreferredGasMileageUnit,
+
+        /* Data & Configuration */
+        useMPG: model.UseMPG,
+        useUKMpg: model.UseUKMPG,
+        useThreeDecimalGasCost: model.UseThreeDecimalGasCost,
+        useThreeDecimalGasConsumption: model.UseThreeDecimalGasConsumption,
+        useUnitForFuelCost: model.UseUnitForFuelCost,
+        userLanguage: model.UserLanguage,
+
+        /* Features */
+        enableCsvImports: model.EnableCsvImports,
+        useDescending: model.UseDescending,
+        automaticDecimalFormat: model.AutomaticDecimalFormat,
+        enableAutoReminderRefresh: model.EnableAutoReminderRefresh,
+        enableAutoOdometerInsert: model.EnableAutoOdometerInsert,
+        enableShopSupplies: model.EnableShopSupplies,
+        showCalendar: model.ShowCalendar,
+
+        /* Display */
+        useDarkMode: model.UseDarkMode,
+        useSystemColorMode: model.UseSystemColorMode,
+        hideZero: model.HideZero,
+        useMarkDownOnSavedNotes: model.UseMarkDownOnSavedNotes,
+        showVehicleThumbnail: model.ShowVehicleThumbnail,
+        enableExtraFieldColumns: model.EnableExtraFieldColumns,
+        hideSoldVehicles: model.HideSoldVehicles,
+
+
+        visibleTabs: model.VisibleTabs,
+        defaultTab: model.DefaultTab,
         tabOrder: tabOrder
-    }
+    };
+
+    updateSettings(userConfigObject);
+}
+
+function updateSettings(userConfigObject) {
     sloader.show();
     $.post('/Home/WriteToSettings', { userConfig: userConfigObject }, function (data) {
         sloader.hide();
         if (data) {
-            setTimeout(function () { window.location.href = '/Home/Index?tab=settings' }, 500);
+            setTimeout(function () { window.location.href = '/Settings' }, 500);
         } else {
             errorToast(genericErrorMessage());
         }

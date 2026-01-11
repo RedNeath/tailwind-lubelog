@@ -13,32 +13,141 @@
 }
 <div>
     <div class="px-4">
-        <div class="flex items-center justify-between">
-            <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">@translator.Translate(userLanguage, "Settings")</h2>
-            @* <div class="flex items-center gap-2"> $1$ Future-proof (will work with more than 1 element) #1# *@
-            @*     <button onclick="showTokenDialog()" class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"> *@
-            @*         <heroicon kind="Outline" name="PencilSquare" class="size-5 mr-2" /> *@
-            @*         @translator.Translate(userLanguage, "Manage Tokens") *@
-            @*     </button> *@
-            @* </div> *@
-        </div>
-        <hr class="md:hidden border-gray-200 dark:border-gray-800 mt-4" />
-        <div class="bg-white dark:bg-gray-800 shadow-md p-2 md:p-4 border border-1 border-gray-300 dark:border-gray-700 rounded-md">
-            <div class="flex gap-4">
-                <button type="button"
-                        onclick="showExtraFieldDialog()"
-                        class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"
-                >
-                    @translator.Translate(userLanguage, "Extra fields")
+        <div class="hidden sm:block border-b border-gray-300/75 dark:border-white/10">
+            <nav id="settings-sections" class="-mb-[1px] flex gap-8">
+                <button type="button" id="@SettingsSection.DataAndConfiguration" class="inline-flex items-center border-b-2 px-1 py-4 text-sm/5" onclick="loadSection('@SettingsSection.DataAndConfiguration')">
+                    <heroicon kind="Solid" name="WrenchScrewdriver" class="mr-2 -ml-0.5 size-5" />
+                    <span>@translator.Translate(userLanguage, "Data") & @translator.Translate(userLanguage, "Configuration")</span>
                 </button>
-            </div>
+                <button type="button" id="@SettingsSection.Features" class="inline-flex items-center border-b-2 px-1 py-4 text-sm/5" onclick="loadSection('@SettingsSection.Features')">
+                    <heroicon kind="Solid" name="AdjustmentsHorizontal" class="mr-2 -ml-0.5 size-5" />
+                    <span>@translator.Translate(userLanguage, "Features")</span>
+                </button>
+                <button type="button" id="@SettingsSection.Display" class="inline-flex items-center border-b-2 px-1 py-4 text-sm/5" onclick="loadSection('@SettingsSection.Display')">
+                    <heroicon kind="Solid" name="ComputerDesktop" class="mr-2 -ml-0.5 size-5" />
+                    <span>@translator.Translate(userLanguage, "Display")</span>
+                </button>
+                <button type="button" id="@SettingsSection.About" class="inline-flex items-center border-b-2 px-1 py-4 text-sm/5" onclick="loadSection('@SettingsSection.About')">
+                    <heroicon kind="Solid" name="InformationCircle" class="mr-2 -ml-0.5 size-5" />
+                    <span>@translator.Translate(userLanguage, "About")</span>
+                </button>
+            </nav>
         </div>
+        
+        <button command="show-modal"
+                commandfor="settings-drawer"
+                type="button"
+                class="inline-flex sm:hidden w-fit justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"
+        >
+            <heroicon kind="Outline" name="ChevronLeft" class="size-5 mr-1.5"/>@translator.Translate(userLanguage, "Back")
+        </button>
+        
+        <div id="settings-content"></div>
     </div>
     
     <dialog class="w-11/12 lg:w-5/12 lg:mt-32 bg-white dark:bg-gray-900 rounded-xl border border-1 border-gray-300 dark:border-gray-700" id="extra-field-dialog"></dialog>
 </div>
 
+<el-dialog>
+    <dialog id="settings-drawer" aria-labelledby="drawer-title" class="fixed inset-0 m-0 size-auto max-h-none max-w-none overflow-hidden bg-transparent p-0 backdrop:bg-transparent [&:not([open],:popover-open,:open)]:hidden">
+        <el-dialog-backdrop class="absolute inset-0 bg-gray-500/75 dark:bg-gray-900/50 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0"></el-dialog-backdrop>
+
+        <div tabindex="0" class="absolute inset-0 pr-10 focus:outline focus:outline-0 sm:pr-16">
+            <el-dialog-panel class="group/dialog-panel relative block size-full max-w-md transform transition duration-500 ease-in-out data-[closed]:-translate-x-full sm:duration-700">
+                <!-- Close button, show/hide based on slide-over state. -->
+                <div class="absolute right-0 top-0 -mr-8 flex pl-2 pt-4 duration-500 ease-in-out group-data-[closed]/dialog-panel:opacity-0 sm:-mr-10 sm:pl-4">
+                    <button type="button" command="close" commandfor="settings-drawer" class="relative rounded-md text-gray-300 dark:text-gray-400 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        <span class="absolute -inset-2.5"></span>
+                        <span class="sr-only">Close panel</span>
+                        <heroicon kind="Outline" name="XMark" class="size-6" />
+                    </button>
+                </div>
+
+                <div class="relative flex h-full flex-col overflow-y-auto bg-white dark:bg-gray-800 py-6 shadow-xl dark:after:absolute dark:after:inset-y-0 dark:after:right-0 dark:after:w-px dark:after:bg-white/10">
+                    <div class="px-4 sm:px-6">
+                        <h2 id="drawer-title" class="text-base font-semibold text-gray-900 dark:text-white">Browse</h2>
+                    </div>
+                    <div class="relative mt-6 flex-1 px-4 sm:px-6">
+                        <ul>
+                            <li>
+                                <button type="button" onclick="loadSection('@SettingsSection.DataAndConfiguration')" command="close" commandfor="settings-drawer" class="flex items-center w-full hover:bg-gray-200 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                    <heroicon kind="Mini" name="WrenchScrewdriver" class="size-4 mr-2" />@translator.Translate(userLanguage, "Data") & @translator.Translate(userLanguage, "Configuration")
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" onclick="loadSection('@SettingsSection.Features')" command="close" commandfor="settings-drawer" class="flex items-center w-full hover:bg-gray-200 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                    <heroicon kind="Mini" name="AdjustmentsHorizontal" class="size-4 mr-2" />@translator.Translate(userLanguage, "Features")
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" onclick="loadSection('@SettingsSection.Display')" command="close" commandfor="settings-drawer" class="flex items-center w-full hover:bg-gray-200 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                    <heroicon kind="Mini" name="ComputerDesktop" class="size-4 mr-2" />@translator.Translate(userLanguage, "Display")
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" onclick="loadSection('@SettingsSection.About')" command="close" commandfor="settings-drawer" class="flex items-center w-full hover:bg-gray-200 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:bg-white/5 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                                    <heroicon kind="Mini" name="InformationCircle" class="size-4 mr-2" />@translator.Translate(userLanguage, "About")
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </el-dialog-panel>
+        </div>
+    </dialog>
+</el-dialog>
+
 <script>
+    function applyTabStyle(section) {
+        const sections = document.getElementById("settings-sections");
+        
+        for (let childSection of sections.children) {
+            if (childSection.id === section) {
+                childSection.classList.add("border-blue-500");
+                childSection.classList.add("text-blue-600");
+                childSection.classList.add("font-medium");
+                childSection.classList.add("dark:border-blue-400");
+                childSection.classList.add("dark:text-blue-400");
+                
+                childSection.classList.remove("border-transparent");
+                childSection.classList.remove("text-gray-500/80");
+                childSection.classList.remove("font-normal");
+                childSection.classList.remove("dark:text-gray-400");
+                childSection.classList.remove("hover:border-gray-400");
+                childSection.classList.remove("hover:text-gray-600");
+                childSection.classList.remove("dark:hover:border-white/20");
+                childSection.classList.remove("dark:hover:text-gray-300");
+            } else {
+                childSection.classList.remove("border-blue-500");
+                childSection.classList.remove("text-blue-600");
+                childSection.classList.remove("font-medium");
+                childSection.classList.remove("dark:border-blue-400");
+                childSection.classList.remove("dark:text-blue-400");
+
+                childSection.classList.add("border-transparent");
+                childSection.classList.add("text-gray-500/80");
+                childSection.classList.add("font-normal");
+                childSection.classList.add("dark:text-gray-400");
+                childSection.classList.add("hover:border-gray-400");
+                childSection.classList.add("hover:text-gray-600");
+                childSection.classList.add("dark:hover:border-white/20");
+                childSection.classList.add("dark:hover:text-gray-300");
+            }
+        }
+    }
+    
+    function loadSection(section) {
+        $.post('/Settings/SettingsContent/', { currentSettingsSection: section }, function (data) {
+            $("#settings-content").html(data);
+        });
+        
+        applyTabStyle(section);
+        currentSection = section;
+    }
+    
     let extraFields = null;
     let subject = null;
+    
+    let currentSection = "@(Model.CurrentSettingsSection)";
+    loadSection(currentSection);
 </script>
