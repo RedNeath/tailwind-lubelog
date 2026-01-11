@@ -4,5 +4,6 @@
 bin/
 obj/
 data/
+_old_data/
 CarCareTracker.csproj.user
 Properties/launchSettings.json

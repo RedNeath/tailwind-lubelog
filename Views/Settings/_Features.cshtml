@@ -1,0 +1,298 @@
+@using System.Text.Json
+@using CarCareTracker.Helper
+@model SettingsViewModel
+@inject ITranslationHelper translator
+@{
+    var userLanguage = Model.UserConfig.UserLanguage;
+    var currentSettings = JsonSerializer.Serialize(Model.UserConfig);
+}
+
+<div class="flex sm:hidden items-center justify-between mt-8">
+    <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">@translator.Translate(userLanguage, "Features")</h2>
+</div>
+<hr class="sm:hidden border-gray-200 dark:border-gray-800 mt-4"/>
+
+<div class="mt-4 sm:mt-8 bg-white dark:bg-gray-800 shadow-md p-4 md:p-6 space-y-12 border border-1 border-gray-300 dark:border-gray-700 rounded-lg">
+    <div class="border-b border-gray-300 dark:border-white/10 pb-12">
+        <h2 class="text-base/7 font-semibold">@translator.Translate(userLanguage, "General")</h2>
+        <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">@translator.Translate(userLanguage, "General options regarding the activation or deactivation of certain features.")</p>
+        
+        <fieldset class="mt-6 space-y-6">
+            <div class="flex gap-3 items-center">
+                <div class="flex h-6 shrink-0 items-center">
+                    <div class="group grid size-4 grid-cols-1">
+                        <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" checked="@Model.UserConfig.EnableCsvImports" id="enableCsvImports" class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                        <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                    </div>
+                </div>
+                <label for="enableCsvImports" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Enable CSV Imports")</label>
+            </div>
+            <div class="flex gap-3 items-center">
+                <div class="flex h-6 shrink-0 items-center">
+                    <div class="group grid size-4 grid-cols-1">
+                        <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" checked="@Model.UserConfig.UseDescending" id="useDescending" class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                        <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                    </div>
+                </div>
+                <label for="useDescending" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Sort lists in Descending Order(Newest to Oldest)")</label>
+            </div>
+            <div class="flex gap-3 items-center">
+                <div class="flex h-6 shrink-0 items-center">
+                    <div class="group grid size-4 grid-cols-1">
+                        <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" checked="@Model.UserConfig.EnableShopSupplies" id="enableShopSupplies" class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                        <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                    </div>
+                </div>
+                <label for="enableShopSupplies" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Shop Supplies")</label>
+            </div>
+            <div class="flex gap-3 items-center">
+                <div class="flex h-6 shrink-0 items-center">
+                    <div class="group grid size-4 grid-cols-1">
+                        <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" checked="@Model.UserConfig.ShowCalendar" id="showCalendar" class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                        <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                    </div>
+                </div>
+                <label for="showCalendar" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Show Calendar")</label>
+            </div>
+        </fieldset>
+    </div>
+    <div class="border-b border-gray-300 dark:border-white/10 pb-12">
+        <h2 class="text-base/7 font-semibold">@translator.Translate(userLanguage, "Automation")</h2>
+        <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">@translator.Translate(userLanguage, "This is where you'll find all the settings about automation matters")</p>
+        
+        <fieldset class="mt-6 space-y-6">
+            <div class="flex gap-3 items-center">
+                <div class="flex h-6 shrink-0 items-center">
+                    <div class="group grid size-4 grid-cols-1">
+                        <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" checked="@Model.UserConfig.AutomaticDecimalFormat" id="automaticDecimalFormat" class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                        <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                    </div>
+                </div>
+                <label for="automaticDecimalFormat" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Automatically Format Decimal Inputs")</label>
+            </div>
+            <div class="flex gap-3 items-center">
+                <div class="flex h-6 shrink-0 items-center">
+                    <div class="group grid size-4 grid-cols-1">
+                        <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" checked="@Model.UserConfig.EnableAutoReminderRefresh" id="enableAutoReminderRefresh" class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                        <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                    </div>
+                </div>
+                <label for="enableAutoReminderRefresh" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Auto Refresh Lapsed Recurring Reminders")</label>
+            </div><div class="flex gap-3">
+                <div class="flex h-6 shrink-0 items-center">
+                    <div class="group grid size-4 grid-cols-1">
+                        <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" checked="@Model.UserConfig.EnableAutoOdometerInsert" id="enableAutoOdometerInsert" class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                        <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                    </div>
+                </div>
+                <div class="text-sm/6">
+                    <label for="enableAutoOdometerInsert" class="font-medium">@translator.Translate(userLanguage, "Auto Insert Odometer Records")</label>
+                    <p class="text-gray-500 dark:text-gray-400">@translator.Translate(userLanguage, "Only when Adding Service/Repair/Upgrade/Fuel Record or Completing a Plan")</p>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="@(User.IsInRole(nameof(UserData.IsRootUser)) ? "border-b border-gray-300 dark:border-white/10 pb-12" : "")">
+        <h2 class="text-base/7 font-semibold">@translator.Translate(userLanguage, "Tabs")</h2>
+        <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">@translator.Translate(userLanguage, "Select which tabs to show, select the default tab, and organise them however you want.")</p>
+
+        <div class="mt-10 space-y-10">
+            <fieldset id="visibleTabs">
+                <legend class="text-sm/6 font-semibold">@translator.Translate(userLanguage, "Visible Tabs")</legend>
+                <div class="mt-6 space-y-6">
+                    <div class="flex gap-3 items-center">
+                        <div class="flex h-6 shrink-0 items-center">
+                            <div class="group grid size-4 grid-cols-1">
+                                <input type="checkbox" disabled onChange="updateFeaturesSettings('@currentSettings')" value="Dashboard" id="dashboardTab" @(Model.UserConfig.VisibleTabs.Contains(ImportMode.Dashboard) ? "checked" : "") class="cursor-not-allowed col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:bg-blue-600/70 dark:checked:bg-blue-500/70 hover:checked:bg-blue-600/70 dark:hover:checked:bg-blue-600/70 dark:border-gray-600">
+                                <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                            </div>
+                        </div>
+                        <label for="dashboardTab" class="text-sm/6 font-medium text-gray-900/70 dark:text-white/70 cursor-not-allowed">@translator.Translate(userLanguage, "Dashboard")</label>
+                    </div>
+                    <div class="flex gap-3 items-center">
+                        <div class="flex h-6 shrink-0 items-center">
+                            <div class="group grid size-4 grid-cols-1">
+                                <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" value="ServiceRecord" id="serviceRecordTab" @(Model.UserConfig.VisibleTabs.Contains(ImportMode.ServiceRecord) ? "checked" : "") class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                                <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                            </div>
+                        </div>
+                        <label for="serviceRecordTab" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Service Records")</label>
+                    </div>
+                    <div class="flex gap-3 items-center">
+                        <div class="flex h-6 shrink-0 items-center">
+                            <div class="group grid size-4 grid-cols-1">
+                                <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" value="RepairRecord" id="repairRecordTab" @(Model.UserConfig.VisibleTabs.Contains(ImportMode.RepairRecord) ? "checked" : "") class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                                <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                            </div>
+                        </div>
+                        <label for="repairRecordTab" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Repairs")</label>
+                    </div>
+                    <div class="flex gap-3 items-center">
+                        <div class="flex h-6 shrink-0 items-center">
+                            <div class="group grid size-4 grid-cols-1">
+                                <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" value="UpgradeRecord" id="upgradeRecordTab" @(Model.UserConfig.VisibleTabs.Contains(ImportMode.UpgradeRecord) ? "checked" : "") class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                                <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                            </div>
+                        </div>
+                        <label for="upgradeRecordTab" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Upgrades")</label>
+                    </div>
+                    <div class="flex gap-3 items-center">
+                        <div class="flex h-6 shrink-0 items-center">
+                            <div class="group grid size-4 grid-cols-1">
+                                <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" value="GasRecord" id="gasRecordTab" @(Model.UserConfig.VisibleTabs.Contains(ImportMode.GasRecord) ? "checked" : "") class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                                <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                            </div>
+                        </div>
+                        <label for="gasRecordTab" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Fuel")</label>
+                    </div>
+                    <div class="flex gap-3 items-center">
+                        <div class="flex h-6 shrink-0 items-center">
+                            <div class="group grid size-4 grid-cols-1">
+                                <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" value="OdometerRecord" id="odometerRecordTab" @(Model.UserConfig.VisibleTabs.Contains(ImportMode.OdometerRecord) ? "checked" : "") class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                                <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                            </div>
+                        </div>
+                        <label for="odometerRecordTab" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Odometer")</label>
+                    </div>
+                    <div class="flex gap-3 items-center">
+                        <div class="flex h-6 shrink-0 items-center">
+                            <div class="group grid size-4 grid-cols-1">
+                                <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" value="TaxRecord" id="taxRecordTab" @(Model.UserConfig.VisibleTabs.Contains(ImportMode.TaxRecord) ? "checked" : "") class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                                <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                            </div>
+                        </div>
+                        <label for="taxRecordTab" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Taxes")</label>
+                    </div>
+                    <div class="flex gap-3 items-center">
+                        <div class="flex h-6 shrink-0 items-center">
+                            <div class="group grid size-4 grid-cols-1">
+                                <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" value="NoteRecord" id="noteRecordTab" @(Model.UserConfig.VisibleTabs.Contains(ImportMode.NoteRecord) ? "checked" : "") class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                                <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                            </div>
+                        </div>
+                        <label for="noteRecordTab" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Notes")</label>
+                    </div>
+                    <div class="flex gap-3 items-center">
+                        <div class="flex h-6 shrink-0 items-center">
+                            <div class="group grid size-4 grid-cols-1">
+                                <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" value="ReminderRecord" id="reminderRecordTab" @(Model.UserConfig.VisibleTabs.Contains(ImportMode.ReminderRecord) ? "checked" : "") class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                                <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                            </div>
+                        </div>
+                        <label for="reminderRecordTab" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Reminder")</label>
+                    </div>
+                    <div class="flex gap-3 items-center">
+                        <div class="flex h-6 shrink-0 items-center">
+                            <div class="group grid size-4 grid-cols-1">
+                                <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" value="SupplyRecord" id="supplyRecordTab" @(Model.UserConfig.VisibleTabs.Contains(ImportMode.SupplyRecord) ? "checked" : "") class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                                <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                            </div>
+                        </div>
+                        <label for="supplyRecordTab" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Supplies")</label>
+                    </div>
+                    <div class="flex gap-3 items-center">
+                        <div class="flex h-6 shrink-0 items-center">
+                            <div class="group grid size-4 grid-cols-1">
+                                <input type="checkbox" onChange="updateFeaturesSettings('@currentSettings')" value="PlanRecord" id="planRecordTab" @(Model.UserConfig.VisibleTabs.Contains(ImportMode.PlanRecord) ? "checked" : "") class="col-start-1 row-start-1 appearance-none rounded border transition-all duration-100 ease-out border-gray-300 bg-white dark:bg-gray-800 checked:border-blue-600 dark:checked:border-blue-600 checked:bg-blue-600 dark:checked:bg-blue-500 indeterminate:border-blue-600 dark:indeterminate:border-blue-500 indeterminate:bg-blue-600 dark:indeterminate:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-500 dark:border-gray-600">
+                                <heroicon kind="Micro" name="Check" class="pointer-events-none col-start-1 row-start-1 s-3.5 self-center justify-self-center" fill="none"/>
+                            </div>
+                        </div>
+                        <label for="planRecordTab" class="text-sm/6 font-medium">@translator.Translate(userLanguage, "Planner")</label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend class="text-sm/6 font-semibold">@translator.Translate(userLanguage, "Default Tab")</legend>
+                <div class="mt-6 space-y-6">
+                    <select onchange="updateFeaturesSettings('@currentSettings')" id="defaultTab" class="mt-2 block transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 pl-3 pr-8 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">
+                        <!option @(StaticHelper.DefaultTabSelected(Model.UserConfig, ImportMode.Dashboard)) value="Dashboard">@translator.Translate(userLanguage, "Dashboard")</!option>
+                        <!option @(StaticHelper.DefaultTabSelected(Model.UserConfig, ImportMode.ServiceRecord)) value="ServiceRecord">@translator.Translate(userLanguage, "Service Record")</!option>
+                        <!option @(StaticHelper.DefaultTabSelected(Model.UserConfig, ImportMode.RepairRecord)) value="RepairRecord">@translator.Translate(userLanguage, "Repairs")</!option>
+                        <!option @(StaticHelper.DefaultTabSelected(Model.UserConfig, ImportMode.UpgradeRecord)) value="UpgradeRecord">@translator.Translate(userLanguage, "Upgrades")</!option>
+                        <!option @(StaticHelper.DefaultTabSelected(Model.UserConfig, ImportMode.GasRecord)) value="GasRecord">@translator.Translate(userLanguage, "Fuel")</!option>
+                        <!option @(StaticHelper.DefaultTabSelected(Model.UserConfig, ImportMode.TaxRecord)) value="TaxRecord">@translator.Translate(userLanguage, "Tax")</!option>
+                        <!option @(StaticHelper.DefaultTabSelected(Model.UserConfig, ImportMode.NoteRecord)) value="NoteRecord">@translator.Translate(userLanguage, "Notes")</!option>
+                        <!option @(StaticHelper.DefaultTabSelected(Model.UserConfig, ImportMode.ReminderRecord)) value="ReminderRecord">@translator.Translate(userLanguage, "Reminders")</!option>
+                        <!option @(StaticHelper.DefaultTabSelected(Model.UserConfig, ImportMode.SupplyRecord)) value="SupplyRecord">@translator.Translate(userLanguage, "Supplies")</!option>
+                        <!option @(StaticHelper.DefaultTabSelected(Model.UserConfig, ImportMode.PlanRecord)) value="PlanRecord">@translator.Translate(userLanguage, "Planner")</!option>
+                        <!option @(StaticHelper.DefaultTabSelected(Model.UserConfig, ImportMode.OdometerRecord)) value="OdometerRecord">@translator.Translate(userLanguage, "Odometer")</!option>
+                    </select>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend class="text-sm/6 font-semibold">@translator.Translate(userLanguage, "Reorder Tabs")</legend>
+                <div class="mt-6 space-y-6">
+                    <button type="button"
+                            onclick="showTabReorderModal()"
+                            class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"
+                    >
+                        @translator.Translate(userLanguage, "Configure")
+                    </button>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    @if (User.IsInRole(nameof(UserData.IsRootUser)))
+    {
+        <div>
+            <h2 class="text-base/7 font-semibold">@translator.Translate(userLanguage, "Extra Fields")</h2>
+            <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">@translator.Translate(userLanguage, "Extra fields lets you specify fields to add to each kind of entry.")</p>
+
+            <div class="mt-6 space-y-10">
+                <fieldset class="flex gap-4">
+                    <button type="button"
+                            onclick="showExtraFieldDialog()"
+                            class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"
+                    >
+                        @translator.Translate(userLanguage, "Configure")
+                    </button>
+                </fieldset>
+            </div>
+        </div>
+    }
+</div>
+<script>
+    function enableAuthCheckChanged() {
+        var enableAuth = $("#enableAuth").is(":checked");
+        if (enableAuth) {
+            //swal dialog to set up username and password.
+            Swal.fire({
+                title: 'Setup Credentials',
+                html: `
+                                    <input type="text" id="authUsername" class="swal2-input" placeholder="Username">
+                                    <input type="password" id="authPassword" class="swal2-input" placeholder="Password" onkeydown="handleSwalEnter(event)">
+                                    `,
+                confirmButtonText: 'Setup',
+                focusConfirm: false,
+                preConfirm: () => {
+                    const username = $("#authUsername").val();
+                    const password = $("#authPassword").val();
+                    if (!username || !password) {
+                        Swal.showValidationMessage(`Please enter username and password`)
+                    }
+                    return { username, password }
+                },
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    $.post('/Login/CreateLoginCreds', { userName: result.value.username, password: result.value.password }, function (data) {
+                        if (data) {
+                            setTimeout(function () { window.location.href = '/Login' }, 500);
+                        } else {
+                            errorToast(genericErrorMessage());
+                        }
+                    })
+                }
+            });
+        } else {
+            $.post('/Login/DestroyLoginCreds', function (data) {
+                if (data) {
+                    setTimeout(function () { window.location.href = '/Home' }, 1000);
+                } else {
+                    errorToast(genericErrorMessage());
+                }
+            });
+        }
+    }
+</script>
