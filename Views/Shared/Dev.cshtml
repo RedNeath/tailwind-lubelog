@@ -24,7 +24,7 @@
 }
 @section Nav { Dev prefab blocks }
 
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-4 md:p-0 p-4">
 
     <!-- Tabs -->
     <div class="hidden sm:block border-b border-gray-300/75 dark:border-white/10">
@@ -112,87 +112,118 @@
     <div class="bg-white dark:bg-gray-800 shadow-md p-2 md:p-4 border border-1 border-gray-300 dark:border-gray-700 rounded-md">
         <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white mb-2">Buttons</h2>
 
-        <!-- primary -->
-        <div class="flex gap-12 mb-4">
-            <button type="button"
-                    class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"
-            >
-                <heroicon kind="Outline" name="Plus" class="size-5 mr-1.5"/>Label
-            </button>
-            <button type="button"
-                    class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"
-            >
-                Label
-            </button>
-            <button type="button"
-                    class="w-full justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"
-            >
-                <heroicon class="size-4 mx-auto" kind="Outline" name="Sparkles"/>
-            </button>
+        
+        <div class="grid grid-cols-1 gap-y-4 gap-x-12">
+            <!-- primary -->
+            <div class="flex gap-12">
+                <button type="button"
+                        class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25">
+                    <heroicon kind="Outline" name="Plus" class="size-5 mr-1.5"/>Label
+                </button>
+                <button type="button"
+                        class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25">
+                    Label
+                </button>
+                <button type="button"
+                        class="w-full justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25">
+                    <heroicon class="size-4 mx-auto" kind="Outline" name="Sparkles"/>
+                </button>
+            </div>
+
+            <!-- Disabled primary -->
+            <div class="flex gap-12">
+                <button type="button"
+                        disabled=""
+                        class="cursor-not-allowed inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600/70 px-3 py-2 text-sm font-semibold text-white">
+                    <heroicon kind="Outline" name="Plus" class="size-5 mr-1.5"/>Label
+                </button>
+                <button type="button"
+                        disabled=""
+                        class="cursor-not-allowed inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600/70 px-3 py-2 text-sm font-semibold text-white">
+                    Label
+                </button>
+                <button type="button"
+                        disabled=""
+                        class="cursor-not-allowed w-full justify-center rounded-md transition-all duration-100 ease-out bg-blue-600/70 px-3 py-2 text-sm font-semibold text-white">
+                    <heroicon class="size-4 mx-auto" kind="Outline" name="Sparkles"/>
+                </button>
+            </div>
             
-            <br/><!-- Disabled -->
+            <!-- transparent -->
+            <div class="flex gap-12">
+                <button type="button"
+                        class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-transparent dark:bg-white/10 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-xs inset-ring inset-ring-gray-300 dark:inset-ring-white/5 hover:bg-white dark:hover:bg-white/20 focus:ring-4 focus:outline-none focus:ring-gray-900/5 dark:focus:ring-white/5">
+                    <heroicon kind="Outline" name="Minus" class="size-5 mr-1.5"/>Label
+                </button>
+                <button type="button"
+                        class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-transparent dark:bg-white/10 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-xs inset-ring inset-ring-gray-300 dark:inset-ring-white/5 hover:bg-white dark:hover:bg-white/20 focus:ring-4 focus:outline-none focus:ring-gray-900/5 dark:focus:ring-white/5">
+                    Label
+                </button>
+                <button type="button"
+                        class="w-full justify-center rounded-md transition-all duration-100 ease-out bg-transparent dark:bg-white/10 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-xs inset-ring inset-ring-gray-300 dark:inset-ring-white/5 hover:bg-white dark:hover:bg-white/20 focus:ring-4 focus:outline-none focus:ring-gray-900/5 dark:focus:ring-white/5">
+                    <heroicon class="size-4 mx-auto" kind="Outline" name="CubeTransparent"/>
+                </button>
+            </div>
             
-            <button type="button"
-                    disabled=""
-                    class="cursor-not-allowed inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600/70 px-3 py-2 text-sm font-semibold text-white"
-            >
-                <heroicon kind="Outline" name="Plus" class="size-5 mr-1.5"/>Label
-            </button>
-            <button type="button"
-                    disabled=""
-                    class="cursor-not-allowed inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600/70 px-3 py-2 text-sm font-semibold text-white"
-            >
-                Label
-            </button>
-            <button type="button"
-                    disabled=""
-                    class="cursor-not-allowed w-full justify-center rounded-md transition-all duration-100 ease-out bg-blue-600/70 px-3 py-2 text-sm font-semibold text-white"
-            >
-                <heroicon class="size-4 mx-auto" kind="Outline" name="Sparkles"/>
-            </button>
-        </div>
-
-        <!-- transparent -->
-
-
-        <!-- danger -->
-        <div class="flex gap-12">
-            <button type="button"
-                    class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-700/25 dark:focus:ring-red-600/25"
-            >
-                <heroicon kind="Outline" name="Minus" class="size-5 mr-1.5"/>Label
-            </button>
-            <button type="button"
-                    class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-700/25 dark:focus:ring-red-600/25"
-            >
-                Label
-            </button>
-            <button type="button"
-                    class="w-full justify-center rounded-md transition-all duration-100 ease-out bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-700/25 dark:focus:ring-red-600/25"
-            >
-                <heroicon class="size-4 mx-auto" kind="Outline" name="Trash"/>
-            </button>
+            <!-- Disabled transparent -->
+            <div class="flex gap-12">
+                <button type="button"
+                        disabled=""
+                        class="cursor-not-allowed inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-transparent dark:bg-gray-100/5 px-3 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300"
+                >
+                    <heroicon kind="Outline" name="Minus" class="size-5 mr-1.5"/>Label
+                </button>
+                <button type="button"
+                        disabled=""
+                        class="cursor-not-allowed inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-transparent dark:bg-gray-100/5 px-3 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300"
+                >
+                    Label
+                </button>
+                <button type="button"
+                        disabled=""
+                        class="cursor-not-allowed w-full justify-center rounded-md transition-all duration-100 ease-out bg-transparent dark:bg-gray-100/5 px-3 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300"
+                >
+                    <heroicon class="size-4 mx-auto" kind="Outline" name="CubeTransparent"/>
+                </button>
+            </div>
             
-            <br/><!-- Disabled -->
-
-            <button type="button"
-                    disabled=""
-                    class="cursor-not-allowed inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-red-600/70 px-3 py-2 text-sm font-semibold text-white"
-            >
-                <heroicon kind="Outline" name="Minus" class="size-5 mr-1.5"/>Label
-            </button>
-            <button type="button"
-                    disabled=""
-                    class="cursor-not-allowed inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-red-600/70 px-3 py-2 text-sm font-semibold text-white"
-            >
-                Label
-            </button>
-            <button type="button"
-                    disabled=""
-                    class="cursor-not-allowed w-full justify-center rounded-md transition-all duration-100 ease-out bg-red-600/70 px-3 py-2 text-sm font-semibold text-white"
-            >
-                <heroicon class="size-4 mx-auto" kind="Outline" name="Trash"/>
-            </button>
+            <!-- danger -->
+            <div class="flex gap-12">
+                <button type="button"
+                        class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-700/25 dark:focus:ring-red-600/25">
+                    <heroicon kind="Outline" name="Minus" class="size-5 mr-1.5"/>Label
+                </button>
+                <button type="button"
+                        class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-700/25 dark:focus:ring-red-600/25">
+                    Label
+                </button>
+                <button type="button"
+                        class="w-full justify-center rounded-md transition-all duration-100 ease-out bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-700/25 dark:focus:ring-red-600/25">
+                    <heroicon class="size-4 mx-auto" kind="Outline" name="Trash"/>
+                </button>
+            </div>
+            
+            <!-- Disabled danger -->
+            <div class="flex gap-12">
+                <button type="button"
+                        disabled=""
+                        class="cursor-not-allowed inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-red-600/70 px-3 py-2 text-sm font-semibold text-white"
+                >
+                    <heroicon kind="Outline" name="Minus" class="size-5 mr-1.5"/>Label
+                </button>
+                <button type="button"
+                        disabled=""
+                        class="cursor-not-allowed inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-red-600/70 px-3 py-2 text-sm font-semibold text-white"
+                >
+                    Label
+                </button>
+                <button type="button"
+                        disabled=""
+                        class="cursor-not-allowed w-full justify-center rounded-md transition-all duration-100 ease-out bg-red-600/70 px-3 py-2 text-sm font-semibold text-white"
+                >
+                    <heroicon class="size-4 mx-auto" kind="Outline" name="Trash"/>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -251,6 +282,12 @@
                 Show full size dialog
             </button>
             <button type="button"
+                onclick="showFullSizeDialogWithActionButtons()"
+                class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"
+            >
+                Show full size dialog with action buttons
+            </button>
+            <button type="button"
                 onclick="showSimpleDialog()"
                 class="inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"
             >
@@ -294,12 +331,61 @@
                     </button>
                 </div>
             </div>
-            <div class="p-3 sm:p-4">
+            <div class="p-3 sm:p-4 dark:text-white">
                 <div>
                     <!-- Dialog content -->
                     <p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>
                     <p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>
                 </div>
+            </div>
+        </dialog>
+        
+        <dialog id="fullSizeDialogWithActionButtons" class="w-11/12 lg:w-5/12 lg:mt-32 bg-white dark:bg-gray-900 rounded-xl border border-1 border-gray-300 dark:border-gray-700">
+            <!-- Dialog title -->
+            <div class="p-3 sm:py-2 sm:px-4 border-b border-b-1 border-gray-300 dark:border-gray-700 flex justify-between items-center">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Title</h3>
+                <!-- Quick actions -->
+                <div class="flex items-center gap-3">
+                    <button class="hidden sm:inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25">
+                        <heroicon kind="Outline" name="Plus" class="size-5 mr-1.5"/>Main action
+                    </button>
+                    <el-dropdown class="inline-block">
+                        <button class="inline-flex justify-center rounded-md transition-all duration-100 ease-out bg-transparent px-1 py-1 text-sm text-gray-400 dark:text-gray-600 shadow-xs inset-ring inset-ring-gray-300 dark:inset-ring-white/5 hover:text-gray-700 dark:hover:text-gray-400 focus:ring-2 focus:ring-gray-900/5 dark:focus:ring-white/5 w-auto">
+                            <heroicon kind="Outline" name="EllipsisVertical" class="size-5"/>
+                        </button>
+                        
+                        <el-menu anchor="bottom end" popover class="m-0 w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 p-0 shadow-lg outline outline-1 outline-black/5 dark:-outline-offset-1 dark:outline-white/10 transition [--anchor-gap:theme(spacing.2)] [transition-behavior:allow-discrete] data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
+                            <div class="py-1">
+                                <div class="flex justify-between items-center w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:outline-none hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-white/5 dark:hover:text-white">
+                                    <label for="action-dialog-extra-action-1" class="w-full cursor-pointer">Extra action 1</label>
+                                    <input id="action-dialog-extra-action-1" type="checkbox" value="" class="cursor-pointer rounded-md transition-all duration-100 ease-out shadow-xs inset-ring inset-ring-gray-400 dark:inset-ring-white/10 focus:ring-2 focus:ring-gray-900/10 dark:focus:ring-white/10">
+                                </div>
+                                <div class="flex justify-between items-center w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:outline-none hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-white/5 dark:hover:text-white">
+                                    <label for="action-dialog-extra-action-2" class="w-full cursor-pointer">Extra action 2</label>
+                                    <input id="action-dialog-extra-action-2" type="checkbox" value="" class="cursor-pointer rounded-md transition-all duration-100 ease-out shadow-xs inset-ring inset-ring-gray-400 dark:inset-ring-white/10 focus:ring-2 focus:ring-gray-900/10 dark:focus:ring-white/10">
+                                </div>
+                                <div class="flex justify-between items-center w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:outline-none hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-white/5 dark:hover:text-white">
+                                    <label for="action-dialog-extra-action-3" class="w-full cursor-pointer">Extra action 3</label>
+                                    <input id="action-dialog-extra-action-3" type="checkbox" value="" class="cursor-pointer rounded-md transition-all duration-100 ease-out shadow-xs inset-ring inset-ring-gray-400 dark:inset-ring-white/10 focus:ring-2 focus:ring-gray-900/10 dark:focus:ring-white/10">
+                                </div>
+                            </div>
+                        </el-menu>
+                    </el-dropdown>
+                    <button onclick="hideFullSizeDialogWithActionButtons()" class="inline-flex justify-center rounded-md transition-all duration-100 ease-out bg-transparent px-1 py-1 text-sm text-gray-400 dark:text-gray-600 shadow-xs inset-ring inset-ring-gray-300 dark:inset-ring-white/5 hover:text-gray-700 dark:hover:text-gray-400 focus:ring-2 focus:ring-gray-900/5 dark:focus:ring-white/5 w-auto">
+                        <heroicon kind="Outline" name="XMark" class="size-5"/>
+                    </button>
+                </div>
+            </div>
+            <div class="mb-0 m-3 pb-3 sm:mb-0 sm:m-4 sm:pb-4 dark:text-white border-b border-b-1 border-gray-100 dark:border-gray-800">
+                <div>
+                    <!-- Dialog content -->
+                    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>
+                </div>
+            </div>
+            <div class="p-3 sm:py-3 sm:p-4 grid grid-cols-2 sm:flex gap-3 justify-end items-center">
+                <button type="button" onclick="hideFullSizeDialogWithActionButtons()" class="inline-flex w-full sm:w-auto justify-center rounded-md transition-all duration-100 ease-out bg-transparent dark:bg-white/10 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-xs inset-ring inset-ring-gray-300 dark:inset-ring-white/5 hover:bg-white dark:hover:bg-white/20 focus:ring-4 focus:ring-gray-900/5 dark:focus:ring-white/5">Cancel</button>
+                <button type="button" onclick="hideFullSizeDialogWithActionButtons()" class="inline-flex w-full sm:w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25">Validate</button>
             </div>
         </dialog>
 
@@ -440,6 +526,23 @@
     function hideFullSizeDialog() {
         let dialog = document.getElementById("fullSizeDialog");
 
+        if (dialog !== null) {
+            dialog.close();
+        }
+    }
+    
+    
+    function showFullSizeDialogWithActionButtons() {
+        let dialog = document.getElementById("fullSizeDialogWithActionButtons");
+        
+        if (dialog !== null) {
+            dialog.showModal();
+        }
+    }
+    
+    function hideFullSizeDialogWithActionButtons() {
+        let dialog = document.getElementById("fullSizeDialogWithActionButtons");
+        
         if (dialog !== null) {
             dialog.close();
         }

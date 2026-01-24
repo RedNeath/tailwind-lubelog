@@ -285,27 +285,6 @@ namespace CarCareTracker.Controllers
         }
         [Authorize(Roles = nameof(UserData.IsRootUser))]
         [HttpGet]
-        public IActionResult GetTranslatorEditor(string userLanguage)
-        {
-            var translationData = _translationHelper.GetTranslations(userLanguage);
-            return PartialView("_TranslationEditor", translationData);
-        }
-        [Authorize(Roles = nameof(UserData.IsRootUser))]
-        [HttpPost]
-        public IActionResult SaveTranslation(string userLanguage, Dictionary<string, string> translationData)
-        {
-            var result = _translationHelper.SaveTranslation(userLanguage, translationData);
-            return Json(result);
-        }
-        [Authorize(Roles = nameof(UserData.IsRootUser))]
-        [HttpPost]
-        public IActionResult ExportTranslation(Dictionary<string, string> translationData)
-        {
-            var result = _translationHelper.ExportTranslation(translationData);
-            return Json(result);
-        }
-        [Authorize(Roles = nameof(UserData.IsRootUser))]
-        [HttpGet]
         public async Task<IActionResult> GetAvailableTranslations()
         {
             try
