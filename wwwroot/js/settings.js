@@ -301,20 +301,22 @@ function loadSponsors() {
     })
 }
 
-function showTranslationEditor() {
-    $.get(`/Home/GetTranslatorEditor?userLanguage=${$("#defaultLanguage").val()}`, function (data) {
-        $('#translationEditorModalContent').html(data);
-        $('#translationEditorModal').modal('show');
+function showTranslationEditorDialog() {
+    $.get(`/Settings/GetTranslatorEditor?userLanguage=${$("#defaultLanguage").val()}`, function (data) {
+        $('#translation-editor-dialog').html(data);
+        $('#translation-editor-dialog')[0].showModal();
     })
 }
-function hideTranslationEditor() {
-    $('#translationEditorModal').modal('hide');
+
+function hideTranslationEditorDialog() {
+    $('#translation-editor-dialog')[0].close();
 }
+
 function saveTranslation() {
     var currentLanguage = $("#defaultLanguage").val();
     var translationData = [];
     $(".translation-keyvalue").map((index, elem) => {
-        var translationKey = $(elem).find('.translation-key');
+        var translationKey = $(elem).find('.translation-key-parent').find('.translation-key');
         var translationValue = $(elem).find('.translation-value textarea');
         translationData.push({ key: translationKey.text().replaceAll(' ', '_').trim(), value: translationValue.val().trim() });
     });
@@ -322,6 +324,7 @@ function saveTranslation() {
         errorToast(genericErrorMessage());
         return;
     }
+    hideTranslationEditorDialog();
     var userCanDelete = $(".translation-delete").length > 0;
     Swal.fire({
         title: 'Save Translation',
@@ -341,10 +344,10 @@ function saveTranslation() {
         },
     }).then(function (result) {
         if (result.isConfirmed) {
-            $.post('/Home/SaveTranslation', { userLanguage: result.value.translationFileName, translationData: translationData }, function (data) {
+            $.post('/Settings/SaveTranslation', { userLanguage: result.value.translationFileName, translationData: translationData }, function (data) {
                 if (data.success) {
                     successToast("Translation Updated");
-                    updateSettings();
+                    window.location.reload();
                 } else {
                     errorToast(genericErrorMessage());
                 }
@@ -352,10 +355,11 @@ function saveTranslation() {
         }
     });
 }
+
 function exportTranslation(){
     var translationData = [];
     $(".translation-keyvalue").map((index, elem) => {
-        var translationKey = $(elem).find('.translation-key');
+        var translationKey = $(elem).find('.translation-key-parent').find('.translation-key');
         var translationValue = $(elem).find('.translation-value textarea');
         translationData.push({ key: translationKey.text().replaceAll(' ', '_').trim(), value: translationValue.val().trim() });
     });
@@ -363,14 +367,15 @@ function exportTranslation(){
         errorToast(genericErrorMessage());
         return;
     }
-    $.post('/Home/ExportTranslation', { translationData: translationData }, function (data) {
+    $.post('/Settings/ExportTranslation', { translationData: translationData }, function (data) {
         if (!data) {
             errorToast(genericErrorMessage());
         } else {
-            window.location.href = data;
+            Object.assign(document.createElement('a'), { href: data, download: "translation.json" }).click();
         }
     });
 }
+
 function showTranslationDownloader() {
     $.get('/Home/GetAvailableTranslations', function(data){
         $('#translationDownloadModalContent').html(data);
@@ -405,7 +410,7 @@ function downloadAllTranslations() {
     })
 }
 function deleteTranslationKey(e) {
-    $(e).parent().parent().remove();
+    $(e).parent().parent().parent().remove();
 }
 //tabs reorder
 function showTabReorderModal() {

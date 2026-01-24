@@ -1,0 +1,68 @@
+@using CarCareTracker.Helper
+@inject IConfigHelper config
+@inject ITranslationHelper translator
+@inject IConfiguration serverConfig;
+@model Dictionary<string, string>
+@{
+    var userConfig = config.GetUserConfig(User);
+    var userLanguage = userConfig.UserLanguage;
+    bool showDelete = bool.Parse(serverConfig["LUBELOGGER_TRANSLATOR"] ?? "false");
+}
+<div class="p-3 sm:py-2 sm:px-4 border-b border-b-1 border-gray-300 dark:border-gray-700 flex justify-between items-center">
+    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">@translator.Translate(userLanguage, "Translation Editor")</h3>
+    <!-- Quick actions -->
+    <div class="flex items-center gap-3">
+        <button onclick="exportTranslation()" class="hidden sm:inline-flex w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25">
+            <heroicon kind="Outline" name="DocumentArrowDown" class="size-5 mr-1.5"/>@translator.Translate(userLanguage, "Export Translation")
+        </button>
+        <el-dropdown class="sm:hidden inline-block">
+            <button class="inline-flex justify-center rounded-md transition-all duration-100 ease-out bg-transparent px-1 py-1 text-sm text-gray-400 dark:text-gray-600 shadow-xs inset-ring inset-ring-gray-300 dark:inset-ring-white/5 hover:text-gray-700 dark:hover:text-gray-400 focus:ring-2 focus:ring-gray-900/5 dark:focus:ring-white/5 w-auto">
+                <heroicon kind="Outline" name="EllipsisVertical" class="size-5"/>
+            </button>
+            
+            <el-menu anchor="bottom end" popover class="m-0 w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 p-0 shadow-lg outline outline-1 outline-black/5 dark:-outline-offset-1 dark:outline-white/10 transition [--anchor-gap:theme(spacing.2)] [transition-behavior:allow-discrete] data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
+                <div class="py-1">
+                    <button type="button" onclick="exportTranslation()" class="text-left w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:outline-none hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-white/5 dark:hover:text-white">
+                        @translator.Translate(userLanguage, "Export Translation")
+                    </button>
+                </div>
+            </el-menu>
+        </el-dropdown>
+        <button onclick="hideTranslationEditorDialog()" class="inline-flex justify-center rounded-md transition-all duration-100 ease-out bg-transparent px-1 py-1 text-sm text-gray-400 dark:text-gray-600 shadow-xs inset-ring inset-ring-gray-300 dark:inset-ring-white/5 hover:text-gray-700 dark:hover:text-gray-400 focus:ring-2 focus:ring-gray-900/5 dark:focus:ring-white/5 w-auto">
+            <heroicon kind="Outline" name="XMark" class="size-5"/>
+        </button>
+    </div>
+</div>
+<div class="p-3 sm:p-4 dark:text-white border-b border-b-1 border-gray-100 dark:border-gray-800 max-h-[80dvh] sm:max-h-[60dvh] overflow-y-scroll">
+    <div class="flex flex-col gap-2">
+        <!-- Dialog content -->
+        @foreach(var translation in Model)
+        {
+            <div class="translation-keyvalue grid grid-cols-1 md:grid-cols-2 items-center gap-2">
+                @if (showDelete)
+                {
+                    <div class="translation-key-parent flex items-center gap-2">
+                        <div class="translation-delete">
+                            <button onclick="deleteTranslationKey(this)" class="w-auto justify-center rounded-md transition-all duration-100 ease-out bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-700/25 dark:focus:ring-red-600/25">
+                                <heroicon class="size-4 mx-auto" kind="Outline" name="Trash"/>
+                            </button>
+                        </div>
+                        <div class="translation-key w-full">@translation.Key.Replace("_", " ")</div>
+                    </div>
+                } else
+                {
+                    <div class="translation-key-parent"><!-- We must go down by one level here, or the key won't be detected when trying to save -->
+                        <div class="translation-key w-full">@translation.Key.Replace("_", " ")</div>
+                    </div>
+                }
+                <div class="translation-value w-full">
+                    <textarea placeholder="@translation.Value" class="mt-2 block w-full transition-all duration-100 ease-out rounded-md dark:bg-gray-800 border-gray-300 dark:border-gray-600 py-1.5 px-3 text-base text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 sm:text-sm/6 dark:focus:ring-blue-600/25">@translation.Value</textarea>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div class="p-3 sm:py-3 sm:p-4 grid grid-cols-2 sm:flex gap-3 justify-end items-center">
+    <button type="button" onclick="hideTranslationEditorDialog()" class="inline-flex w-full sm:w-auto justify-center rounded-md transition-all duration-100 ease-out bg-transparent dark:bg-white/10 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-xs inset-ring inset-ring-gray-300 dark:inset-ring-white/5 hover:bg-white dark:hover:bg-white/20 focus:ring-4 focus:ring-gray-900/5 dark:focus:ring-white/5">@translator.Translate(userLanguage, "Cancel")</button>
+    <button type="button" onclick="saveTranslation()" class="inline-flex w-full sm:w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25">@translator.Translate(userLanguage, "Save Translation")</button>
+</div>
