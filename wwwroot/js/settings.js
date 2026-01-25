@@ -376,22 +376,22 @@ function exportTranslation(){
     });
 }
 
-function showTranslationDownloader() {
-    $.get('/Home/GetAvailableTranslations', function(data){
-        $('#translationDownloadModalContent').html(data);
-        $('#translationDownloadModal').modal('show');
+function showTranslationDownloaderDialog() {
+    $.get('/Settings/GetAvailableTranslations', function(data){
+        $('#translation-download-dialog').html(data);
+        $('#translation-download-dialog')[0].showModal();
     })
 }
-function hideTranslationDownloader() {
-    $('#translationDownloadModal').modal('hide');
+function hideTranslationDownloaderDialog() {
+    $('#translation-download-dialog')[0].close();
 }
 function downloadTranslation(continent, name) {
     sloader.show();
-    $.get(`/Home/DownloadTranslation?continent=${continent}&name=${name}`, function (data) {
+    $.get(`/Settings/DownloadTranslation?continent=${continent}&name=${name}`, function (data) {
         sloader.hide();
         if (data) {
             successToast("Translation Downloaded");
-            updateSettings();
+            window.location.reload();
         } else {
             errorToast(genericErrorMessage());
         }
@@ -399,11 +399,11 @@ function downloadTranslation(continent, name) {
 }
 function downloadAllTranslations() {
     sloader.show();
-    $.get('/Home/DownloadAllTranslations', function (data) {
+    $.get('/Settings/DownloadAllTranslations', function (data) {
         sloader.hide();
         if (data.success) {
             successToast(data.message);
-            updateSettings();
+            window.location.reload();
         } else {
             errorToast(data.message);
         }
