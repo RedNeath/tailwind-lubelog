@@ -154,6 +154,13 @@
                             </button>
                         </div>
                     </div>
+                    <button type="button"
+                            onclick="deleteLanguage()"
+                            @(Model.UserConfig.UserLanguage == "en_US" ? "disabled" : "")
+                            class="inline-flex min-w-32 w-auto justify-center rounded-md transition-all duration-100 ease-out px-3 py-2 text-sm font-semibold text-white @(Model.UserConfig.UserLanguage == "en_US" ? "cursor-not-allowed bg-red-600/70" : "bg-red-600 shadow-xs hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-700/25 dark:focus:ring-red-600/25")"
+                    >
+                        @translator.Translate(userLanguage, "Delete")
+                    </button>
                 </fieldset>
                 
                 <fieldset>
@@ -169,17 +176,10 @@
                             </button>
                         </div>
                         <button type="button"
-                                onclick="showTranslationDownloader()"
+                                onclick="showTranslationDownloaderDialog()"
                                 class="inline-flex min-w-32 w-auto justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"
                         >
                             @translator.Translate(userLanguage, "Get Translations")
-                        </button>
-                        <button type="button"
-                                onclick="deleteLanguage()"
-                                @(Model.UserConfig.UserLanguage == "en_US" ? "disabled" : "")
-                                class="inline-flex min-w-32 w-auto justify-center rounded-md transition-all duration-100 ease-out px-3 py-2 text-sm font-semibold text-white @(Model.UserConfig.UserLanguage == "en_US" ? "cursor-not-allowed bg-red-600/70" : "bg-red-600 shadow-xs hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-700/25 dark:focus:ring-red-600/25")"
-                        >
-                            @translator.Translate(userLanguage, "Delete")
                         </button>
                     </div>
                 </fieldset>
