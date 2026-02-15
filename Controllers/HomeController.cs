@@ -310,39 +310,6 @@ namespace CarCareTracker.Controllers
             return PartialView("_VehicleSelector", vehiclesStored);
         }
         [Authorize(Roles = nameof(UserData.IsRootUser))]
-        [HttpGet]
-        public IActionResult GetCustomWidgetEditor()
-        {
-            if (_config.GetCustomWidgetsEnabled())
-            {
-                var customWidgetData = _fileHelper.GetWidgets();
-                return PartialView("_WidgetEditor", customWidgetData);
-            }
-            return Json(string.Empty);
-        }
-        [Authorize(Roles = nameof(UserData.IsRootUser))]
-        [HttpPost]
-        public IActionResult SaveCustomWidgets(string widgetsData)
-        {
-            if (_config.GetCustomWidgetsEnabled())
-            {
-                var saveResult = _fileHelper.SaveWidgets(widgetsData);
-                return Json(saveResult);
-            }
-            return Json(false);
-        }
-        [Authorize(Roles = nameof(UserData.IsRootUser))]
-        [HttpPost]
-        public IActionResult DeleteCustomWidgets()
-        {
-            if (_config.GetCustomWidgetsEnabled())
-            {
-                var deleteResult = _fileHelper.DeleteWidgets();
-                return Json(deleteResult);
-            }
-            return Json(false);
-        }
-        [Authorize(Roles = nameof(UserData.IsRootUser))]
         public IActionResult GetLocaleSample(string locale, string dtlocale)
         {
             var cultureInfo = new CultureInfo(locale);
