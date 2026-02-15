@@ -1,0 +1,68 @@
+@using CarCareTracker.Helper
+@using Heroicons.AspNetCore.Mvc.TagHelpers
+@inject IConfigHelper config
+@inject ITranslationHelper translator
+@model VehicleViewModel
+@{
+    var userConfig = config.GetUserConfig(User);
+    var userLanguage = userConfig.UserLanguage;
+    var importModeTranslation = new List<string>([
+        "Service Records",
+        "Repairs",
+        "Fuel",
+        "Taxes",
+        "Upgrades",
+        "Reminders",
+        "Notes",
+        "Supplies",
+        "Dashboard",
+        "Planner",
+        "Odometer",
+    ]);
+    var importModeIcon = new List<HeroiconName>([
+        HeroiconName.Wrench,
+        HeroiconName.ExclamationCircle,
+        HeroiconName.Beaker,
+        HeroiconName.Banknotes,
+        HeroiconName.Sparkles,
+        HeroiconName.Bell,
+        HeroiconName.BookOpen,
+        HeroiconName.BuildingStorefront,
+        HeroiconName.ChartBar,
+        HeroiconName.RectangleStack,
+        HeroiconName.GlobeAmericas,
+    ]);
+}
+<div class="py-1 max-h-80 overflow-y-auto">
+    <button type="button" onclick="sortGarage()" class="flex justify-between items-center w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:outline-none hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-white/5 dark:hover:text-white">
+        <span class="text-left">@translator.Translate(userLanguage, "Sort")</span>
+        <heroicon kind="Mini" name="ArrowsUpDown" class="default-sort size-4" />
+        <heroicon kind="Mini" name="ArrowDown" class="sort-asc hidden size-4" />
+        <heroicon kind="Mini" name="ArrowUp" class="sort-desc hidden size-4" />
+    </button>
+    <button type="button" onclick="showVehicleExtraFields(@Model.Id)" class="flex justify-between items-center w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:outline-none hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-white/5 dark:hover:text-white">
+        <span class="text-left">@translator.Translate(userLanguage, "Extra Fields")</span>
+        <heroicon kind="Mini" name="ListBullet" class="size-4" />
+    </button>
+    @* <button type="button" onclick="manageCollaborators(@Model.Id)" class="flex justify-between items-center w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:outline-none hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-white/5 dark:hover:text-white"> *@
+    @*     <span class="text-left">@translator.Translate(userLanguage, "Manage Collaborators")</span> *@
+    @*     <heroicon kind="Mini" name="UserGroup" class="size-4" /> *@
+    @* </button> *@
+    
+    <hr class="border-gray-100 dark:border-gray-700/50 my-1 mx-4" />
+    
+    @foreach (ImportMode importMode in userConfig.TabOrder)
+    {
+        <a href="/Vehicle/@importMode?vehicleId=@Model.Id" class="flex justify-between items-center w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:outline-none hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-white/5 dark:hover:text-white">
+            <span class="text-left">@translator.Translate(userLanguage, importModeTranslation[(int)importMode])</span>
+            <heroicon kind="Mini" name="@importModeIcon[(int)importMode]" class="size-4" />
+        </a>
+    }
+
+    <hr class="border-gray-100 dark:border-gray-700/50 my-1 mx-4" />
+    
+    <button type="button" onclick="deleteVehicle(@Model.Id)" class="flex justify-between items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-300 hover:outline-none hover:bg-red-100/50 hover:text-red-800 dark:hover:bg-red-200/10 dark:hover:text-red-300">
+        <span class="text-left">@translator.Translate(userLanguage, "Delete")</span>
+        <heroicon kind="Mini" name="Trash" class="size-4" />
+    </button>
+</div>

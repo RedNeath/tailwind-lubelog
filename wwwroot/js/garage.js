@@ -17,13 +17,7 @@ function hideAddVehicleModal() {
 function loadGarage() {
     $.get('/Home/Garage', function (data) {
         $("#garageContainer").html(data);
-        loadSettings();
         bindTabEvent();
-    });
-}
-function loadSettings() {
-    $.get('/Home/Settings', function (data) {
-        $("#settings-tab-pane").html(data);
     });
 }
 function getVehicleSupplyRecords() {
@@ -231,97 +225,104 @@ function filterGarage(sender) {
         $(sender).removeClass('dark:text-gray-300');
     }
 }
+
+// function manageCollaborators(vehicleId) {
+//     if (event != undefined) {
+//         event.stopPropagation();
+//     }
+//    
+//     $.post('/Vehicle/GetVehiclesCollaborators', { vehicleIds: [vehicleId] }, function (data) {
+//         if (isOperationResponse(data)) {
+//             return;
+//         } else if (data) {
+//             $("#userCollaboratorsModalContent").html(data);
+//             $("#userCollaboratorsModal").modal('show');
+//         }
+//     })
+// }
+
+function deleteVehicle(vehicleId) {
+    if (event != undefined) {
+        event.stopPropagation();
+    }
+    
+    Swal.fire({
+        title: "Confirm Deletion?",
+        text: "This will also delete all data tied to this vehicle. Deleted Vehicles and their associated data cannot be restored.",
+        showCancelButton: true,
+        confirmButtonText: "Delete",
+        confirmButtonColor: "#dc3545"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post('/Vehicle/DeleteVehicle', { vehicleId: vehicleId }, function (data) {
+                if (data) {
+                    window.location.href = '/Home';
+                }
+            })
+        }
+    });
+}
+
+async function showVehicleExtraFields(vehicleId) {
+    if (event != undefined) {
+        event.stopPropagation();
+    }
+    
+    Swal.fire({
+        title: 'Vehicle Extra Fields',
+        html: await $.get("/Home/GetVehicleExtraFieldsPartialView", { vehicleId: vehicleId }, function (data) { return data; }),
+        confirmButtonText: 'Close',
+        focusConfirm: false
+    });
+}
+
 function sortVehicles(desc) {
     //get row data
-    var rowData = $('.garage-item');
-    var sortedRow = rowData.toArray().sort((a, b) => {
-        var currentVal = globalParseFloat($(a).find(".garage-item-year").attr('data-unit'));
-        var nextVal = globalParseFloat($(b).find(".garage-item-year").attr('data-unit'));
+    const rowData = $('.garage-item');
+    const sortedRow = rowData.toArray().sort((a, b) => {
+        const currentVal = globalParseFloat($(a).find(".garage-item-year").text());
+        const nextVal = globalParseFloat($(b).find(".garage-item-year").text());
         if (desc) {
             return nextVal - currentVal;
         } else {
             return currentVal - nextVal;
         }
     });
-    sortedRow.push($('.garage-item-add'))
+    
     $('.vehiclesContainer').html(sortedRow);
 }
 
-var touchtimer;
-var touchduration = 800;
-function detectLongTouch(sender) {
-    if ($(sender).hasClass("active")) {
-        if (!touchtimer) {
-            touchtimer = setTimeout(function () { sortGarage(sender, true); detectTouchEndPremature(sender); }, touchduration);
-        }
-    }
-}
-function detectTouchEndPremature(sender) {
-    if (touchtimer) {
-        clearTimeout(touchtimer);
-        touchtimer = null;
-    }
-}
-
-function sortGarage(sender, isMobile) {
+function sortGarage() {
     if (event != undefined) {
-        event.preventDefault();
+        event.stopPropagation();
     }
-    sender = $(sender);
-    if (sender.hasClass("active")) {
-        //do sorting only if garage is the active tab.
-        var sortColumn = sender.text();
-        var garageIcon = '<i class="bi bi-car-front me-2"></i>';
-        var sortAscIcon = '<i class="bi bi-sort-numeric-down ms-2"></i>';
-        var sortDescIcon = '<i class="bi bi-sort-numeric-down-alt ms-2"></i>';
-        if (sender.hasClass('sort-asc')) {
-            sender.removeClass('sort-asc');
-            sender.addClass('sort-desc');
-            sender.html(isMobile ? `<span class="ms-2 display-3">${garageIcon}${sortColumn}${sortDescIcon}</span>` : `${garageIcon}${sortColumn}${sortDescIcon}`);
-            sortVehicles(true);
-        } else if (sender.hasClass('sort-desc')) {
-            //restore table
-            sender.removeClass('sort-desc');
-            sender.html(isMobile ? `<span class="ms-2 display-3">${garageIcon}${sortColumn}</span>` : `${garageIcon}${sortColumn}`);
-            resetSortGarage();
-        } else {
-            //first time sorting.
-            //check if table was sorted before by a different column(only relevant to fuel tab)
-            if ($("[default-sort]").length > 0 && ($(".sort-asc").length > 0 || $(".sort-desc").length > 0)) {
-                //restore table state.
-                resetSortGarage();
-                //reset other sorted columns
-                if ($(".sort-asc").length > 0) {
-                    $(".sort-asc").html($(".sort-asc").html().replace(sortAscIcon, ""));
-                    $(".sort-asc").removeClass("sort-asc");
-                }
-                if ($(".sort-desc").length > 0) {
-                    $(".sort-desc").html($(".sort-desc").html().replace(sortDescIcon, ""));
-                    $(".sort-desc").removeClass("sort-desc");
-                }
-            }
-            sender.addClass('sort-asc');
-            sender.html(isMobile ? `<span class="ms-2 display-3">${garageIcon}${sortColumn}${sortAscIcon}</span>` : `${garageIcon}${sortColumn}${sortAscIcon}`);
-            //append sortRowId to the vehicle container
-            if ($("[default-sort]").length == 0) {
-                $(`.garage-item`).map((index, elem) => {
-                    $(elem).attr("default-sort", index);
-                });
-            }
-            sortVehicles(false);
-        }
+    
+    const defaultSortIcon = $(".default-sort");
+    const sortAscIcon = $(".sort-asc");
+    const sortDescIcon = $(".sort-desc");
+    if (!sortAscIcon.hasClass("hidden")) {
+        sortAscIcon.toArray().forEach(f => f.classList.add("hidden"));
+        sortDescIcon.toArray().forEach(f => f.classList.remove("hidden"));
+        sortVehicles(true);
+    } else if (!sortDescIcon.hasClass("hidden")) {
+        sortDescIcon.toArray().forEach(f => f.classList.add("hidden"));
+        defaultSortIcon.toArray().forEach(f => f.classList.remove("hidden"));
+        resetSortGarage();
+    } else {
+        //first time sorting.
+        defaultSortIcon.toArray().forEach(f => f.classList.add("hidden"));
+        sortAscIcon.toArray().forEach(f => f.classList.remove("hidden"));
+        sortVehicles(false);
     }
 }
 function resetSortGarage() {
-    var rowData = $(`.garage-item`);
-    var sortedRow = rowData.toArray().sort((a, b) => {
-        var currentVal = $(a).attr('default-sort');
-        var nextVal = $(b).attr('default-sort');
+    const rowData = $(`.garage-item`);
+    const sortedRow = rowData.toArray().sort((a, b) => {
+        const currentVal = $(a).attr('id').split('_')[1];
+        const nextVal = $(b).attr('id').split('_')[1];
         return currentVal - nextVal;
     });
-    $(".garage-item-add").map((index, elem) => {
-        sortedRow.push(elem);
-    })
+    
     $(`.vehiclesContainer`).html(sortedRow);
 }
 
@@ -469,3 +470,13 @@ function generateTokenForUser() {
         }
     });
 }
+
+// function isOperationResponse(result) {
+//     //checks if response from controller is operationresponse
+//     if (result.success != undefined && result.message != undefined) {
+//         if (!result.success) {
+//             errorToast(result.message);
+//         }
+//         return true;
+//     }
+// }
