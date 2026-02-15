@@ -62,7 +62,7 @@
                                 <div class="inline-flex items-center gap-2 mt-2 whitespace-nowrap max-w-full overflow-scroll">
                                     <div class="inline-flex items-center gap-1 text-gray-600 dark:text-gray-400">
                                         <heroicon kind="Micro" name="CalendarDays" class="size-4"/>
-                                        <span class="text-xs">@($"{vehicle.Year}")</span>
+                                        <span class="garage-item-year text-xs">@($"{vehicle.Year}")</span>
                                     </div>
                                     @if (vehicle.DashboardMetrics.Contains(DashboardMetric.Default) && vehicle.LastReportedMileage != default)
                                     {
@@ -88,9 +88,20 @@
                                 </div>
                                 <p class="text-sm font-medium truncate mt-0.5">@StaticHelper.GetVehicleIdentifier(vehicle)</p>
                                 <hr class="border-gray-100 dark:border-gray-700/50 mt-4 mb-3"/>
-                                <div class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                                    <heroicon kind="Mini" name="@(vehicle.HasReminders ? HeroiconName.BellAlert : HeroiconName.Bell)" class="size-4"/>
-                                    <span class="text-sm">@(vehicle.HasReminders ? translator.Translate(userLanguage, "Vehicle has reminders") : translator.Translate(userLanguage, "No reminders"))</span>
+                                <div class="flex items-center justify-between">
+                                    <div class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                                        <heroicon kind="Mini" name="@(vehicle.HasReminders ? HeroiconName.BellAlert : HeroiconName.Bell)" class="size-4"/>
+                                        <span class="text-sm">@(vehicle.HasReminders ? translator.Translate(userLanguage, "Vehicle has reminders") : translator.Translate(userLanguage, "No reminders"))</span>
+                                    </div>
+                                    <el-dropdown class="relative">
+                                        <button onclick="if (event != undefined) event.stopPropagation();" class="inline-flex justify-center rounded-md transition-all duration-100 ease-out bg-transparent px-1 py-1 text-sm text-gray-400 dark:text-gray-600 shadow-xs inset-ring inset-ring-gray-300 dark:inset-ring-white/5 hover:text-gray-700 dark:hover:text-gray-400 focus:ring-2 focus:ring-gray-900/5 dark:focus:ring-white/5 w-auto">
+                                            <heroicon kind="Outline" name="EllipsisVertical" class="size-5"/>
+                                        </button>
+                                        
+                                        <el-menu anchor="bottom end" popover class="m-0 w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 p-0 shadow-lg outline outline-1 outline-black/5 dark:-outline-offset-1 dark:outline-white/10 transition [--anchor-gap:theme(spacing.2)] [transition-behavior:allow-discrete] data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
+                                            @await Html.PartialAsync("DropdownMenus/_GarageDropdownMenu", vehicle)
+                                        </el-menu>
+                                    </el-dropdown>
                                 </div>
                             </div>
                         </div>

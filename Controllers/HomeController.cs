@@ -161,6 +161,13 @@ namespace CarCareTracker.Controllers
             }).ToList();
             return PartialView("_GarageDisplay", vehicleViewModels);
         }
+
+        public IActionResult GetVehicleExtraFieldsPartialView(int vehicleId)
+        {
+            var vehicle = _dataAccess.GetVehicleById(vehicleId);
+            return PartialView("_VehicleExtraFields", vehicle.ExtraFields);
+        }
+        
         public IActionResult Calendar()
         {
             var vehiclesStored = _dataAccess.GetVehicles();
