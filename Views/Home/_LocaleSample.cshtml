@@ -6,7 +6,7 @@
     var userConfig = config.GetUserConfig(User);
     var userLanguage = userConfig.UserLanguage;
 }
-<div class="d-flex flex-column text-secondary">
+<div class="flex flex-col">
     <span>@translator.Translate(userLanguage, "Short Date"): @Model.ShortDateSample</span>
     <span>@translator.Translate(userLanguage, "Short DateTime"): @Model.ShortDateTimeSample</span>
     <span>@translator.Translate(userLanguage, "Currency"): @Model.CurrencySample</span>

@@ -580,7 +580,6 @@ html[data-bs-theme="light"] .api-method:hover {
     height: calc(100% - 60px);
     overflow-y:auto;
     overflow-x:hidden;
-    padding: 10px 15px;
 }
 
 .setup-wizard-nav{
