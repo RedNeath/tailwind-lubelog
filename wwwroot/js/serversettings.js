@@ -4,30 +4,10 @@
         $('.setup-wizard-content').hide();
         pageElem.show();
     }
-    determineSetupButtons();
 }
-function determineSetupButtons() {
-    let currentVisiblePage = $(".setup-wizard-content:visible").attr('data-page');
-    switch (currentVisiblePage) {
-        case '0':
-        case '5':
-            $(".setup-wizard-nav").hide();
-            break;
-        case '1':
-        case '2':
-        case '3':
-            $(".setup-wizard-nav").show();
-            $(".btn-prev").show();
-            $(".btn-next").show();
-            $(".btn-save").hide();
-            break;
-        case '4':
-            $(".setup-wizard-nav").show();
-            $(".btn-prev").show();
-            $(".btn-next").hide();
-            $(".btn-save").show();
-            break;
-    }
+
+function goBackToSettings() {
+    window.location.href = '/Settings';
 }
 function nextSetupPage() {
     let currentVisiblePage = $(".setup-wizard-content:visible").attr('data-page');
@@ -39,7 +19,7 @@ function previousSetupPage() {
     let prevPage = parseInt(currentVisiblePage) - 1;
     loadSetupPage(prevPage);
 }
-function loadLocaleSample() {
+function reloadLocaleSample() {
     let selectedLocale = $("#inputLocale").val();
     let selectedDateTimeLocale = $("#inputDateTimeLocale").val();
     if (selectedLocale.trim() == '') {
@@ -121,7 +101,7 @@ function saveSetup() {
     if ($("#skipOIDC").is(":checked")) {
         setupData["OIDCConfig"] = null;
     }
-    if ($("#skipPostgres").is(":checked")) {
+    if (setupData["PostgresConnection"].trim().length > 0) {
         setupData["PostgresConnection"] = null;
     }
     let rootUserOIDC = $("#inputOIDCRootUser");
