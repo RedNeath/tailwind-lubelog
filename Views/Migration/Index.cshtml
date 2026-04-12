@@ -7,43 +7,38 @@
     var userLanguage = config.GetServerLanguage();
 }
 @using CarCareTracker.Helper
-@section Nav {
-    <div class="container-fluid lubelogger-navbar-container frosted hideOnPrint">
-        <div class="row mt-2">
-            <div class="d-flex lubelogger-navbar">
-                <div class="me-2" style="cursor:pointer;" onclick="returnToGarage()">
-                    <application-logo variant="small" class="lubelogger-logo" />
-                </div>
-                <span class="text-truncate lead">@translator.Translate(userLanguage, "Database Migration")</span>
-            </div>
-        </div>
-        <hr />
-    </div>
-}
+@section Nav { @translator.Translate(userLanguage, "Database Migration") }
 @model AdminViewModel
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">@translator.Translate(userLanguage, "Instructions")</li>
-                <li class="list-group-item">@translator.Translate(userLanguage, "Use this tool to migrate data between LiteDB and Postgres")</li>
-                <li class="list-group-item">@translator.Translate(userLanguage, "Note that it is recommended that the Postgres DB is empty when importing from LiteDB to prevent primary key errors.")</li>
-            </ul>
-        </div>
+<div class="px-4">
+    <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">@translator.Translate(userLanguage, "Instructions")</h2>
     </div>
-    <hr />
-    <div class="row d-flex justify-content-center">
-        <div class="col-3">
-            <div class="d-grid">
-                <input onChange="importPostgresData(this)" type="file" accept=".db" class="d-none" id="inputImport">
-                <button type="button" class="btn btn-warning mt-2" onclick="importToPostgres()"><i class="bi bi-upload me-2"></i>@translator.Translate(userLanguage, "Import To Postgres")</button>
+    <hr class="sm:hidden border-gray-200 dark:border-gray-800 mt-4" />
+    
+    <div class="mt-4 sm:mt-8 bg-white dark:bg-gray-800 shadow-md p-4 md:p-6 space-y-4 border border-1 border-gray-300 dark:border-gray-700 rounded-lg">
+        <p>@translator.Translate(userLanguage, "Use this tool to migrate data between LiteDB and Postgres")</p>
+        <p>@translator.Translate(userLanguage, "Note that it is recommended that the Postgres DB is empty when importing from LiteDB to prevent primary key errors.")</p>
+        
+        <div class="grid gap-4 grid-cols-1 sm:grid-cols-2">
+            <div>
+                <input type="file" accept=".db" onChange="importPostgresData(this)" id="inputImport" class="hidden">
+                <button type="button"
+                        onclick="openImportToPostgres()"
+                        class="inline-flex min-w-32 w-full justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"
+                >
+                    <heroicon kind="Outline" name="ArrowUpTray" class="size-5 mr-1.5"/>@translator.Translate(userLanguage, "Import To Postgres")
+                </button>
             </div>
-            <div class="d-grid">
-                <button type="button" class="btn btn-warning mt-2" onclick="exportFromPostgres()"><i class="bi bi-download me-2"></i>@translator.Translate(userLanguage, "Export From Postgres")</button>
-            </div>
+            <button type="button"
+                    onclick="exportFromPostgres()"
+                    class="inline-flex min-w-32 w-full justify-center rounded-md transition-all duration-100 ease-out bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-700/25 dark:focus:ring-blue-600/25"
+            >
+                <heroicon kind="Outline" name="ArrowDownTray" class="size-5 mr-1.5"/>@translator.Translate(userLanguage, "Export From Postgres")
+            </button>
         </div>
     </div>
 </div>
+
 <script>
     function exportFromPostgres(){
         sloader.show();
@@ -86,7 +81,7 @@
             }
         });
     }
-    function importToPostgres() {
+    function openImportToPostgres() {
         $("#inputImport").trigger('click');
     }
 </script>
