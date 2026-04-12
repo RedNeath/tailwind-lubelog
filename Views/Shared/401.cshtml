@@ -7,8 +7,6 @@
 @model string
 @{
     var userLanguage = config.GetServerLanguage();
-    var registrationDisabled = config.GetServerDisabledRegistration();
-    var openIdConfigName = config.GetOpenIDConfig().Name;
     string? unsplashRandomImageUrl = null;
     string? unsplashRandomImageAuthor = null;
     string? unsplashRandomImageAuthorLink = null;
