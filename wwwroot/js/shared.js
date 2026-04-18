@@ -431,17 +431,6 @@ function hideMobileNav() {
     $("body").css('overflow-y', 'auto');
     $("body").css('position', ''); //iOS SafariWebKit hack fix
 }
-var windowWidthForCompare = 0;
-function bindWindowResize() {
-    windowWidthForCompare = window.innerWidth;
-    $(window).on('resize', function () {
-        if (window.innerWidth != windowWidthForCompare) {
-            hideMobileNav();
-            checkNavBarOverflow();
-            windowWidthForCompare = window.innerWidth;
-        }
-    });
-}
 function encodeHTMLInput(input) {
     const encoded = document.createElement('div');
     encoded.innerText = input;

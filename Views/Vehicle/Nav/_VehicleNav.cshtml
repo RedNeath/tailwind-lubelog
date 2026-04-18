@@ -1,0 +1,130 @@
+@using CarCareTracker.Helper
+@using Heroicons.AspNetCore.Mvc.TagHelpers
+@inject IConfigHelper config
+@inject ITranslationHelper translator
+@{
+    var userConfig = config.GetUserConfig(User);
+    var userLanguage = config.GetServerLanguage();
+    var importModeTranslation = new List<string>([
+        "Service Records",
+        "Repairs",
+        "Fuel",
+        "Taxes",
+        "Upgrades",
+        "Reminders",
+        "Notes",
+        "Supplies",
+        "Dashboard",
+        "Planner",
+        "Odometer",
+    ]);
+    var importModeIcon = new List<HeroiconName>([
+        HeroiconName.Wrench,
+        HeroiconName.ExclamationCircle,
+        HeroiconName.Beaker,
+        HeroiconName.Banknotes,
+        HeroiconName.Sparkles,
+        HeroiconName.Bell,
+        HeroiconName.BookOpen,
+        HeroiconName.BuildingStorefront,
+        HeroiconName.ChartBar,
+        HeroiconName.RectangleStack,
+        HeroiconName.GlobeAmericas,
+    ]);
+}
+@model Vehicle
+
+<div class="hidden md:flex items-center gap-3 w-full border-t border-white/10 py-1.5 px-1">
+    <button type="button" onclick="editVehicle(@Model.Id)" title="@translator.Translate(userLanguage, "Edit Vehicle")" class="group shrink-0 whitespace-nowrap flex items-center gap-3 text-gray-300 hover:bg-white/5 hover:text-white rounded-md px-2 py-1.5 text-xs font-medium transition transition-all ease-out">
+        @if (userConfig.ShowVehicleThumbnail)
+        {
+            <div class="relative size-5 rounded-full overflow-hidden flex items-center justify-center transition">
+                <div class="absolute inset-0 bg-no-repeat bg-center bg-cover @(string.IsNullOrWhiteSpace(Model.SoldDate) ? "" : "grayscale") group-hover:brightness-50 transition" style="background-image: url('@Model.ImageLocation')"></div>
+                <heroicon kind="Mini" name="Pencil" class="relative size-3 text-white hidden group-hover:block"/>
+            </div>
+        }
+        else
+        {
+            <div class="size-5 flex items-center justify-center transition group-hover:bg-gray-900 rounded-full">
+                <heroicon kind="Outline" name="Truck" class="size-5 text-gray-300 group-hover:hidden"/>
+                <heroicon kind="Mini" name="Pencil" class="size-3 text-white hidden group-hover:block"/>
+            </div>
+        }
+        <span>@Model.Make @Model.Model</span>
+    </button>
+    <div id="vehicle-nav-items" class="flex items-center gap-2 overflow-hidden flex-nowrap w-full">
+        @foreach (ImportMode importMode in StaticHelper.VisibleTabsInOrder(userConfig))
+        {
+            var translation = translator.Translate(userLanguage, importModeTranslation[(int)importMode]);
+            <button type="button" title="@translation" data-nav-mode="@((int)importMode)" class="shrink-0 text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium">
+                <heroicon kind="Micro" name="@importModeIcon[(int)importMode]" class="size-3"/>
+                <span>@translation</span>
+            </button>
+        }
+        <el-dropdown id="vehicle-nav-dropdown" class="relative hidden">
+            <button class="relative flex items-center text-gray-300 hover:bg-white/5 hover:text-white rounded-md px-2 py-1.5 text-xs font-medium">
+                <heroicon kind="Micro" name="ChevronDown" class="size-3" />
+            </button>
+
+            <el-menu anchor="bottom end" popover class="m-0 w-48 origin-top-right rounded-md bg-white dark:bg-gray-800 p-0 py-1 shadow-lg outline outline-1 outline-black/5 dark:-outline-offset-1 dark:outline-white/10 transition [transition-behavior:allow-discrete] [--anchor-gap:theme(spacing.2)] data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
+                @foreach (ImportMode importMode in StaticHelper.VisibleTabsInOrder(userConfig))
+                {
+                    <button type="button" data-nav-dropdown-mode="@((int)importMode)" class="hidden w-full px-4 py-2 text-xs text-gray-600 dark:text-gray-300 hover:outline-none hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-white/5 dark:hover:text-white">
+                        <div class="flex items-center gap-3">
+                            <heroicon kind="Mini" name="@importModeIcon[(int)importMode]" class="size-4"/>
+                            <span>@translator.Translate(userLanguage, importModeTranslation[(int)importMode])</span>
+                        </div>
+                    </button>
+                }
+            </el-menu>
+        </el-dropdown>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const container = document.getElementById('vehicle-nav-items');
+        const dropdown = document.getElementById('vehicle-nav-dropdown');
+        const buttons = container.querySelectorAll('button[data-nav-mode]');
+        const dropdownButtons = document.querySelectorAll('button[data-nav-dropdown-mode]');
+
+        const updateNav = () => {
+            let anyHidden = false;
+            const margin = 36;
+            const containerWidthIncludingMargin = container.offsetWidth - margin;
+            const firstButtonLeftOffset = buttons[0].offsetLeft;
+            
+            buttons.forEach(btn => {
+                const mode = btn.getAttribute('data-nav-mode');
+                const dropdownBtn = document.querySelector(`button[data-nav-dropdown-mode="${mode}"]`);
+                
+                // Reset visibility to measure
+                btn.classList.remove('invisible');
+                btn.style.display = 'flex';
+            
+                if (btn.offsetLeft + btn.offsetWidth - firstButtonLeftOffset > containerWidthIncludingMargin) {
+                    btn.classList.add('invisible');
+                    btn.style.display = 'none';
+                    dropdownBtn.classList.remove('hidden');
+                    anyHidden = true;
+                } else {
+                    dropdownBtn.classList.add('hidden');
+                }
+            });
+
+            if (anyHidden) {
+                dropdown.classList.remove('hidden');
+            } else {
+                dropdown.classList.add('hidden');
+            }
+        };
+
+        const observer = new ResizeObserver(() => {
+            updateNav();
+        });
+
+        observer.observe(container);
+        // Initial call
+        updateNav();
+    })();
+</script>

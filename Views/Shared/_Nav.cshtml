@@ -5,6 +5,7 @@
     var userConfig = config.GetUserConfig(User);
     var userLanguage = config.GetServerLanguage();
 }
+@model Vehicle?
 
 <nav class="bg-gray-800 dark:bg-gray-800/50">
     <div class="mx-auto container px-4 sm:px-6 lg:px-8">
@@ -68,6 +69,11 @@
                 </button>
             </div>
         </div>
+        
+        @if (Model != null)
+        {
+            @await Html.PartialAsync("Nav/_VehicleNav", Model)
+        }
     </div>
 
     <el-disclosure id="mobile-menu" hidden class="md:hidden [&:not([hidden])]:block">
@@ -110,5 +116,9 @@
                 <button type="button" onclick="performLogOut()" class="block w-full text-start rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">@translator.Translate(userLanguage, "Logout")</button>
             </div>
         </div>
+        @if (Model != null)
+        {
+            @await Html.PartialAsync("Nav/_MobileVehicleNav", Model)
+        }
     </el-disclosure>
 </nav>

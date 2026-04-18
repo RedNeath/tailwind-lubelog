@@ -170,10 +170,19 @@
     @await RenderSectionAsync("Scripts", required: false)
 </head>
 <body>
-    @* Navigation should not be displayed unless authenticated or authentication disabled, or when displaying an error page *@
-    @if ((!config.GetServerAuthEnabled() || User.IsInRole("CookieAuth") || User.IsInRole("APIAuth")) && !Url.Action().StartsWith("/Error"))
+@* Navigation should not be displayed unless authenticated or authentication disabled, or when displaying an error page *@
+    @if (Url.Action().StartsWith("/Vehicle"))
     {
-        @await Html.PartialAsync("_Nav")
+        @await RenderSectionAsync("VehicleNav", required: false)
+        <header class="relative bg-white dark:bg-gray-800 shadow-sm dark:after:pointer-events-none dark:after:absolute dark:after:inset-x-0 dark:after:inset-y-0 dark:after:border-y dark:after:border-white/10">
+            <div class="mx-auto container px-4 py-6 sm:px-6 lg:px-8">
+                <div class="inline-flex items-center justify-between text-3xl font-bold tracking-tight text-gray-900 dark:text-white">@await RenderSectionAsync("Nav", required: false)</div>
+            </div>
+        </header>
+    }
+    else if ((!config.GetServerAuthEnabled() || User.IsInRole("CookieAuth") || User.IsInRole("APIAuth")) && !Url.Action().StartsWith("/Error"))
+    {
+        @await Html.PartialAsync("_Nav", null, null)
         <header class="relative bg-white dark:bg-gray-800 shadow-sm dark:after:pointer-events-none dark:after:absolute dark:after:inset-x-0 dark:after:inset-y-0 dark:after:border-y dark:after:border-white/10">
             <div class="mx-auto container px-4 py-6 sm:px-6 lg:px-8">
                 <div class="inline-flex items-center justify-between text-3xl font-bold tracking-tight text-gray-900 dark:text-white">@await RenderSectionAsync("Nav", required: false)</div>
