@@ -1,0 +1,71 @@
+@using CarCareTracker.Helper
+@using Heroicons.AspNetCore.Mvc.TagHelpers
+@inject IConfigHelper config
+@inject ITranslationHelper translator
+@{
+    var userConfig = config.GetUserConfig(User);
+    var userLanguage = config.GetServerLanguage();
+    var importModeTranslation = new List<string>([
+        "Service Records",
+        "Repairs",
+        "Fuel",
+        "Taxes",
+        "Upgrades",
+        "Reminders",
+        "Notes",
+        "Supplies",
+        "Dashboard",
+        "Planner",
+        "Odometer",
+    ]);
+    var importModeIcon = new List<HeroiconName>([
+        HeroiconName.Wrench,
+        HeroiconName.ExclamationCircle,
+        HeroiconName.Beaker,
+        HeroiconName.Banknotes,
+        HeroiconName.Sparkles,
+        HeroiconName.Bell,
+        HeroiconName.BookOpen,
+        HeroiconName.BuildingStorefront,
+        HeroiconName.ChartBar,
+        HeroiconName.RectangleStack,
+        HeroiconName.GlobeAmericas,
+    ]);
+}
+@model Vehicle
+
+<div class="border-t border-white/10 pt-4 pb-3">
+    <div class="flex justify-between items-center">
+        <div class="flex items-center px-5">
+            <div class="shrink-0">
+                @if (userConfig.ShowVehicleThumbnail)
+                {
+                <img src="@Model.ImageLocation" class="size-10 rounded-full object-cover @(string.IsNullOrWhiteSpace(Model.SoldDate) ? "" : "grayscale")"/>
+                    }
+                else
+                {
+                <heroicon kind="Outline" name="Truck" class="size-5 text-gray-300"/>
+                }
+            </div>
+            <div class="ml-3">
+                <div class="text-base/5 font-medium text-white">@Model.Make @Model.Model</div>
+                <div class="text-sm font-medium text-gray-400">@Model.Year @Model.LicensePlate</div>
+            </div>
+        </div>
+        
+        <button type="button" onclick="editVehicle(@Model.Id)" title="@translator.Translate(userLanguage, "Edit Vehicle")" class="mr-2 relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-blue-500">
+            <span class="absolute -inset-0.5"></span>
+            <span class="sr-only">@translator.Translate(userLanguage, "Edit Vehicle")</span>
+            <heroicon kind="Outline" name="Pencil" data-slot="icon" aria-hidden="true" class="size-6" />
+        </button>
+    </div>
+    <div class="mt-3 space-y-1 px-2">
+        @foreach (ImportMode importMode in StaticHelper.VisibleTabsInOrder(userConfig))
+        {
+            <button type="button" class="flex justify-between items-center w-full text-start rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">
+                <span>@translator.Translate(userLanguage, importModeTranslation[(int)importMode])</span>
+                <heroicon kind="Mini" name="@importModeIcon[(int)importMode]" class="size-4"/>
+            </button>
+        }
+    </div>
+</div>
