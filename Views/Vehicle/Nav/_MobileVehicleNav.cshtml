@@ -62,7 +62,7 @@
     <div class="mt-3 space-y-1 px-2">
         @foreach (ImportMode importMode in StaticHelper.VisibleTabsInOrder(userConfig))
         {
-            <button type="button" class="flex justify-between items-center w-full text-start rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">
+            <button type="button" onclick="displayTab(@((int)importMode))" class="flex justify-between items-center w-full text-start rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">
                 <span>@translator.Translate(userLanguage, importModeTranslation[(int)importMode])</span>
                 <heroicon kind="Mini" name="@importModeIcon[(int)importMode]" class="size-4"/>
             </button>

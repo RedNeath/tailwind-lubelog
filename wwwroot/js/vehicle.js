@@ -1,84 +1,8 @@
 ﻿$(document).ready(function () {
-    var vehicleId = GetVehicleId().vehicleId;
+    let vehicleId = GetVehicleId().vehicleId;
     //bind tabs
-    $('button[data-bs-toggle="tab"]').on('show.bs.tab', function (e) {
-        switch (e.target.id) {
-            case "servicerecord-tab":
-                getVehicleServiceRecords(vehicleId);
-                break;
-            case "notes-tab":
-                getVehicleNotes(vehicleId);
-                break;
-            case "gas-tab":
-                getVehicleGasRecords(vehicleId);
-                break;
-            case "accident-tab":
-                getVehicleCollisionRecords(vehicleId);
-                break;
-            case "tax-tab":
-                getVehicleTaxRecords(vehicleId);
-                break;
-            case "report-tab":
-                getVehicleReport(vehicleId);
-                break;
-            case "reminder-tab":
-                getVehicleReminders(vehicleId);
-                break;
-            case "upgrade-tab":
-                getVehicleUpgradeRecords(vehicleId);
-                break;
-            case "supply-tab":
-                getVehicleSupplyRecords(vehicleId);
-                break;
-            case "plan-tab":
-                getVehiclePlanRecords(vehicleId);
-                break;
-            case "odometer-tab":
-                getVehicleOdometerRecords(vehicleId);
-                break;
-        }
-        switch (e.relatedTarget.id) { //clear out previous tabs with grids in them to help with performance
-            case "servicerecord-tab":
-                $("#servicerecord-tab-pane").html("");
-                break;
-            case "gas-tab":
-                $("#gas-tab-pane").html("");
-                break;
-            case "accident-tab":
-                $("#accident-tab-pane").html("");
-                break;
-            case "tax-tab":
-                $("#tax-tab-pane").html("");
-                break;
-            case "report-tab":
-                $("#report-tab-pane").html("");
-                break;
-            case "reminder-tab":
-                $("#reminder-tab-pane").html("");
-                break;
-            case "upgrade-tab":
-                $("#upgrade-tab-pane").html("");
-                break;
-            case "notes-tab":
-                $("#notes-tab-pane").html("");
-                break;
-            case "supply-tab":
-                $("#supply-tab-pane").html("");
-                break;
-            case "plan-tab":
-                $("#plan-tab-pane").html("");
-                break;
-            case "odometer-tab":
-                $("#odometer-tab-pane").html("");
-                break;
-        }
-        $(`.lubelogger-tab #${e.target.id}`).addClass('active');
-        $(`.lubelogger-mobile-nav #${e.target.id}`).addClass('active');
-        $(`.lubelogger-tab #${e.relatedTarget.id}`).removeClass('active');
-        $(`.lubelogger-mobile-nav #${e.relatedTarget.id}`).removeClass('active');
-    });
-    var defaultTab = GetDefaultTab().tab;
-    switch (defaultTab) {
+    let defaultTab = GetDefaultTab();
+    switch (defaultTab.tab) {
         case "ServiceRecord":
             getVehicleServiceRecords(vehicleId);
             break;
@@ -113,7 +37,52 @@
             getVehicleOdometerRecords(vehicleId);
             break;
     }
+
+    $("#vehicle-nav-title").html(vehicleTabs[defaultTab.index].title);
 });
+
+function switchTab (newTab) {
+    let vehicleId = GetVehicleId().vehicleId;
+    
+    switch (newTab) {
+        case "servicerecord-tab-pane":
+            getVehicleServiceRecords(vehicleId);
+            break;
+        case "notes-tab-pane":
+            getVehicleNotes(vehicleId);
+            break;
+        case "gas-tab-pane":
+            getVehicleGasRecords(vehicleId);
+            break;
+        case "accident-tab-pane":
+            getVehicleCollisionRecords(vehicleId);
+            break;
+        case "tax-tab-pane":
+            getVehicleTaxRecords(vehicleId);
+            break;
+        case "report-tab-pane":
+            getVehicleReport(vehicleId);
+            break;
+        case "reminder-tab-pane":
+            getVehicleReminders(vehicleId);
+            break;
+        case "upgrade-tab-pane":
+            getVehicleUpgradeRecords(vehicleId);
+            break;
+        case "supply-tab-pane":
+            getVehicleSupplyRecords(vehicleId);
+            break;
+        case "plan-tab-pane":
+            getVehiclePlanRecords(vehicleId);
+            break;
+        case "odometer-tab-pane":
+            getVehicleOdometerRecords(vehicleId);
+            break;
+    }
+    
+    
+    $(`#${vehicleTabs[currentTab].element}`).html("");
+}
 
 function getVehicleNotes(vehicleId) {
     $.get(`/Vehicle/GetNotesByVehicleId?vehicleId=${vehicleId}`, function (data) {
