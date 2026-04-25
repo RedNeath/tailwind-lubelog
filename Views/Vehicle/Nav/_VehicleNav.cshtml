@@ -56,7 +56,7 @@
         @foreach (ImportMode importMode in StaticHelper.VisibleTabsInOrder(userConfig))
         {
             var translation = translator.Translate(userLanguage, importModeTranslation[(int)importMode]);
-            <button type="button" title="@translation" data-nav-mode="@((int)importMode)" class="shrink-0 text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium">
+            <button type="button" title="@translation" onclick="displayTab(@((int)importMode))" data-nav-mode="@((int)importMode)" class="shrink-0 text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium">
                 <heroicon kind="Micro" name="@importModeIcon[(int)importMode]" class="size-3"/>
                 <span>@translation</span>
             </button>
@@ -69,7 +69,7 @@
             <el-menu anchor="bottom end" popover class="m-0 w-48 origin-top-right rounded-md bg-white dark:bg-gray-800 p-0 py-1 shadow-lg outline outline-1 outline-black/5 dark:-outline-offset-1 dark:outline-white/10 transition [transition-behavior:allow-discrete] [--anchor-gap:theme(spacing.2)] data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
                 @foreach (ImportMode importMode in StaticHelper.VisibleTabsInOrder(userConfig))
                 {
-                    <button type="button" data-nav-dropdown-mode="@((int)importMode)" class="hidden w-full px-4 py-2 text-xs text-gray-600 dark:text-gray-300 hover:outline-none hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-white/5 dark:hover:text-white">
+                    <button type="button" onclick="displayTab(@((int)importMode))" data-nav-dropdown-mode="@((int)importMode)" class="hidden w-full px-4 py-2 text-xs text-gray-600 dark:text-gray-300 hover:outline-none hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-white/5 dark:hover:text-white">
                         <div class="flex items-center gap-3">
                             <heroicon kind="Mini" name="@importModeIcon[(int)importMode]" class="size-4"/>
                             <span>@translator.Translate(userLanguage, importModeTranslation[(int)importMode])</span>

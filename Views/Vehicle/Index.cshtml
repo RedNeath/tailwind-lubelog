@@ -26,62 +26,7 @@
     <script src="~/lib/drawdown/drawdown.js"></script>
 }
 @section Nav{
-    @switch (userConfig.DefaultTab)
-    {
-        case ImportMode.Dashboard:
-            @translator.Translate(userLanguage, "Dashboard")
-            ;
-            break;
-
-        case ImportMode.PlanRecord:
-            @translator.Translate(userLanguage, "Planner")
-            ;
-            break;
-
-        case ImportMode.OdometerRecord:
-            @translator.Translate(userLanguage, "Odometer")
-            ;
-            break;
-        case ImportMode.ServiceRecord:
-            @translator.Translate(userLanguage, "Service Records")
-            ;
-            break;
-
-        case ImportMode.RepairRecord:
-            @translator.Translate(userLanguage, "Repairs")
-            ;
-            break;
-
-        case ImportMode.UpgradeRecord:
-            @translator.Translate(userLanguage, "Upgrades")
-            ;
-            break;
-
-        case ImportMode.GasRecord:
-            @translator.Translate(userLanguage, "Fuel")
-            ;
-            break;
-
-        case ImportMode.SupplyRecord:
-            @translator.Translate(userLanguage, "Supplies")
-            ;
-            break;
-
-        case ImportMode.TaxRecord:
-            @translator.Translate(userLanguage, "Taxes")
-            ;
-            break;
-
-        case ImportMode.NoteRecord:
-            @translator.Translate(userLanguage, "Notes")
-            ;
-            break;
-
-        case ImportMode.ReminderRecord:
-            @translator.Translate(userLanguage, "Reminders")
-            ;
-            break;
-    }
+    <div id="vehicle-nav-title"></div>
 }
 @section VehicleNav{
     @await Html.PartialAsync("_Nav", Model)
@@ -95,19 +40,18 @@
     </ul>
 </div>
 <div class="container">
-    <div class="tab-content" id="vehicleTabContent">
-        <div class="tab-pane fade @StaticHelper.DefaultActiveTabContent(userConfig, ImportMode.ServiceRecord)" id="servicerecord-tab-pane" role="tabpanel" tabindex="0"></div>
-        <div class="tab-pane fade @StaticHelper.DefaultActiveTabContent(userConfig, ImportMode.GasRecord)" id="gas-tab-pane" role="tabpanel" tabindex="0"></div>
-        <div class="tab-pane fade @StaticHelper.DefaultActiveTabContent(userConfig, ImportMode.TaxRecord)" id="tax-tab-pane" role="tabpanel" tabindex="0"></div>
-        <div class="tab-pane fade @StaticHelper.DefaultActiveTabContent(userConfig, ImportMode.NoteRecord)" id="notes-tab-pane" role="tabpanel" tabindex="0"></div>
-        <div class="tab-pane fade @StaticHelper.DefaultActiveTabContent(userConfig, ImportMode.RepairRecord)" id="accident-tab-pane" role="tabpanel" tabindex="0"></div>
-        <div class="tab-pane fade @StaticHelper.DefaultActiveTabContent(userConfig, ImportMode.ReminderRecord)" id="reminder-tab-pane" role="tabpanel" tabindex="0"></div>
-        <div class="tab-pane fade @StaticHelper.DefaultActiveTabContent(userConfig, ImportMode.Dashboard)" id="report-tab-pane" role="tabpanel" tabindex="0"></div>
-        <div class="tab-pane fade @StaticHelper.DefaultActiveTabContent(userConfig, ImportMode.UpgradeRecord)" id="upgrade-tab-pane" role="tabpanel" tabindex="0"></div>
-        <div class="tab-pane fade @StaticHelper.DefaultActiveTabContent(userConfig, ImportMode.SupplyRecord)" id="supply-tab-pane" role="tabpanel" tabindex="0"></div>
-        <div class="tab-pane fade @StaticHelper.DefaultActiveTabContent(userConfig, ImportMode.PlanRecord)" id="plan-tab-pane" role="tabpanel" tabindex="0"></div>
-        <div class="tab-pane fade @StaticHelper.DefaultActiveTabContent(userConfig, ImportMode.OdometerRecord)" id="odometer-tab-pane" role="tabpanel" tabindex="0"></div>
-    </div>
+    @* Sets the visibility for the first rendering of the page. Then visibility will have to be handled throush js *@
+    <div class="@(userConfig.DefaultTab == ImportMode.ServiceRecord ? "block" : "hidden")" id="servicerecord-tab-pane"></div>
+    <div class="@(userConfig.DefaultTab == ImportMode.GasRecord ? "block" : "hidden")" id="gas-tab-pane"></div>
+    <div class="@(userConfig.DefaultTab == ImportMode.TaxRecord ? "block" : "hidden")" id="tax-tab-pane"></div>
+    <div class="@(userConfig.DefaultTab == ImportMode.NoteRecord ? "block" : "hidden")" id="notes-tab-pane"></div>
+    <div class="@(userConfig.DefaultTab == ImportMode.RepairRecord ? "block" : "hidden")" id="accident-tab-pane"></div>
+    <div class="@(userConfig.DefaultTab == ImportMode.ReminderRecord ? "block" : "hidden")" id="reminder-tab-pane"></div>
+    <div class="@(userConfig.DefaultTab == ImportMode.Dashboard ? "block" : "hidden")" id="report-tab-pane"></div>
+    <div class="@(userConfig.DefaultTab == ImportMode.UpgradeRecord ? "block" : "hidden")" id="upgrade-tab-pane"></div>
+    <div class="@(userConfig.DefaultTab == ImportMode.SupplyRecord ? "block" : "hidden")" id="supply-tab-pane"></div>
+    <div class="@(userConfig.DefaultTab == ImportMode.PlanRecord ? "block" : "hidden")" id="plan-tab-pane"></div>
+    <div class="@(userConfig.DefaultTab == ImportMode.OdometerRecord ? "block" : "hidden")" id="odometer-tab-pane"></div>
 </div>
 <div class="modal fade" data-bs-focus="false" id="editVehicleModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -162,6 +106,21 @@
 <div class="stickerPrintContainer hideOnPrint">
 </div>
 <script>
+    const vehicleTabs = [];
+    vehicleTabs[@((int)ImportMode.ServiceRecord)] = { element: "servicerecord-tab-pane", title: "@translator.Translate(userLanguage, "Service Records")" };
+    vehicleTabs[@((int)ImportMode.GasRecord)] = { element: "gas-tab-pane", title: "@translator.Translate(userLanguage, "Fuel")" };
+    vehicleTabs[@((int)ImportMode.TaxRecord)] = { element: "tax-tab-pane", title: "@translator.Translate(userLanguage, "Taxes")" };
+    vehicleTabs[@((int)ImportMode.NoteRecord)] = { element: "notes-tab-pane", title: "@translator.Translate(userLanguage, "Notes")" };
+    vehicleTabs[@((int)ImportMode.RepairRecord)] = { element: "accident-tab-pane", title: "@translator.Translate(userLanguage, "Repairs")" };
+    vehicleTabs[@((int)ImportMode.ReminderRecord)] = { element: "reminder-tab-pane", title: "@translator.Translate(userLanguage, "Reminders")" };
+    vehicleTabs[@((int)ImportMode.Dashboard)] = { element: "report-tab-pane", title: "@translator.Translate(userLanguage, "Dashboard")" };
+    vehicleTabs[@((int)ImportMode.UpgradeRecord)] = { element: "upgrade-tab-pane", title: "@translator.Translate(userLanguage, "Upgrades")" };
+    vehicleTabs[@((int)ImportMode.SupplyRecord)] = { element: "supply-tab-pane", title: "@translator.Translate(userLanguage, "Supplies")" };
+    vehicleTabs[@((int)ImportMode.PlanRecord)] = { element: "plan-tab-pane", title: "@translator.Translate(userLanguage, "Planner")" };
+    vehicleTabs[@((int)ImportMode.OdometerRecord)] = { element: "odometer-tab-pane", title: "@translator.Translate(userLanguage, "Odometer")" };
+    
+    let currentTab = @((int)userConfig.DefaultTab);
+    
     function GetVehicleId() {
         return { 
             vehicleId: @Model.Id, 
@@ -173,7 +132,24 @@
         };
     }
     function GetDefaultTab() {
-        return { tab: "@userConfig.DefaultTab" };
+        return { tab: "@userConfig.DefaultTab", index: @((int)userConfig.DefaultTab) };
     }
+    
+    function displayTab(index) {
+        const newTab = vehicleTabs[index];
+        const displayedTab = $(`#${vehicleTabs[currentTab].element}`)[0];
+        const tabToDisplay = $(`#${newTab.element}`)[0];
+        
+        // Hide displayed tab first, so that if it actually is the same tab as the one to display, it doesn't get hidden.
+        displayedTab.classList.add("hidden");
+        displayedTab.classList.remove("block");
+        tabToDisplay.classList.add("block");
+        tabToDisplay.classList.remove("hidden");
+        
+        $("#vehicle-nav-title").html(newTab.title);
+        switchTab(newTab.element);
+        currentTab = index;
+    }
+    
     checkRecurringTaxes();
 </script>
